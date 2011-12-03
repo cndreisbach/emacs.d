@@ -1,0 +1,23 @@
+;;; Keybindings
+(global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-z") 'undo-tree-undo)
+(global-set-key (kbd "M-z") 'undo-tree-redo)
+(global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-\\") 'indent-region)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
+; user definitions
+(global-set-key (kbd "C-c a") 'mark-whole-buffer)
+(global-set-key (kbd "C-c c") 'query-replace-regexp)
+(global-set-key (kbd "C-c d") 'deft)
+;(global-set-key (kbd "C-c f") 'find-file-in-project)
+(global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-c q") 'join-line)
+(global-set-key (kbd "C-c r") 'revert-buffer)
+;(global-set-key (kbd "C-c s") 'save-buffer-always)
+(global-set-key (kbd "C-c v") 'eval-buffer)
+(global-set-key (kbd "C-c w") 'whitespace-mode)
+(global-set-key (kbd "C-c x") 'execute-extended-command)
+(global-set-key (kbd "C-c z") 'zap-to-char)
