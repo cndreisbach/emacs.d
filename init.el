@@ -8,37 +8,31 @@
 (setq inhibit-splash-screen t)
 
 ;; Directories and file names
-(setq crn-emacs-init-file (or load-file-name buffer-file-name))
-(setq crn-emacs-config-dir
-      (file-name-directory crn-emacs-init-file))
-(setq user-emacs-directory crn-emacs-config-dir)
-(setq crn-elisp-dir (expand-file-name "elisp" crn-emacs-config-dir))
-(setq crn-vendor-dir (expand-file-name "vendor" crn-emacs-config-dir))
-(setq crn-init-dir
-      (expand-file-name "init.d" crn-emacs-config-dir))
+(setq user-config-dir (expand-file-name "~/.emacs.d"))
+(setq user-elisp-dir (expand-file-name "elisp" user-config-dir))
+(setq user-vendor-dir (expand-file-name "vendor" user-config-dir))
 
-(add-to-list 'load-path crn-elisp-dir)
-(add-to-list 'load-path crn-vendor-dir)
+(add-to-list 'load-path user-elisp-dir)
+(add-to-list 'load-path user-vendor-dir)
 
 ; Add external projects to load path
-(dolist (project (directory-files crn-vendor-dir t "\\w+"))
+(dolist (project (directory-files user-vendor-dir t "\\w+"))
   (when (file-directory-p project)
     (add-to-list 'load-path project)))
 
 ; Load all elisp files in ./init.d
-(if (file-exists-p crn-init-dir)
-    (dolist (file (directory-files crn-init-dir t "\\.el$"))
-      (load file)))
+(let ((init-dir (expand-file-name "init.d" user-config-dir)))
+  (when (file-exists-p init-dir)
+    (dolist (file (directory-files init-dir t "\\.el$"))
+      (load file))))
 
 ;; Set up 'custom' system
-(setq custom-file (expand-file-name "custom.el" crn-emacs-config-dir))
+(setq custom-file (expand-file-name "custom.el" user-config-dir))
 (load custom-file)
 
 ;; Backups
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;;; Configure packages
 (setq ack-prompt-for-directory t)
@@ -57,3 +51,8 @@
 
 ;;; Personal functions
 (defalias 'qrr 'query-replace-regexp)
+
+;;; Local config
+(let ((local-config (expand-file-name "local.el" user-config-dir)))
+  (when (file-exists-p local-config)
+    (load local-config)))
