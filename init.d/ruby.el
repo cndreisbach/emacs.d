@@ -7,4 +7,6 @@
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
 
-(define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
+(add-hook 'ruby-mode-hook
+	  '(lambda ()
+	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
