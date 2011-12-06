@@ -1,7 +1,7 @@
 ;;; Keybindings
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-z") 'undo-tree-undo)
-(global-set-key (kbd "M-z") 'undo-tree-redo)
+(global-set-key (kbd "C-/") 'undo-tree-undo)
+(global-set-key (kbd "M-/") 'undo-tree-redo)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-SPC") 'hippie-expand)
 (global-set-key (kbd "C-\\") 'indent-region)
@@ -12,7 +12,7 @@
 (global-set-key (kbd "C-c a") 'mark-whole-buffer)
 (global-set-key (kbd "C-c c") 'query-replace-regexp)
 (global-set-key (kbd "C-c d") 'deft)
-;(global-set-key (kbd "C-c f") 'find-file-in-project)
+(global-set-key (kbd "C-c f") 'find-file-in-project)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c q") 'join-line)
 (global-set-key (kbd "C-c r") 'revert-buffer)

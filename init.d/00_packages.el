@@ -5,6 +5,7 @@
 		    undo-tree
 		    full-ack
 		    deft
+		    find-file-in-project
 		    marmalade
 		    yaml-mode
 		    haml-mode
