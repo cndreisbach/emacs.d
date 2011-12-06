@@ -10,13 +10,16 @@
 
 ; user definitions
 (global-set-key (kbd "C-c a") 'mark-whole-buffer)
+(global-set-key (kbd "C-c C-a") 'anything)
+(global-set-key (kbd "C-x C-a") 'anything)
 (global-set-key (kbd "C-c c") 'query-replace-regexp)
 (global-set-key (kbd "C-c d") 'deft)
 (global-set-key (kbd "C-c f") 'find-file-in-project)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c q") 'join-line)
 (global-set-key (kbd "C-c r") 'revert-buffer)
-;(global-set-key (kbd "C-c s") 'save-buffer-always)
+(global-set-key (kbd "C-c s") 'save-buffer-always)
+(global-set-key (kbd "C-c C-s") 'save-buffer-always)
 (global-set-key (kbd "C-c v") 'eval-buffer)
 (global-set-key (kbd "C-c w") 'whitespace-mode)
 (global-set-key (kbd "C-c x") 'execute-extended-command)

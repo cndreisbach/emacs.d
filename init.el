@@ -51,6 +51,13 @@
 
 ;;; Personal functions
 (defalias 'qrr 'query-replace-regexp)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(defun save-buffer-always ()
+  "Save the buffer even if it is not modified."
+  (interactive)
+  (set-buffer-modified-p t)
+  (save-buffer))
 
 ;;; Local config
 (let ((local-config (expand-file-name "local.el" user-config-dir)))

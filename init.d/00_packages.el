@@ -6,6 +6,7 @@
 		    full-ack
 		    deft
 		    find-file-in-project
+		    htmlize
 		    marmalade
 		    yaml-mode
 		    haml-mode
