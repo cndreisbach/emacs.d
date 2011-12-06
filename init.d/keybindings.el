@@ -1,7 +1,7 @@
 ;;; Keybindings
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-/") 'undo-tree-undo)
-(global-set-key (kbd "M-/") 'undo-tree-redo)
+(global-set-key (kbd "C-?") 'undo-tree-redo)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-SPC") 'hippie-expand)
 (global-set-key (kbd "C-\\") 'indent-region)
