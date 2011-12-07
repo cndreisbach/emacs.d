@@ -1,21 +1,23 @@
 ;;; Load packages
-(setq my-packages '(magit
-		    smex
-		    ido-ubiquitous
-		    undo-tree
-		    full-ack
-		    deft
-		    find-file-in-project
-		    htmlize
-		    marmalade
-		    yaml-mode
-		    haml-mode
-		    sass-mode scss-mode
-		    feature-mode
+(setq my-packages '(
+		    anything anything-config
 		    coffee-mode
-		    go-mode
 		    cperl-mode
+		    deft
+		    feature-mode
+		    find-file-in-project
+		    full-ack
+		    go-mode
+		    haml-mode
+		    htmlize
+		    ido-ubiquitous
+		    magit
 		    markdown-mode
+		    marmalade
+		    sass-mode scss-mode
+		    smex
+		    undo-tree
+		    yaml-mode
 		    ))
 
 (setq package-archives 
