@@ -8,7 +8,6 @@
  '(ido-mode (quote both) nil (ido))
  '(mark-even-if-inactive nil)
  '(menu-bar-mode nil)
- '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("marmalade" . "http://marmalade-repo.org/packages/") ("Tromey" . "http://tromey.com/elpa/"))))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces

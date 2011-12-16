@@ -6,6 +6,8 @@
 ;;; Initial configuration
 (require 'cl)
 (setq inhibit-splash-screen t)
+(fset 'yes-or-no-p 'y-or-n-p)
+(transient-mark-mode t)
 
 ;; Directories and file names
 (setq user-config-dir (expand-file-name "~/.emacs.d"))
@@ -39,6 +41,7 @@
 
 (setq css-indent-level 2)
 (setq css-indent-offset 2)
+(setq scss-compile-at-save nil)
 
 (setq deft-directory "~/Dropbox/Notes/")
 (setq deft-text-mode 'org-mode)
@@ -51,7 +54,6 @@
 
 ;;; Personal functions
 (defalias 'qrr 'query-replace-regexp)
-(fset 'yes-or-no-p 'y-or-n-p)
 
 (defun save-buffer-always ()
   "Save the buffer even if it is not modified."
