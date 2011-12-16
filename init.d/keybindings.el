@@ -4,11 +4,12 @@
 (global-set-key (kbd "C-?") 'undo-tree-redo)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-SPC") 'hippie-expand)
-(global-set-key (kbd "C-\\") 'indent-region)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-; user definitions
+(if window-system (global-unset-key (kbd "C-z")))
+
+;;; user definitions
 (global-set-key (kbd "C-c a") 'mark-whole-buffer)
 (global-set-key (kbd "C-c C-a") 'my-anything)
 (global-set-key (kbd "C-x C-a") 'my-anything)
@@ -16,6 +17,7 @@
 (global-set-key (kbd "C-c d") 'deft)
 (global-set-key (kbd "C-c f") 'find-file-in-project)
 (global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-c m") 'clean-buffer)
 (global-set-key (kbd "C-c q") 'join-line)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key (kbd "C-c s") 'save-buffer-always)
