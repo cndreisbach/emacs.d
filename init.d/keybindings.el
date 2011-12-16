@@ -10,8 +10,8 @@
 
 ; user definitions
 (global-set-key (kbd "C-c a") 'mark-whole-buffer)
-(global-set-key (kbd "C-c C-a") 'anything)
-(global-set-key (kbd "C-x C-a") 'anything)
+(global-set-key (kbd "C-c C-a") 'my-anything)
+(global-set-key (kbd "C-x C-a") 'my-anything)
 (global-set-key (kbd "C-c c") 'query-replace-regexp)
 (global-set-key (kbd "C-c d") 'deft)
 (global-set-key (kbd "C-c f") 'find-file-in-project)
