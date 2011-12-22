@@ -22,7 +22,7 @@
   (when (file-directory-p project)
     (add-to-list 'load-path project)))
 
-; Load all elisp files in ./init.d
+                                        ; Load all elisp files in ./init.d
 (let ((init-dir (expand-file-name "init.d" user-config-dir)))
   (when (file-exists-p init-dir)
     (dolist (file (directory-files init-dir t "\\.el$"))
