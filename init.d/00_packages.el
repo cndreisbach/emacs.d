@@ -2,6 +2,7 @@
 (setq my-packages '(anything
                     anything-config
                     auto-indent-mode
+                    clojure-mode
                     coffee-mode
                     cperl-mode
                     deft
@@ -16,8 +17,12 @@
                     markdown-mode
                     marmalade
                     org2blog
+                    paredit
                     sass-mode
                     scss-mode
+                    simp
+                    slime
+                    slime-repl
                     smex
                     undo-tree
                     yaml-mode
