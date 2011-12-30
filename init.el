@@ -65,3 +65,4 @@
 (let ((local-config (expand-file-name "local.el" user-config-dir)))
   (when (file-exists-p local-config)
     (load local-config)))
+

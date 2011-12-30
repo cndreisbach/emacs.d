@@ -7,9 +7,11 @@
                     cperl-mode
                     deft
                     feature-mode
+                    find-file-in-git-repo
                     find-file-in-project
                     full-ack
                     go-mode
+                    gist
                     haml-mode
                     htmlize
                     ido-ubiquitous
