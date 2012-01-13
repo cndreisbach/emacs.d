@@ -10,5 +10,6 @@
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
 
 (add-hook 'ruby-mode-hook
-	  '(lambda ()
-	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
+          (lambda ()
+             (add-hook 'before-save-hook 'whitespace-cleanup)
+             (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
