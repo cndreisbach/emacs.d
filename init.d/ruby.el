@@ -9,7 +9,9 @@
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
 
+(autoload 'autopair-mode "autopair")
 (add-hook 'ruby-mode-hook
           (lambda ()
-             (add-hook 'before-save-hook 'whitespace-cleanup)
-             (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
+            (autopair-mode)
+            (add-hook 'before-save-hook 'whitespace-cleanup)
+            (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))

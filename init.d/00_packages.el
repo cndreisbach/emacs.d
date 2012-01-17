@@ -2,6 +2,7 @@
 (setq my-packages '(anything
                     anything-config
                     auto-indent-mode
+                    autopair
                     clojure-mode
                     coffee-mode
                     cperl-mode
