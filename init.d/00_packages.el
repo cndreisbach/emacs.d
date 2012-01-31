@@ -24,9 +24,11 @@
                     sass-mode
                     scss-mode
                     simp
+                    slim-mode
                     slime
                     slime-repl
                     smex
+                    solarized-theme
                     undo-tree
                     yaml-mode
                     xml-rpc))

@@ -13,5 +13,5 @@
 (add-hook 'ruby-mode-hook
           (lambda ()
             (autopair-mode)
-            (add-hook 'before-save-hook 'whitespace-cleanup)
+            (add-hook 'before-save-hook 'whitespace-cleanup nil t)
             (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
