@@ -4,6 +4,7 @@
 (global-set-key (kbd "C-?") 'undo-tree-redo)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 (global-set-key (kbd "M-SPC") 'hippie-expand)
+(global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
