@@ -7,3 +7,4 @@ url
 local.el
 anything-c-*
 eshell
+swank
