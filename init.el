@@ -8,6 +8,7 @@
 (setq inhibit-splash-screen t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (transient-mark-mode t)
+(global-visual-line-mode t)
 
 ;; Directories and file names
 (setq user-config-dir (expand-file-name "~/.emacs.d"))
@@ -17,12 +18,12 @@
 (add-to-list 'load-path user-elisp-dir)
 (add-to-list 'load-path user-vendor-dir)
 
-; Add external projects to load path
+;; Add external projects to load path
 (dolist (project (directory-files user-vendor-dir t "\\w+"))
   (when (file-directory-p project)
     (add-to-list 'load-path project)))
 
-                                        ; Load all elisp files in ./init.d
+;; Load all elisp files in ./init.d
 (let ((init-dir (expand-file-name "init.d" user-config-dir)))
   (when (file-exists-p init-dir)
     (dolist (file (directory-files init-dir t "\\.el$"))
