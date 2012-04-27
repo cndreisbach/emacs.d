@@ -29,3 +29,5 @@
 (global-set-key (kbd "C-c w") 'whitespace-mode)
 (global-set-key (kbd "C-c x") 'execute-extended-command)
 (global-set-key (kbd "C-c z") 'zap-to-char)
+
+(windmove-default-keybindings 'meta)
