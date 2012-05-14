@@ -8,3 +8,4 @@ local.el
 anything-c-*
 eshell
 swank
+session.*
