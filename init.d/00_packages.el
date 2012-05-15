@@ -23,8 +23,8 @@
                     paredit
                     sass-mode
                     scss-mode
-                    slime
-                    slime-repl
+                    ;;slime
+                    ;;slime-repl
                     smex
                     solarized-theme
                     undo-tree
