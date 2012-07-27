@@ -18,6 +18,7 @@
 (global-set-key (kbd "C-c d") 'deft)
 (global-set-key (kbd "C-c f") 'find-file-in-project)
 (global-set-key (kbd "C-c C-f") 'find-file-in-project)
+(global-set-key (kbd "s-t") 'find-file-in-project)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c C-g") 'find-file-in-git-repo)
 (global-set-key (kbd "C-c m") 'clean-buffer)

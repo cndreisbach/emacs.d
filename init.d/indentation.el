@@ -3,11 +3,11 @@
 (setq-default c-basic-offset 2)
 (setq-default js-indent-level 2)
 
-(setq auto-indent-modes '(ruby-mode
-                          javascript-mode
-                          emacs-lisp-mode))
-(dolist (mode auto-indent-modes)
-  (add-hook (intern (format "%s-hook" mode)) 'auto-indent-minor-mode))
+;; (setq auto-indent-modes '(ruby-mode
+;;                           javascript-mode
+;;                           emacs-lisp-mode))
+;; (dolist (mode auto-indent-modes)
+;;   (add-hook (intern (format "%s-hook" mode)) 'auto-indent-minor-mode))
 
 (defun clean-buffer ()
   "Re-indent the entire buffer and cleanup whitespace."
