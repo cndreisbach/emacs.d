@@ -9,6 +9,9 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (transient-mark-mode t)
 (global-visual-line-mode t)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
 
 ;; Directories and file names
 (setq user-config-dir (expand-file-name "~/.emacs.d"))

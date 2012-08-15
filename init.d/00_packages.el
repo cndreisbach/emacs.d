@@ -1,6 +1,7 @@
 ;;; Load packages
 (setq my-packages '(anything
                     anything-config
+                    auto-complete
                     auto-indent-mode
                     autopair
                     clojure-mode
