@@ -43,6 +43,7 @@
                     magit
                     markdown-mode
                     marmalade
+                    nrepl
                     org2blog
                     paredit
                     sass-mode
