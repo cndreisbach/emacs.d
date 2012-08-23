@@ -1,9 +1,8 @@
 * Inspirations
 ** https://github.com/avdi/.emacs24.d
 ** http://technomancy.us/153
-
 * Initial Configuration
-  
+** Must-Haves
   There are a few settings that any real user of Emacs should
   have. You do not want to see the Emacs splash screen. You do want to
   see what text is selected (transient-mark-mode). You do want Emacs
@@ -11,6 +10,14 @@
   (global-auto-revert-mode). And you really do want the power of 'cl,
   which brings in a lot of Common Lisp's methods.
 
+#+begin_src emacs-lisp
+  (require 'cl)
+  (setq inhibit-splash-screen t)
+  (transient-mark-mode t)
+  (global-auto-revert-mode t)
+#+end_src
+
+** Opinions
   Then there are opinions. I personally don't want to see a tool bar,
   a scroll bar, a menu bar, or really, any kind of bar. I also don't
   want Emacs to make me type out "yes" or "no" when a "y" or "n" will
@@ -18,11 +25,6 @@
   way better in Emacs, but I go back and forth on it.
 
 #+begin_src emacs-lisp
-  (require 'cl)
-  (setq inhibit-splash-screen t)
-  (transient-mark-mode t)
-  (global-auto-revert-mode t)
-  
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
@@ -136,3 +138,4 @@
   (when (file-exists-p local-config)
     (load local-config)))
 #+end_src
+  
