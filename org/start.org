@@ -1,0 +1,138 @@
+* Inspirations
+** https://github.com/avdi/.emacs24.d
+** http://technomancy.us/153
+
+* Initial Configuration
+  
+  There are a few settings that any real user of Emacs should
+  have. You do not want to see the Emacs splash screen. You do want to
+  see what text is selected (transient-mark-mode). You do want Emacs
+  to reload changed files if you haven't also changed them in Emacs
+  (global-auto-revert-mode). And you really do want the power of 'cl,
+  which brings in a lot of Common Lisp's methods.
+
+  Then there are opinions. I personally don't want to see a tool bar,
+  a scroll bar, a menu bar, or really, any kind of bar. I also don't
+  want Emacs to make me type out "yes" or "no" when a "y" or "n" will
+  suffice. Right now, I like visual-line-mode, which makes word wrap
+  way better in Emacs, but I go back and forth on it.
+
+#+begin_src emacs-lisp
+  (require 'cl)
+  (setq inhibit-splash-screen t)
+  (transient-mark-mode t)
+  (global-auto-revert-mode t)
+  
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (global-visual-line-mode t)
+#+end_src
+
+* Everything else
+
+#+begin_src emacs-lisp
+;; Directories and file names
+(setq user-config-dir (expand-file-name "~/.emacs.d"))
+(setq user-elisp-dir (expand-file-name "elisp" user-config-dir))
+(setq user-vendor-dir (expand-file-name "vendor" user-config-dir))
+
+(add-to-list 'load-path user-elisp-dir)
+(add-to-list 'load-path user-vendor-dir)
+
+;;; Load packages
+(setq my-packages '(anything
+                    anything-config
+                    auto-complete
+                    auto-indent-mode
+                    autopair
+                    clojure-mode
+                    coffee-mode
+                    cperl-mode
+                    deft
+                    feature-mode
+                    find-file-in-git-repo
+                    find-file-in-project
+                    full-ack
+                    go-mode
+                    gist
+                    haml-mode
+                    htmlize
+                    ido-ubiquitous
+                    magit
+                    markdown-mode
+                    marmalade
+                    nrepl
+                    org2blog
+                    paredit
+                    sass-mode
+                    scss-mode
+                    slime
+                    slime-repl
+                    smex
+                    solarized-theme
+                    undo-tree
+                    yaml-mode
+                    xml-rpc))
+
+(setq package-archives
+      '(("marmalade" . "http://marmalade-repo.org/packages/")
+        ("gnu" . "http://elpa.gnu.org/packages/")
+        ("Tromey" . "http://tromey.com/elpa/")))
+
+(load "package")
+(package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
+;; Add external projects to load path
+(dolist (project (directory-files user-vendor-dir t "\\w+"))
+  (when (file-directory-p project)
+    (add-to-list 'load-path project)))
+
+
+;; Load all elisp files in ./init.d
+(let ((init-dir (expand-file-name "init.d" user-config-dir)))
+  (when (file-exists-p init-dir)
+    (dolist (file (directory-files init-dir t "\\.el$"))
+      (load file))))
+
+;; Backups
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+;;; Configure packages
+(setq ack-prompt-for-directory t)
+
+(setq css-indent-level 2)
+(setq css-indent-offset 2)
+(setq scss-compile-at-save nil)
+
+(setq deft-directory "~/Dropbox/Notes/")
+(setq deft-text-mode 'org-mode)
+
+(require 'undo-tree)
+(global-undo-tree-mode)
+
+(setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+(smex-initialize)
+
+;;; Personal functions
+(defalias 'qrr 'query-replace-regexp)
+
+(defun save-buffer-always ()
+  "Save the buffer even if it is not modified."
+  (interactive)
+  (set-buffer-modified-p t)
+  (save-buffer))
+
+;;; Local config
+(let ((local-config (expand-file-name "local.el" user-config-dir)))
+  (when (file-exists-p local-config)
+    (load local-config)))
+#+end_src
