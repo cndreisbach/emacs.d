@@ -31,4 +31,8 @@
 (global-set-key (kbd "C-c x") 'execute-extended-command)
 (global-set-key (kbd "C-c z") 'zap-to-char)
 
-(windmove-default-keybindings 'meta)
+(windmove-default-keybindings 'shift)
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
