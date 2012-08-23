@@ -8,8 +8,8 @@
 (define-minor-mode lisp-power-mode "Fix keybindings; add power."
   :lighter " (power)"
   :keymap lisp-power-map
-  (enable-paredit-mode)
-  (show-paren-mode 1))
+  (paredit-mode t)
+  (show-paren-mode t))
 (define-key lisp-power-map [delete] 'paredit-forward-delete)
 (define-key lisp-power-map [backspace] 'paredit-backward-delete)
 
