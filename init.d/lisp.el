@@ -4,11 +4,12 @@
                    scheme-mode
                    clojure-mode))
 
-(defun cnd-turn-on-paredit ()
-  (paredit-mode 1))
+(defun cnd/engage-lisp-power ()
+  (paredit-mode 1)
+  (show-paren-mode 1))
 
 (dolist (mode lisp-modes)
-  (add-hook (intern (concat (symbol-name mode) "-hook"))
-            #'cnd-turn-on-paredit))
+  (add-hook (intern (concat (symbol-name mode) "-hook"))            
+            #'cnd/engage-lisp-power))
 
 (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
