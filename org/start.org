@@ -1,141 +1,207 @@
-* Inspirations
-** https://github.com/avdi/.emacs24.d
-** http://technomancy.us/153
-* Initial Configuration
-** Must-Haves
-  There are a few settings that any real user of Emacs should
-  have. You do not want to see the Emacs splash screen. You do want to
-  see what text is selected (transient-mark-mode). You do want Emacs
-  to reload changed files if you haven't also changed them in Emacs
-  (global-auto-revert-mode). And you really do want the power of 'cl,
-  which brings in a lot of Common Lisp's methods.
+#+TITLE: Emacs 24 configuration for Clinton Dreisbach
+#+AUTHOR: Clinton Dreisbach
+
+* Introduction
+** Standards
+   Emacs does not have namespaces, so you should come up with some
+   prefix for your variables and functions to avoid
+   conflicts. Luckily, =/= is a valid character in Emacs symbols, so I
+   emulate Clojure namespaces by using this. I use the prefix =cnd=
+   (my initials), so a custom function I write would have a name like
+   this: =cnd/gain-ultimate-power=.
+
+** Inspirations
+*** https://github.com/avdi/.emacs24.d
+*** http://technomancy.us/153
+*** http://pavpanchekha.com/blog/emacs.html
+
+* Personal Info
+   Emacs will try and guess information about you from your
+   environment. I prefer to be explicit about it.
+
+#+begin_src emacs-lisp
+  (setq user-full-name "Clinton N. Dreisbach")
+  (setq user-mail-address "clinton@dreisbach.us")
+#+end_src
+
+* Must-Have Configuration
+  There are a few settings that any user of Emacs should have. You do
+  want the power of =cl=, which brings in a lot of Common Lisp's
+  methods.  You do want Emacs to reload changed files if you haven't
+  also changed them in Emacs (=global-auto-revert-mode=). You want
+  winner-mode, because you are a winner.
 
 #+begin_src emacs-lisp
   (require 'cl)
-  (setq inhibit-splash-screen t)
-  (transient-mark-mode t)
   (global-auto-revert-mode t)
+  (winner-mode t)
 #+end_src
 
-** Opinions
-  Then there are opinions. I personally don't want to see a tool bar,
-  a scroll bar, a menu bar, or really, any kind of bar. I also don't
-  want Emacs to make me type out "yes" or "no" when a "y" or "n" will
-  suffice. Right now, I like visual-line-mode, which makes word wrap
-  way better in Emacs, but I go back and forth on it.
+* GUI Settings
+  Emacs' default GUI settings are not great ones. No one wants to see
+  the Emacs splash screen. Everyone wants to see what text is selected
+  (=transient-mark-mode=). Other GUI setings will be based on personal
+  preferences. I personally don't want to see a tool bar, a scroll
+  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
+  to make me type out "yes" or "no" when a "y" or "n" will
+  suffice. Right now, I like =visual-line-mode=, which makes word wrap
+  way better in Emacs, but I go back and forth on it. Lastly, I like
+  seeing where my files end, so I toggle on =indicate-empty-lines=.
 
 #+begin_src emacs-lisp
+  (setq inhibit-splash-screen t)
+  (transient-mark-mode t)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (fset 'yes-or-no-p 'y-or-n-p)
   (global-visual-line-mode t)
+  (if (not indicate-empty-lines)
+    (toggle-indicate-empty-lines))  
 #+end_src
+
+** Modeline Improvements
+   I like having the column number in my modeline to help with stack
+   traces and just as a sanity check.
+
+#+begin_src emacs-lisp
+  (setq column-number-mode t)
+#+end_src
+
+* Backups
+   Default Emacs behavior around backups dates from a time of
+   barbarism and should be avoided. On the other hand, it's saved me
+   once or twice. Therefore, I allow Emacs to keep backups, but
+   instead of keeping them in the same directory as the file being
+   edited, I force them to be kept in a temporary directory.
+
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+#+end_src
+  
+* Files and Directories
+  I like to set up a vendor directory for any random elisp files I
+  pull in. I get the majority of my functionality from packages
+  distributed through ELPA or Marmalade, but sometimes, you find
+  something random on EmacsWiki that you may want to pull in. After
+  adding that directory, you're going to want to throw it in your
+  load-path. Often, you'll have subdirectories in your vendor
+  directory. Go ahead and add those to the load-path as well.
+
+#+begin_src emacs-lisp
+  (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
+    "Location of any random elisp files I find from other authors.")
+  (add-to-list 'load-path cnd/vendor-dir)
+  
+  (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
+    (when (file-directory-p project)
+      (add-to-list 'load-path project)))
+#+end_src
+
+* Packages
+** Package Repositories
+   In addition to the default ELPA package repository, I use Marmalade,
+   which is community-run and has new packages more quickly.
+
+#+begin_src emacs-lisp
+  (load "package")
+  (package-initialize)
+
+  (add-to-list 'package-archives
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
+#+end_src
+
+** Packages to Install
+  There's no way I can list each package I use and why here. The
+  important thing to note is that I set up a var with a list of the
+  packages I want to have installed.
+
+#+begin_src emacs-lisp
+  (defvar cnd/packages '(anything
+                        anything-config
+                        auto-complete
+                        auto-indent-mode
+                        autopair
+                        clojure-mode
+                        coffee-mode
+                        cperl-mode
+                        deft
+                        feature-mode
+                        find-file-in-git-repo
+                        find-file-in-project
+                        full-ack
+                        go-mode
+                        gist
+                        haml-mode
+                        htmlize
+                        ido-ubiquitous
+                        magit
+                        markdown-mode
+                        marmalade
+                        nrepl
+                        org2blog
+                        paredit
+                        sass-mode
+                        scss-mode
+                        slime
+                        slime-repl
+                        smex
+                        solarized-theme
+                        yaml-mode
+                        xml-rpc)
+    "Packages I always want installed.")
+#+end_src
+  
+** Installing Packages   
+   This is the magic incantation to get your packages installed. It
+   will require a network connection if you don't have all your
+   packages currently installed, but otherwise, does not make any
+   connections.
+
+#+begin_src emacs-lisp
+  (defun cnd/packages-installed-p ()
+    (loop for pkg in cnd/packages
+          when (not (package-installed-p pkg)) do (return nil)
+          finally (return t)))
+  
+  (unless (cnd/packages-installed-p)
+    (message "%s" "Refreshing package database...")
+    (package-refresh-contents)
+    (dolist (pkg cnd/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+#+end_src
+
 
 * Everything else
 
 #+begin_src emacs-lisp
-;; Directories and file names
-(setq user-config-dir (expand-file-name "~/.emacs.d"))
-(setq user-elisp-dir (expand-file-name "elisp" user-config-dir))
-(setq user-vendor-dir (expand-file-name "vendor" user-config-dir))
-
-(add-to-list 'load-path user-elisp-dir)
-(add-to-list 'load-path user-vendor-dir)
-
-;;; Load packages
-(setq my-packages '(anything
-                    anything-config
-                    auto-complete
-                    auto-indent-mode
-                    autopair
-                    clojure-mode
-                    coffee-mode
-                    cperl-mode
-                    deft
-                    feature-mode
-                    find-file-in-git-repo
-                    find-file-in-project
-                    full-ack
-                    go-mode
-                    gist
-                    haml-mode
-                    htmlize
-                    ido-ubiquitous
-                    magit
-                    markdown-mode
-                    marmalade
-                    nrepl
-                    org2blog
-                    paredit
-                    sass-mode
-                    scss-mode
-                    slime
-                    slime-repl
-                    smex
-                    solarized-theme
-                    undo-tree
-                    yaml-mode
-                    xml-rpc))
-
-(setq package-archives
-      '(("marmalade" . "http://marmalade-repo.org/packages/")
-        ("gnu" . "http://elpa.gnu.org/packages/")
-        ("Tromey" . "http://tromey.com/elpa/")))
-
-(load "package")
-(package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents))
-
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
-;; Add external projects to load path
-(dolist (project (directory-files user-vendor-dir t "\\w+"))
-  (when (file-directory-p project)
-    (add-to-list 'load-path project)))
-
-
-;; Load all elisp files in ./init.d
-(let ((init-dir (expand-file-name "init.d" user-config-dir)))
-  (when (file-exists-p init-dir)
-    (dolist (file (directory-files init-dir t "\\.el$"))
-      (load file))))
-
-;; Backups
-(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-;;; Configure packages
-(setq ack-prompt-for-directory t)
-
-(setq css-indent-level 2)
-(setq css-indent-offset 2)
-(setq scss-compile-at-save nil)
-
-(setq deft-directory "~/Dropbox/Notes/")
-(setq deft-text-mode 'org-mode)
-
-(require 'undo-tree)
-(global-undo-tree-mode)
-
-(setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-(smex-initialize)
-
-;;; Personal functions
-(defalias 'qrr 'query-replace-regexp)
-
-(defun save-buffer-always ()
-  "Save the buffer even if it is not modified."
-  (interactive)
-  (set-buffer-modified-p t)
-  (save-buffer))
-
-;;; Local config
-(let ((local-config (expand-file-name "local.el" user-config-dir)))
-  (when (file-exists-p local-config)
-    (load local-config)))
+  
+  ;;; Configure packages
+  (setq ack-prompt-for-directory t)
+  
+  (setq css-indent-level 2)
+  (setq css-indent-offset 2)
+  (setq scss-compile-at-save nil)
+  
+  (setq deft-directory "~/Dropbox/Notes/")
+  (setq deft-text-mode 'org-mode)
+  
+  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+  (smex-initialize)
+  
+  ;;; Personal functions
+  (defun save-buffer-always ()
+    "Save the buffer even if it is not modified."
+    (interactive)
+    (set-buffer-modified-p t)
+    (save-buffer))
+  
+  ;;; Local config
+  (let ((local-config (expand-file-name "local.el" user-config-dir)))
+    (when (file-exists-p local-config)
+      (load local-config)))
 #+end_src
+  
   
