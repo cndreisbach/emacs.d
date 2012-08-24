@@ -10,6 +10,7 @@
 (transient-mark-mode t)
 (global-visual-line-mode t)
 (global-auto-revert-mode t)
+(winner-mode t)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
