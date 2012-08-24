@@ -9,3 +9,4 @@ anything-c-*
 eshell
 swank
 session.*
+ac-comphist.dat
