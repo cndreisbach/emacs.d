@@ -23,7 +23,7 @@
   (setq user-full-name "Clinton N. Dreisbach")
   (setq user-mail-address "clinton@dreisbach.us")
 #+end_src
-
+   
 * Must-Have Configuration
   There are a few settings that any user of Emacs should have. You do
   want the power of =cl=, which brings in a lot of Common Lisp's
@@ -121,7 +121,6 @@
   (defvar cnd/packages '(anything
                         anything-config
                         auto-complete
-                        auto-indent-mode
                         autopair
                         clojure-mode
                         coffee-mode
@@ -153,7 +152,7 @@
     "Packages I always want installed.")
 #+end_src
   
-** Installing Packages   
+** Installing Packages
    This is the magic incantation to get your packages installed. It
    will require a network connection if you don't have all your
    packages currently installed, but otherwise, does not make any
@@ -173,6 +172,28 @@
       (package-install pkg))))
 #+end_src
 
+* Functions
+#+begin_src emacs-lisp
+  (defun cnd/clean-buffer ()
+    "Re-indent the entire buffer and cleanup whitespace."
+    (interactive)
+    (save-excursion
+      (indent-region (point-min) (point-max) nil)
+      (whitespace-cleanup-region (point-min) (point-max))))
+#+end_src
+* Programming
+** Indentation
+   By default, I want to indent with 2 spaces. Different programming
+   modes use their own variable to indicate how much to indent, so I
+   have to set multiple variables.
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil
+                tab-width 2
+                c-basic-offset 2
+                js-indent-level 2
+                css-indent-offset 2)  
+#+end_src
 
 * Everything else
 
@@ -202,6 +223,162 @@
   (let ((local-config (expand-file-name "local.el" user-config-dir)))
     (when (file-exists-p local-config)
       (load local-config)))
+  
+  ;; anything.el
+  (defun my-anything ()
+    (interactive)
+    (require 'anything-config)
+    (anything-other-buffer
+     '(anything-c-source-buffers
+       anything-c-source-files-in-current-dir
+       anything-c-source-recentf
+       anything-c-source-locate)
+     "*my-anything*"))
+  
+  ;; darwin.el
+  (when (eq system-type 'darwin)
+    (setq locate-command "mdfind")
+    (setq anything-c-locate-command "mdfind %s")
+    (setq ispell-program-name "aspell")
+    (setenv "PATH" "~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin"))
+  
+  ;; go.el
+  (add-hook 'go-mode-hook
+            (lambda ()
+              (autopair-mode)
+              (add-hook 'before-save-hook 'gofmt-before-save nil t)))
+  
+  (require 'go-autocomplete)
+  (require 'auto-complete-config)
+  
+  ;; ido.el
+  (ido-mode t)
+  (ido-ubiquitous t)
+  
+  (setq ido-enable-prefix nil
+        ido-enable-flex-matching t
+        ido-auto-merge-work-directories-length nil
+        ido-create-new-buffer 'always
+        ido-use-filename-at-point nil
+        ido-use-virtual-buffers t
+        ido-handle-duplicate-virtual-buffers 2
+        ido-max-prospects 10)
+  
+  ;; keybindings.el
+  
+  ;;; Keybindings
+  (global-set-key (kbd "RET") 'newline-and-indent)
+  (global-set-key (kbd "C-/") 'undo-tree-undo)
+  (global-set-key (kbd "C-?") 'undo-tree-redo)
+  (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+  (global-set-key (kbd "M-SPC") 'hippie-expand)
+  (global-set-key (kbd "M-/") 'hippie-expand)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  
+  (if window-system (global-unset-key (kbd "C-z")))
+  
+  ;;; user definitions
+  (global-set-key (kbd "C-c a") 'mark-whole-buffer)
+  (global-set-key (kbd "C-c C-a") 'my-anything)
+  (global-set-key (kbd "C-x C-a") 'my-anything)
+  (global-set-key (kbd "C-c c") 'query-replace-regexp)
+  (global-set-key (kbd "C-c d") 'deft)
+  (global-set-key (kbd "C-c f") 'find-file-in-project)
+  (global-set-key (kbd "C-c C-f") 'find-file-in-project)
+  (global-set-key (kbd "s-t") 'find-file-in-project)
+  (global-set-key (kbd "C-c g") 'magit-status)
+  (global-set-key (kbd "C-c C-g") 'find-file-in-git-repo)
+  (global-set-key (kbd "C-c m") 'clean-buffer)
+  (global-set-key (kbd "C-c q") 'join-line)
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+  (global-set-key (kbd "C-c s") 'save-buffer-always)
+  (global-set-key (kbd "C-c C-s") 'save-buffer-always)
+  (global-set-key (kbd "C-c v") 'eval-buffer)
+  (global-set-key (kbd "C-c w") 'whitespace-mode)
+  (global-set-key (kbd "C-c x") 'execute-extended-command)
+  (global-set-key (kbd "C-c z") 'zap-to-char)
+  
+  (windmove-default-keybindings 'shift)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+  
+  ;; lisp.el
+  (setq lisp-modes '(lisp-mode
+                     emacs-lisp-mode
+                     common-lisp-mode
+                     scheme-mode
+                     clojure-mode))
+  
+  (defvar lisp-power-map (make-keymap))
+  (define-minor-mode lisp-power-mode "Fix keybindings; add power."
+    :lighter " (power)"
+    :keymap lisp-power-map
+    (paredit-mode t)
+    (show-paren-mode t))
+  (define-key lisp-power-map [delete] 'paredit-forward-delete)
+  (define-key lisp-power-map [backspace] 'paredit-backward-delete)
+  
+  (defun cnd/engage-lisp-power ()
+    (lisp-power-mode t))
+  
+  (dolist (mode lisp-modes)
+    (add-hook (intern (concat (symbol-name mode) "-hook"))  
+              #'cnd/engage-lisp-power))
+  
+  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+  
+  ;; opa.el
+  (autoload 'opa-js-mode "/usr/share/opa/emacs/opa-js-mode.el" "OPA JS editing mode." t)
+  (autoload 'opa-classic-mode "/usr/share/opa/emacs/opa-mode.el" "OPA CLASSIC editing mode." t)
+  (add-to-list 'auto-mode-alist '("\\.opa$" . opa-js-mode)) ;; <-- Set the default mode here
+  (add-to-list 'auto-mode-alist '("\\.js\\.opa$" . opa-js-mode))
+  (add-to-list 'auto-mode-alist '("\\.classic\\.opa$" . opa-classic-mode))
+  
+  ;; org2blog.el
+  (require 'netrc)
+  
+  (setq crnio-netrc
+        (netrc-machine (netrc-parse "~/.netrc") "crn_io" t))
+  (setq org2blog/wp-blog-alist
+        '(("crn_io"
+           :url "http://crn.io/xmlrpc.php"
+           :username (netrc-get crnio-netrc "login")
+           :password (netrc-get crnio-netrc "password")
+           :tags-as-categories nil)))
+  
+  (setq org-emphasis-alist '(("*" bold "<strong>" "</strong>") ("/" italic "<em>" "</em>") ("_" underline "<span style=\"text-decoration:underline;\">" "</span>") ("=" org-code "<code>" "</code>" verbatim) ("~" org-verbatim "<code>" "</code>" verbatim) ("+" (:strike-through t) "<del>" "</del>")))
+  (setq org-export-htmlize-output-type 'css)
+  (setq org-export-htmlized-org-css-url nil)
+  
+  ;; ruby.el
+  (require 'yaml-mode)
+  
+  ;; Rake files are ruby, too, as are gemspecs, rackup files, etc.
+  (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
+  
+  (autoload 'autopair-mode "autopair")
+  (add-hook 'ruby-mode-hook
+            (lambda ()
+              (autopair-mode)
+              (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+              (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
+  
+  ;; server.el
+  (add-hook 'server-switch-hook
+              (lambda ()
+                (when (current-local-map)
+                  (use-local-map (copy-keymap (current-local-map))))
+          (when server-buffer-clients
+      (local-set-key (kbd "C-x k") 'server-edit))))
 #+end_src
   
   
