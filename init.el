@@ -5,4 +5,4 @@
 
 (require 'org-install)
 (require 'ob-tangle)
-(mapc #'org-babel-load-file (directory-files "~/.emacs.d/org/" t "\\.org$"))
+(org-babel-load-file (expand-file-name "start.org" user-emacs-directory))
