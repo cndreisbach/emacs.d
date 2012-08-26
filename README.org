@@ -2,11 +2,19 @@
   This configuration is meant to be used with Emacs 24. It is not guaranteed,
   or even likely, that it will work with anything less than that.
 
-  I've redone my Emacs config several times over the years, and this is not
-  going to be my last time. Previously, I was using version 2 of the 
-  [[http://github.com/technomancy/emacs-starter-kit][Emacs Starter Kit]] with my own modifications, and that worked well, but I
-  didn't always know where all the behaviors were coming from, so I started
-  over.
+** Where's the Code?
+
+   If you look at =init.el=, you will only see a short snippet of
+   code. This code loads the org-mode file =start.org= and then
+   executes the Emacs Lisp code in there. This is fantastic, because
+   it allows me to document my configuration through org-mode instead
+   of through comments.
+
+   Strangely, I found that when I could organize my configuration with
+   org-mode, I did not need to split it into a bunch of different
+   files. My theory is that I was using the separate files to name
+   sections of my configuration, which I can do just as well with the
+   structure of org-mode.
 
 ** Values and Goals
    My #1 value to impress on this config is simplicity. If I can get away
