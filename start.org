@@ -139,15 +139,27 @@
 
 * Packages
 ** Package Repositories
-   In addition to the default ELPA package repository, I use Marmalade,
-   which is community-run and has new packages more quickly.
+   In addition to the default ELPA package repository, I use
+   Marmalade, which is community-run and has new packages more
+   quickly. I also use MELPA, which has up-to-date versions of
+   packages built straight from their repos. I don't want to get all
+   my packages from there, since they might be flaky, but if I want a
+   particular package to use the HEAD version, I can throw it in the
+   =package-archive-enable-alist=.
 
 #+begin_src emacs-lisp
   (load "package")
+  (require 'melpa)
+  
   (package-initialize)
-
+  
   (add-to-list 'package-archives
                '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  
+  (setq package-archive-enable-alist '(("melpa" deft smex)))
+  
 #+end_src
 
 ** Packages to Install
@@ -182,8 +194,9 @@
                          solarized-theme
                          yaml-mode)
     "Packages I always want installed.")
+  
 #+end_src
-
+  
 ** Installing Packages
    This is the magic incantation to get your packages installed. It
    will require a network connection if you don't have all your
@@ -195,7 +208,7 @@
     (loop for pkg in cnd/packages
           when (not (package-installed-p pkg)) do (return nil)
           finally (return t)))
-
+  
   (unless (cnd/packages-installed-p)
     (message "%s" "Refreshing package database...")
     (package-refresh-contents)
@@ -216,6 +229,7 @@
 #+begin_src emacs-lisp
   (setq deft-directory "~/Dropbox/Notes/")
   (setq deft-text-mode 'org-mode)
+  (setq deft-use-filename-as-title t)
 #+end_src
 
 ** Smex
