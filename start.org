@@ -1,7 +1,7 @@
 #+TITLE: Emacs 24 configuration for Clinton Dreisbach
 #+AUTHOR: Clinton Dreisbach
 #+EMAIL: clinton@dreisbach.us
-#+OPTIONS: toc:nil num:nil
+#+OPTIONS: toc:2 num:nil
 
 * Introduction
 ** Standards
