@@ -227,8 +227,9 @@
 
 #+begin_src emacs-lisp
   (setq deft-directory "~/Dropbox/Notes/")
-  (setq deft-text-mode 'org-mode)
   (setq deft-use-filename-as-title t)
+  (setq deft-extension "org")
+  (setq deft-text-mode 'org-mode)
 #+end_src
 
 ** Smex
