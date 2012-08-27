@@ -1,9 +1,7 @@
 #+TITLE: Emacs 24 configuration for Clinton Dreisbach
 #+AUTHOR: Clinton Dreisbach
 #+EMAIL: clinton@dreisbach.us
-#+OPTIONS: toc:2 num:nil
-#+STYLE: <link rel="stylesheet" href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" type="text/css"></link>
-#+STYLE: <style type="text/css">pre.src { padding: 5pt; }</style>
+#+OPTIONS: toc:nil num:nil
 
 * Introduction
 ** Standards
