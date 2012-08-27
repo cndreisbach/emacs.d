@@ -157,7 +157,7 @@
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
   
-  (setq package-archive-enable-alist '(("melpa" deft smex)))
+  (setq package-archive-enable-alist '(("melpa" deft smex magit)))
   
 #+end_src
 
