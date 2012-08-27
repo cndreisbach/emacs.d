@@ -45,10 +45,9 @@
   (=transient-mark-mode=). Other GUI setings will be based on personal
   preferences. I personally don't want to see a tool bar, a scroll
   bar, a menu bar, or really, any kind of bar. I also don't want Emacs
-  to make me type out "yes" or "no" when a "y" or "n" will
-  suffice. Right now, I like =visual-line-mode=, which makes word wrap
-  way better in Emacs, but I go back and forth on it. Lastly, I like
-  seeing where my files end, so I toggle on =indicate-empty-lines=.
+  to make me type out "yes" or "no" when a "y" or "n" will suffice.
+  Lastly, I like seeing where my files end, so I toggle on
+  =indicate-empty-lines=.
 
 #+begin_src emacs-lisp
   (setq inhibit-splash-screen t)
@@ -57,7 +56,6 @@
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (fset 'yes-or-no-p 'y-or-n-p)
-  (global-visual-line-mode t)
   (if (not indicate-empty-lines)
     (toggle-indicate-empty-lines))
 #+end_src
