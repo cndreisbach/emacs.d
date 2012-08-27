@@ -19,7 +19,8 @@
    Unfortunately, org-mode files do not always render well on
    Github. Code blocks are not formatted at all. You can feel free to
    look at the code here, but I suggest pulling it down and looking at
-   it within Emacs for now.
+   it within Emacs for now. I also have rendered it as HTML at
+   http://crnixon.github.com/emacs.d/.
 
 ** Values and Goals
    My #1 value to impress on this config is simplicity. If I can get away
