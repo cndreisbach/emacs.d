@@ -1,77 +1,930 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
-<html>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
-
-  <title>Emacs.d</title>
-  <meta name="description" content="My emacs config">
-
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emacs 24 configuration for Clinton Dreisbach</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Emacs 24 configuration for Clinton Dreisbach"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-08-26 21:01:19 EDT"/>
+<meta name="author" content="Clinton Dreisbach"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
 
 </head>
-
 <body>
 
-  <div class="wrapper">
-    <header>
-      <h1 class="title">Emacs.d</h1>
-    </header>
-    <div id="container">
-      <p class="tagline">My emacs config</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/crnixon/emacs.d/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/crnixon/emacs.d/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/crnixon/emacs.d" class="code">View Emacs.d on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <h1>My Emacs Configuration</h1>
+<div id="preamble">
 
-<p>This configuration is meant to be used with Emacs 24. It is not guaranteed,
-or even likely, that it will work with anything less than that.</p>
+</div>
 
-<p>I've redone my Emacs config several times over the years, and this is not
-going to be my last time.</p>
-
-<h2>Values and Goals</h2>
-
-<p>My #1 value to impress on this config is simplicity. If I can get away
-with not including something, I will.</p>
-
-<p>My #1 goal when writing this config is to learn Emacs Lisp better. I know
-Scheme (particularly PLT Racket) pretty well, but I don't really know Emacs 
-Lisp.</p>
-        </article>
-      </div>
-    </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/crnixon" class="avatar"><img src="https://secure.gravatar.com/avatar/ca58c93600b38beb7b5a6a5deb27f1e8?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/crnixon">crnixon</a> maintains <a href="https://github.com/crnixon/emacs.d">Emacs.d</a></p>
+<div id="content">
+<h1 class="title">Emacs 24 configuration for Clinton Dreisbach</h1>
 
 
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/crnixon/emacs.d/tarball/master" class="tar">tar</a><a href="https://github.com/crnixon/emacs.d/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div class="outline-text-2" id="text-1">
 
-  
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1">Standards</h3>
+<div class="outline-text-3" id="text-1-1">
+
+<p>   Emacs does not have namespaces, so you should come up with some
+   prefix for your variables and functions to avoid
+   conflicts. Luckily, <code>/</code> is a valid character in Emacs symbols, so I
+   emulate Clojure namespaces by using this. I use the prefix <code>cnd</code>
+   (my initials), so a custom function I write would have a name like
+   this: <code>cnd/gain-ultimate-power</code>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2">Inspirations</h3>
+<div class="outline-text-3" id="text-1-2">
+
+<ul>
+<li><a href="https://github.com/avdi/.emacs24.d">https://github.com/avdi/.emacs24.d</a>
+</li>
+<li><a href="http://technomancy.us/153">http://technomancy.us/153</a>
+</li>
+<li><a href="http://pavpanchekha.com/blog/emacs.html">http://pavpanchekha.com/blog/emacs.html</a>
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">Personal Info</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>   Emacs will try and guess information about you from your
+   environment. I prefer to be explicit about it.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq user-full-name <span style="color: #8b2252;">"Clinton N. Dreisbach"</span>)
+(setq user-mail-address <span style="color: #8b2252;">"clinton@dreisbach.us"</span>)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Must-Have Configuration</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  There are a few settings that any user of Emacs should have. You do
+  want the power of <code>cl</code>, which brings in a lot of Common Lisp's
+  methods.  You do want Emacs to reload changed files if you haven't
+  also changed them in Emacs (<code>global-auto-revert-mode</code>). You want
+  winner-mode, because you are a winner.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">cl</span>)
+(global-auto-revert-mode t)
+(winner-mode t)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">GUI Settings</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>  Emacs' default GUI settings are not great ones. No one wants to see
+  the Emacs splash screen. Everyone wants to see what text is selected
+  (<code>transient-mark-mode</code>). Other GUI setings will be based on personal
+  preferences. I personally don't want to see a tool bar, a scroll
+  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
+  to make me type out "yes" or "no" when a "y" or "n" will
+  suffice. Right now, I like <code>visual-line-mode</code>, which makes word wrap
+  way better in Emacs, but I go back and forth on it. Lastly, I like
+  seeing where my files end, so I toggle on <code>indicate-empty-lines</code>.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq inhibit-splash-screen t)
+(transient-mark-mode t)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-visual-line-mode t)
+(<span style="color: #a020f0;">if</span> (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1">Modeline Improvements</h3>
+<div class="outline-text-3" id="text-4-1">
+
+<p>   I like having the column number in my modeline to help with stack
+   traces and just as a sanity check.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq column-number-mode t)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">Indentation</h2>
+<div class="outline-text-2" id="text-5">
+
+<p>   By default, I want to indent with 2 spaces and no tabs.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq-default indent-tabs-mode nil
+              tab-width 2)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">Backups</h2>
+<div class="outline-text-2" id="text-6">
+
+<p>   Default Emacs behavior around backups dates from a time of
+   barbarism and should be avoided. On the other hand, it's saved me
+   once or twice. Therefore, I allow Emacs to keep backups, but
+   instead of keeping them in the same directory as the file being
+   edited, I force them to be kept in a temporary directory.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq backup-directory-alist `((<span style="color: #8b2252;">".*"</span> . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((<span style="color: #8b2252;">".*"</span> ,temporary-file-directory t)))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7">Files and Directories</h2>
+<div class="outline-text-2" id="text-7">
+
+<p>  I like to set up a vendor directory for any random elisp files I
+  pull in. I get the majority of my functionality from packages
+  distributed through ELPA or Marmalade, but sometimes, you find
+  something random on EmacsWiki that you may want to pull in. After
+  adding that directory, you're going to want to throw it in your
+  load-path. Often, you'll have subdirectories in your vendor
+  directory. Go ahead and add those to the load-path as well.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">cnd/vendor-dir</span> (expand-file-name <span style="color: #8b2252;">"vendor"</span> user-emacs-directory)
+  <span style="color: #8b2252;">"Location of any random elisp files I find from other authors."</span>)
+(add-to-list 'load-path cnd/vendor-dir)
+
+(<span style="color: #a020f0;">dolist</span> (project (directory-files cnd/vendor-dir t <span style="color: #8b2252;">"\\w+"</span>))
+  (<span style="color: #a020f0;">when</span> (file-directory-p project)
+    (add-to-list 'load-path project)))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8">Emacs Server</h2>
+<div class="outline-text-2" id="text-8">
+
+<p>  It is very annoying to find that you cannot close a buffer that has
+  been opened via <code>emacsclient</code> in the same way you would close any
+  other buffer. The following code fixes that.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(add-hook 'server-switch-hook
+          (<span style="color: #a020f0;">lambda</span> ()
+            (<span style="color: #a020f0;">when</span> (current-local-map)
+              (use-local-map (copy-keymap (current-local-map))))
+            (<span style="color: #a020f0;">when</span> server-buffer-clients
+              (local-set-key (kbd <span style="color: #8b2252;">"C-x k"</span>) 'server-edit))))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9">Functions</h2>
+<div class="outline-text-2" id="text-9">
+
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/clean-buffer</span> ()
+  <span style="color: #8b2252;">"Re-indent the entire buffer and cleanup whitespace."</span>
+  (interactive)
+  (<span style="color: #a020f0;">save-excursion</span>
+    (indent-region (point-min) (point-max) nil)
+    (whitespace-cleanup-region (point-min) (point-max))))
+
+(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/save-buffer-always</span> ()
+  <span style="color: #8b2252;">"Save the buffer even if it is not modified."</span>
+  (interactive)
+  (set-buffer-modified-p t)
+  (save-buffer))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10">Packages</h2>
+<div class="outline-text-2" id="text-10">
+
+
+</div>
+
+<div id="outline-container-10-1" class="outline-3">
+<h3 id="sec-10-1">Package Repositories</h3>
+<div class="outline-text-3" id="text-10-1">
+
+<p>   In addition to the default ELPA package repository, I use Marmalade,
+   which is community-run and has new packages more quickly.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(load <span style="color: #8b2252;">"package"</span>)
+(package-initialize)
+
+(add-to-list 'package-archives
+             '(<span style="color: #8b2252;">"marmalade"</span> . <span style="color: #8b2252;">"http://marmalade-repo.org/packages/"</span>))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10-2" class="outline-3">
+<h3 id="sec-10-2">Packages to Install</h3>
+<div class="outline-text-3" id="text-10-2">
+
+<p>  There's no way I can list each package I use and why here. The
+  important thing to note is that I set up a var with a list of the
+  packages I want to have installed.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">cnd/packages</span> '(auto-complete
+                       autopair
+                       clojure-mode
+                       coffee-mode
+                       cperl-mode
+                       deft
+                       feature-mode
+                       find-file-in-git-repo
+                       find-file-in-project
+                       full-ack
+                       go-mode
+                       gist
+                       haml-mode
+                       htmlize
+                       ido-ubiquitous
+                       magit
+                       markdown-mode
+                       marmalade
+                       nrepl
+                       paredit
+                       sass-mode
+                       scss-mode
+                       smex
+                       solarized-theme
+                       yaml-mode)
+  <span style="color: #8b2252;">"Packages I always want installed."</span>)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10-3" class="outline-3">
+<h3 id="sec-10-3">Installing Packages</h3>
+<div class="outline-text-3" id="text-10-3">
+
+<p>   This is the magic incantation to get your packages installed. It
+   will require a network connection if you don't have all your
+   packages currently installed, but otherwise, does not make any
+   connections.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/packages-installed-p</span> ()
+  (<span style="color: #a020f0;">loop</span> for pkg in cnd/packages
+        when (not (package-installed-p pkg)) do (<span style="color: #a020f0;">return</span> nil)
+        finally (<span style="color: #a020f0;">return</span> t)))
+
+(<span style="color: #a020f0;">unless</span> (cnd/packages-installed-p)
+  (message <span style="color: #8b2252;">"%s"</span> <span style="color: #8b2252;">"Refreshing package database..."</span>)
+  (package-refresh-contents)
+  (<span style="color: #a020f0;">dolist</span> (pkg cnd/packages)
+  (<span style="color: #a020f0;">when</span> (not (package-installed-p pkg))
+    (package-install pkg))))
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11">Utilities</h2>
+<div class="outline-text-2" id="text-11">
+
+
+</div>
+
+<div id="outline-container-11-1" class="outline-3">
+<h3 id="sec-11-1">Deft</h3>
+<div class="outline-text-3" id="text-11-1">
+
+<p>   <a href="http://jblevins.org/projects/deft/">http://jblevins.org/projects/deft/</a>
+</p>
+<p>
+   Deft is an Emacs mode for quickly browsing, filtering, and editing
+   directories of plain text notes, inspired by Notational Velocity. I
+   like it a lot. I want it to store all my notes in my Dropbox, and I
+   want it to use org-mode for those notes
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq deft-directory <span style="color: #8b2252;">"~/Dropbox/Notes/"</span>)
+(setq deft-text-mode 'org-mode)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11-2" class="outline-3">
+<h3 id="sec-11-2">Smex</h3>
+<div class="outline-text-3" id="text-11-2">
+
+<p>   Smex is a replacement for the default behavior of <code>M-x</code> with better
+   history and completion.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq smex-save-file (expand-file-name <span style="color: #8b2252;">".smex-items"</span> user-emacs-directory))
+(smex-initialize)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11-3" class="outline-3">
+<h3 id="sec-11-3">Ido</h3>
+<div class="outline-text-3" id="text-11-3">
+
+<p>   Ido stands for Interactively Do Things, but it might as well stand
+   for "Do the Right Thing." It makes Emacs have something resembling
+   a modern interface with fuzzy-finding and autocompletion.
+</p>
+<p>
+   <code>ido-ubiquitous</code> does exactly what you think it does: it takes the
+   power of ido and lets you use it almost everywhere.
+</p>
+<p>
+   I like to set the two options <code>ido-enable-flex-matching</code> and
+   <code>ido-use-virtual-buffers</code>. Flex matching gives me fuzzy-finding,
+   and using virtual buffers lets me switch to (and re-open) closed
+   buffers from my buffer search.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(ido-mode t)
+(ido-ubiquitous t)
+(setq ido-enable-flex-matching t
+      ido-use-virtual-buffers t)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12">Programming</h2>
+<div class="outline-text-2" id="text-12">
+
+
+</div>
+
+<div id="outline-container-12-1" class="outline-3">
+<h3 id="sec-12-1">Ack</h3>
+<div class="outline-text-3" id="text-12-1">
+
+<p>   <code>ack</code> is an enhanced grep.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq ack-prompt-for-directory t)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-2" class="outline-3">
+<h3 id="sec-12-2">autopair-mode</h3>
+<div class="outline-text-3" id="text-12-2">
+
+<p>   <code>autopair-mode</code> automatically adds closing parentheses, brackets, and the like, which is very useful when writing code. It doesn't get auto-loaded, so I have to require it explicitly.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">autopair</span>)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-3" class="outline-3">
+<h3 id="sec-12-3">C</h3>
+<div class="outline-text-3" id="text-12-3">
+
+<p>   C has its own indentation rules, so I have to set them with a
+   separate variable.
+</p>
+
+
+<pre class="src src-emacs-lisp">(setq c-basic-offset 2)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-4" class="outline-3">
+<h3 id="sec-12-4">Clojure</h3>
+<div class="outline-text-3" id="text-12-4">
+
+<p>   I want Emacs to open up ClojureScript files with Clojure syntax.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.cljs$"</span> . clojure-mode))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-5" class="outline-3">
+<h3 id="sec-12-5">CSS/SCSS</h3>
+<div class="outline-text-3" id="text-12-5">
+
+<p>   CSS has its own indentation rules, so I have to set them with a
+   separate variable.
+</p>
+<p>
+   I do not want SCSS to automatically compile to CSS upon save.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq css-indent-offset 2
+      scss-compile-at-save nil)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-6" class="outline-3">
+<h3 id="sec-12-6">Go</h3>
+<div class="outline-text-3" id="text-12-6">
+
+<p>   Go is a rad systems language from Google. One thing I like about it
+   is that it has exquisite tools built for it. In particular, it has
+   <code>gofmt</code>, which formats the code according to Google's specs. I am
+   adding a hook to <code>go-mode</code> to turn on <code>autopair-mode</code> and to run
+   <code>gofmt</code> before saving a file.
+</p>
+<p>
+   I am also adding <code>go-autocomplete</code>, which will allow me to complete
+   on methods from my own code and the Go libraries I am using.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(add-hook 'go-mode-hook
+          (<span style="color: #a020f0;">lambda</span> ()
+            (autopair-mode)
+            (add-hook 'before-save-hook 'gofmt-before-save nil t)))
+
+(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">go-autocomplete</span>)
+(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">auto-complete-config</span>)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-7" class="outline-3">
+<h3 id="sec-12-7">Javascript</h3>
+<div class="outline-text-3" id="text-12-7">
+
+<p>   JS has its own indentation rules, so I have to set them with a
+   separate variable.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq js-indent-level 2)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-8" class="outline-3">
+<h3 id="sec-12-8">Lisp</h3>
+<div class="outline-text-3" id="text-12-8">
+
+<p>   Lisp is the most awesome family of programming languages ever. When
+   I'm using Lisp, I want ultimate power, so I turn on paredit, which
+   gives me amazing abilities to move code around inside
+   S-expressions, and show-paren-mode, which shows me matching sets of
+   parentheses.
+</p>
+<p>
+   This section is a good example of how to extend Emacs with keymaps
+   and minor-modes.
+</p>
+
+
+
+<pre class="src src-emacs-lisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">lisp.el</span>
+(setq lisp-modes '(lisp-mode
+                   emacs-lisp-mode
+                   common-lisp-mode
+                   scheme-mode
+                   clojure-mode))
+
+(<span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">lisp-power-map</span> (make-keymap))
+(<span style="color: #a020f0;">define-minor-mode</span> <span style="color: #0000ff;">lisp-power-mode</span> <span style="color: #8b2252;">"Fix keybindings; add power."</span>
+  <span style="color: #483d8b;">:lighter</span> <span style="color: #8b2252;">" (power)"</span>
+  <span style="color: #483d8b;">:keymap</span> lisp-power-map
+  (paredit-mode t)
+  (show-paren-mode t))
+(define-key lisp-power-map [delete] 'paredit-forward-delete)
+(define-key lisp-power-map [backspace] 'paredit-backward-delete)
+
+(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/engage-lisp-power</span> ()
+  (lisp-power-mode t))
+
+(<span style="color: #a020f0;">dolist</span> (mode lisp-modes)
+  (add-hook (intern (format <span style="color: #8b2252;">"%s-hook"</span> mode))
+            #'cnd/engage-lisp-power))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-9" class="outline-3">
+<h3 id="sec-12-9">Ruby</h3>
+<div class="outline-text-3" id="text-12-9">
+
+<p>   There are a lot of different file names and extensions that are associated with Ruby. I've listed all I can think of so that <code>ruby-mode</code> is loaded for each of them.
+</p>
+
+
+
+<pre class="src src-emacs-lisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">Rake files are ruby, too, as are gemspecs, rackup files, etc.</span>
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.rake$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.gemspec$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.ru$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Rakefile$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Gemfile$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Capfile$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Vagrantfile$"</span> . ruby-mode))
+</pre>
+
+
+
+<pre class="src src-emacs-lisp">(add-hook 'ruby-mode-hook
+          (<span style="color: #a020f0;">lambda</span> ()
+            (autopair-mode)
+            (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+            (define-key ruby-mode-map (kbd <span style="color: #8b2252;">"RET"</span>) 'newline-and-indent)))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12-10" class="outline-3">
+<h3 id="sec-12-10">YAML</h3>
+<div class="outline-text-3" id="text-12-10">
+
+
+
+
+<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.yml$"</span> . yaml-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.yaml$"</span> . yaml-mode))
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13">OS-Specific Settings</h2>
+<div class="outline-text-2" id="text-13">
+
+
+</div>
+
+<div id="outline-container-13-1" class="outline-3">
+<h3 id="sec-13-1">OS X</h3>
+<div class="outline-text-3" id="text-13-1">
+
+<p>   Emacs works pretty great on OS X, but there are a few adjustments I
+   like. <code>mdfind</code> is a command-line interface to Spotlight which works
+   great when using the <code>locate</code> function in Emacs. <code>aspell</code> is used
+   instead of <code>ispell</code>. Lastly, OS X has annoying issues with the
+   <code>PATH</code> environment variable. If you launch Emacs as an app instead
+   of on the command-line, it will not have the path you set up in
+   <code>.profile</code> (or wherever you set up your environment variables.)
+   Therefore, I set it explicitly.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">when</span> (eq system-type 'darwin)
+  (setq locate-command <span style="color: #8b2252;">"mdfind"</span>)
+  (setq ispell-program-name <span style="color: #8b2252;">"aspell"</span>)
+  (setq exec-path '(<span style="color: #8b2252;">"~/bin"</span> <span style="color: #8b2252;">"/usr/local/bin"</span> <span style="color: #8b2252;">"/usr/local/sbin"</span> <span style="color: #8b2252;">"/usr/bin"</span> <span style="color: #8b2252;">"/usr/sbin"</span>))
+  (setenv <span style="color: #8b2252;">"PATH"</span> (reduce
+                  (<span style="color: #a020f0;">lambda</span> (path dir) (concat path <span style="color: #8b2252;">":"</span> dir))
+                  exec-path)))
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-14" class="outline-2">
+<h2 id="sec-14">Keybindings</h2>
+<div class="outline-text-2" id="text-14">
+
+<p>  Keybindings are a really personal matter. My philosophy with Emacs
+  is this: keep as many keybindings as possible the same as the
+  out-of-the-box Emacs config, and use <code>C-c</code> for your own special
+  preferences. It's cool to extend the default functionality (setting
+  Return to <code>newline-and-indent</code> instead of <code>newline</code>, for example),
+  but radically altering it is only going to frustrate you when you
+  have use Emacs without your configuration. Plus, it's nice to anyone
+  you ever have to pair program with.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(global-set-key (kbd <span style="color: #8b2252;">"RET"</span>) 'newline-and-indent)
+(global-set-key (kbd <span style="color: #8b2252;">"C-;"</span>) 'comment-or-uncomment-region)
+(global-set-key (kbd <span style="color: #8b2252;">"M-/"</span>) 'hippie-expand)
+(global-set-key (kbd <span style="color: #8b2252;">"M-x"</span>) 'smex)
+(global-set-key (kbd <span style="color: #8b2252;">"M-X"</span>) 'smex-major-mode-commands)
+(<span style="color: #a020f0;">if</span> window-system (global-unset-key (kbd <span style="color: #8b2252;">"C-z"</span>)))
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-14-1" class="outline-3">
+<h3 id="sec-14-1">Super-Special Personal Keybindings</h3>
+<div class="outline-text-3" id="text-14-1">
+
+
+
+
+
+<pre class="src src-emacs-lisp">(global-set-key (kbd <span style="color: #8b2252;">"C-c a"</span>) 'mark-whole-buffer)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c c"</span>) 'query-replace-regexp)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c d"</span>) 'deft)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c f"</span>) 'find-file-in-project)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c C-f"</span>) 'find-file-in-project)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c g"</span>) 'magit-status)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c C-g"</span>) 'find-file-in-git-repo)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c m"</span>) 'cnd/clean-buffer)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c q"</span>) 'join-line)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c r"</span>) 'revert-buffer)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c s"</span>) 'cnd/save-buffer-always)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c C-s"</span>) 'cnd/save-buffer-always)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c v"</span>) 'eval-buffer)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c w"</span>) 'whitespace-mode)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c x"</span>) 'execute-extended-command)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c z"</span>) 'zap-to-char)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-14-2" class="outline-3">
+<h3 id="sec-14-2">Windmove</h3>
+<div class="outline-text-3" id="text-14-2">
+
+<p>   Windmove is a nice little feature to let you move between open
+   windows by pressing <code>Shift</code> + the arrow keys. I like to add the
+   ability to also do this using <code>C-c</code>, as using <code>Shift</code> may not work
+   on all terminals.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(windmove-default-keybindings 'shift)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;left&gt;"</span>)  'windmove-left)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;right&gt;"</span>) 'windmove-right)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;up&gt;"</span>)    'windmove-up)
+(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;down&gt;"</span>)  'windmove-down)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-15" class="outline-2">
+<h2 id="sec-15">Local Configuration</h2>
+<div class="outline-text-2" id="text-15">
+
+<p>  No matter how universal your configuration is, you will find
+  yourself someday needing to configuration something different for a
+  specific computer. I keep that code in <code>local.el</code>, which gets loaded
+  at the end of my main configuration.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">let</span> ((local-config (expand-file-name <span style="color: #8b2252;">"local.el"</span> user-emacs-directory)))
+  (<span style="color: #a020f0;">when</span> (file-exists-p local-config)
+    (load local-config)))
+</pre>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2012-08-26 21:01:19 EDT</p>
+<p class="author">Author: Clinton Dreisbach</p>
+<p class="creator">Org version 7.8.11 with Emacs version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
 </body>
 </html>
