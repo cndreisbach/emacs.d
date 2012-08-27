@@ -149,7 +149,6 @@
 
 #+begin_src emacs-lisp
   (load "package")
-  (require 'melpa)
   
   (package-initialize)
   
