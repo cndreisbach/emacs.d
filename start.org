@@ -1,0 +1,468 @@
+#+TITLE: Emacs 24 configuration for Clinton Dreisbach
+#+AUTHOR: Clinton Dreisbach
+#+EMAIL: clinton@dreisbach.us
+#+OPTIONS: toc:2 num:nil
+
+* Introduction
+** Standards
+   Emacs does not have namespaces, so you should come up with some
+   prefix for your variables and functions to avoid
+   conflicts. Luckily, =/= is a valid character in Emacs symbols, so I
+   emulate Clojure namespaces by using this. I use the prefix =cnd=
+   (my initials), so a custom function I write would have a name like
+   this: =cnd/gain-ultimate-power=.
+
+** Inspirations
+   - https://github.com/avdi/.emacs24.d
+   - http://technomancy.us/153
+   - http://pavpanchekha.com/blog/emacs.html
+
+* Personal Info
+   Emacs will try and guess information about you from your
+   environment. I prefer to be explicit about it.
+
+#+begin_src emacs-lisp
+  (setq user-full-name "Clinton N. Dreisbach")
+  (setq user-mail-address "clinton@dreisbach.us")
+#+end_src
+
+* Must-Have Configuration
+  There are a few settings that any user of Emacs should have. You do
+  want the power of =cl=, which brings in a lot of Common Lisp's
+  methods.  You do want Emacs to reload changed files if you haven't
+  also changed them in Emacs (=global-auto-revert-mode=). You want
+  winner-mode, because you are a winner.
+
+#+begin_src emacs-lisp
+  (require 'cl)
+  (global-auto-revert-mode t)
+  (winner-mode t)
+#+end_src
+
+* GUI Settings
+  Emacs' default GUI settings are not great ones. No one wants to see
+  the Emacs splash screen. Everyone wants to see what text is selected
+  (=transient-mark-mode=). Other GUI setings will be based on personal
+  preferences. I personally don't want to see a tool bar, a scroll
+  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
+  to make me type out "yes" or "no" when a "y" or "n" will
+  suffice. Right now, I like =visual-line-mode=, which makes word wrap
+  way better in Emacs, but I go back and forth on it. Lastly, I like
+  seeing where my files end, so I toggle on =indicate-empty-lines=.
+
+#+begin_src emacs-lisp
+  (setq inhibit-splash-screen t)
+  (transient-mark-mode t)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (global-visual-line-mode t)
+  (if (not indicate-empty-lines)
+    (toggle-indicate-empty-lines))
+#+end_src
+
+** Modeline Improvements
+   I like having the column number in my modeline to help with stack
+   traces and just as a sanity check.
+
+#+begin_src emacs-lisp
+  (setq column-number-mode t)
+#+end_src
+
+* Indentation
+   By default, I want to indent with 2 spaces and no tabs.
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil
+                tab-width 2)
+#+end_src
+
+* Backups
+   Default Emacs behavior around backups dates from a time of
+   barbarism and should be avoided. On the other hand, it's saved me
+   once or twice. Therefore, I allow Emacs to keep backups, but
+   instead of keeping them in the same directory as the file being
+   edited, I force them to be kept in a temporary directory.
+
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+#+end_src
+
+* Files and Directories
+  I like to set up a vendor directory for any random elisp files I
+  pull in. I get the majority of my functionality from packages
+  distributed through ELPA or Marmalade, but sometimes, you find
+  something random on EmacsWiki that you may want to pull in. After
+  adding that directory, you're going to want to throw it in your
+  load-path. Often, you'll have subdirectories in your vendor
+  directory. Go ahead and add those to the load-path as well.
+
+#+begin_src emacs-lisp
+  (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
+    "Location of any random elisp files I find from other authors.")
+  (add-to-list 'load-path cnd/vendor-dir)
+
+  (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
+    (when (file-directory-p project)
+      (add-to-list 'load-path project)))
+#+end_src
+
+* Emacs Server
+  It is very annoying to find that you cannot close a buffer that has
+  been opened via =emacsclient= in the same way you would close any
+  other buffer. The following code fixes that.
+
+#+begin_src emacs-lisp
+  (add-hook 'server-switch-hook
+            (lambda ()
+              (when (current-local-map)
+                (use-local-map (copy-keymap (current-local-map))))
+              (when server-buffer-clients
+                (local-set-key (kbd "C-x k") 'server-edit))))
+#+end_src
+
+* Functions
+#+begin_src emacs-lisp
+  (defun cnd/clean-buffer ()
+    "Re-indent the entire buffer and cleanup whitespace."
+    (interactive)
+    (save-excursion
+      (indent-region (point-min) (point-max) nil)
+      (whitespace-cleanup-region (point-min) (point-max))))
+
+  (defun cnd/save-buffer-always ()
+    "Save the buffer even if it is not modified."
+    (interactive)
+    (set-buffer-modified-p t)
+    (save-buffer))
+#+end_src
+
+* Packages
+** Package Repositories
+   In addition to the default ELPA package repository, I use Marmalade,
+   which is community-run and has new packages more quickly.
+
+#+begin_src emacs-lisp
+  (load "package")
+  (package-initialize)
+
+  (add-to-list 'package-archives
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
+#+end_src
+
+** Packages to Install
+  There's no way I can list each package I use and why here. The
+  important thing to note is that I set up a var with a list of the
+  packages I want to have installed.
+
+#+begin_src emacs-lisp
+  (defvar cnd/packages '(auto-complete
+                         autopair
+                         clojure-mode
+                         coffee-mode
+                         cperl-mode
+                         deft
+                         feature-mode
+                         find-file-in-git-repo
+                         find-file-in-project
+                         full-ack
+                         go-mode
+                         gist
+                         haml-mode
+                         htmlize
+                         ido-ubiquitous
+                         magit
+                         markdown-mode
+                         marmalade
+                         nrepl
+                         paredit
+                         sass-mode
+                         scss-mode
+                         smex
+                         solarized-theme
+                         yaml-mode)
+    "Packages I always want installed.")
+#+end_src
+
+** Installing Packages
+   This is the magic incantation to get your packages installed. It
+   will require a network connection if you don't have all your
+   packages currently installed, but otherwise, does not make any
+   connections.
+
+#+begin_src emacs-lisp
+  (defun cnd/packages-installed-p ()
+    (loop for pkg in cnd/packages
+          when (not (package-installed-p pkg)) do (return nil)
+          finally (return t)))
+
+  (unless (cnd/packages-installed-p)
+    (message "%s" "Refreshing package database...")
+    (package-refresh-contents)
+    (dolist (pkg cnd/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+#+end_src
+   
+* Utilities
+** Deft
+   http://jblevins.org/projects/deft/
+
+   Deft is an Emacs mode for quickly browsing, filtering, and editing
+   directories of plain text notes, inspired by Notational Velocity. I
+   like it a lot. I want it to store all my notes in my Dropbox, and I
+   want it to use org-mode for those notes
+
+#+begin_src emacs-lisp
+  (setq deft-directory "~/Dropbox/Notes/")
+  (setq deft-text-mode 'org-mode)
+#+end_src
+
+** Smex
+   Smex is a replacement for the default behavior of =M-x= with better
+   history and completion.
+
+#+begin_src emacs-lisp
+  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
+  (smex-initialize)
+#+end_src
+
+** Ido
+   Ido stands for Interactively Do Things, but it might as well stand
+   for "Do the Right Thing." It makes Emacs have something resembling
+   a modern interface with fuzzy-finding and autocompletion.
+
+   =ido-ubiquitous= does exactly what you think it does: it takes the
+   power of ido and lets you use it almost everywhere.
+
+   I like to set the two options =ido-enable-flex-matching= and
+   =ido-use-virtual-buffers=. Flex matching gives me fuzzy-finding,
+   and using virtual buffers lets me switch to (and re-open) closed
+   buffers from my buffer search.
+
+#+begin_src emacs-lisp
+  (ido-mode t)
+  (ido-ubiquitous t)
+  (setq ido-enable-flex-matching t
+        ido-use-virtual-buffers t)
+#+end_src
+
+* Programming
+** Ack
+   =ack= is an enhanced grep.
+
+#+begin_src emacs-lisp
+  (setq ack-prompt-for-directory t)
+#+end_src
+
+** autopair-mode
+   =autopair-mode= automatically adds closing parentheses, brackets, and the like, which is very useful when writing code. It doesn't get auto-loaded, so I have to require it explicitly.
+
+#+begin_src emacs-lisp
+  (require 'autopair)
+#+end_src
+
+** C
+   C has its own indentation rules, so I have to set them with a
+   separate variable.
+#+begin_src emacs-lisp
+  (setq c-basic-offset 2)
+#+end_src
+
+** Clojure
+   I want Emacs to open up ClojureScript files with Clojure syntax.
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+#+end_src
+
+** CSS/SCSS
+   CSS has its own indentation rules, so I have to set them with a
+   separate variable.
+
+   I do not want SCSS to automatically compile to CSS upon save.
+
+#+begin_src emacs-lisp
+  (setq css-indent-offset 2
+        scss-compile-at-save nil)
+#+end_src
+
+** Go
+   Go is a rad systems language from Google. One thing I like about it
+   is that it has exquisite tools built for it. In particular, it has
+   =gofmt=, which formats the code according to Google's specs. I am
+   adding a hook to =go-mode= to turn on =autopair-mode= and to run
+   =gofmt= before saving a file.
+
+   I am also adding =go-autocomplete=, which will allow me to complete
+   on methods from my own code and the Go libraries I am using.
+
+#+begin_src emacs-lisp
+  (add-hook 'go-mode-hook
+            (lambda ()
+              (autopair-mode)
+              (add-hook 'before-save-hook 'gofmt-before-save nil t)))
+
+  (require 'go-autocomplete)
+  (require 'auto-complete-config)
+#+end_src
+
+** Javascript
+   JS has its own indentation rules, so I have to set them with a
+   separate variable.
+
+#+begin_src emacs-lisp
+  (setq js-indent-level 2)
+#+end_src
+
+** Lisp
+   Lisp is the most awesome family of programming languages ever. When
+   I'm using Lisp, I want ultimate power, so I turn on paredit, which
+   gives me amazing abilities to move code around inside
+   S-expressions, and show-paren-mode, which shows me matching sets of
+   parentheses.
+
+   This section is a good example of how to extend Emacs with keymaps
+   and minor-modes.
+
+#+begin_src emacs-lisp
+  ;; lisp.el
+  (setq lisp-modes '(lisp-mode
+                     emacs-lisp-mode
+                     common-lisp-mode
+                     scheme-mode
+                     clojure-mode))
+
+  (defvar lisp-power-map (make-keymap))
+  (define-minor-mode lisp-power-mode "Fix keybindings; add power."
+    :lighter " (power)"
+    :keymap lisp-power-map
+    (paredit-mode t)
+    (show-paren-mode t))
+  (define-key lisp-power-map [delete] 'paredit-forward-delete)
+  (define-key lisp-power-map [backspace] 'paredit-backward-delete)
+
+  (defun cnd/engage-lisp-power ()
+    (lisp-power-mode t))
+
+  (dolist (mode lisp-modes)
+    (add-hook (intern (format "%s-hook" mode))
+              #'cnd/engage-lisp-power))
+#+end_src
+
+** Ruby
+   There are a lot of different file names and extensions that are associated with Ruby. I've listed all I can think of so that =ruby-mode= is loaded for each of them.
+
+#+begin_src emacs-lisp
+  ;; Rake files are ruby, too, as are gemspecs, rackup files, etc.
+  (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+  (add-hook 'ruby-mode-hook
+            (lambda ()
+              (autopair-mode)
+              (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+              (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
+#+end_src
+
+** YAML
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+#+end_src
+
+* OS-Specific Settings
+** OS X
+   Emacs works pretty great on OS X, but there are a few adjustments I
+   like. =mdfind= is a command-line interface to Spotlight which works
+   great when using the =locate= function in Emacs. =aspell= is used
+   instead of =ispell=. Lastly, OS X has annoying issues with the
+   =PATH= environment variable. If you launch Emacs as an app instead
+   of on the command-line, it will not have the path you set up in
+   =.profile= (or wherever you set up your environment variables.)
+   Therefore, I set it explicitly.
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq locate-command "mdfind")
+    (setq ispell-program-name "aspell")
+    (setq exec-path '("~/bin" "/usr/local/bin" "/usr/local/sbin" "/usr/bin" "/usr/sbin"))
+    (setenv "PATH" (reduce
+                    (lambda (path dir) (concat path ":" dir))
+                    exec-path)))
+#+end_src
+
+* Keybindings
+  Keybindings are a really personal matter. My philosophy with Emacs
+  is this: keep as many keybindings as possible the same as the
+  out-of-the-box Emacs config, and use =C-c= for your own special
+  preferences. It's cool to extend the default functionality (setting
+  Return to =newline-and-indent= instead of =newline=, for example),
+  but radically altering it is only going to frustrate you when you
+  have use Emacs without your configuration. Plus, it's nice to anyone
+  you ever have to pair program with.
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "RET") 'newline-and-indent)
+  (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+  (global-set-key (kbd "M-/") 'hippie-expand)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (if window-system (global-unset-key (kbd "C-z")))
+#+end_src
+
+** Super-Special Personal Keybindings
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c a") 'mark-whole-buffer)
+  (global-set-key (kbd "C-c c") 'query-replace-regexp)
+  (global-set-key (kbd "C-c d") 'deft)
+  (global-set-key (kbd "C-c f") 'find-file-in-project)
+  (global-set-key (kbd "C-c C-f") 'find-file-in-project)
+  (global-set-key (kbd "C-c g") 'magit-status)
+  (global-set-key (kbd "C-c C-g") 'find-file-in-git-repo)
+  (global-set-key (kbd "C-c m") 'cnd/clean-buffer)
+  (global-set-key (kbd "C-c q") 'join-line)
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+  (global-set-key (kbd "C-c s") 'cnd/save-buffer-always)
+  (global-set-key (kbd "C-c C-s") 'cnd/save-buffer-always)
+  (global-set-key (kbd "C-c v") 'eval-buffer)
+  (global-set-key (kbd "C-c w") 'whitespace-mode)
+  (global-set-key (kbd "C-c x") 'execute-extended-command)
+  (global-set-key (kbd "C-c z") 'zap-to-char)
+#+end_src
+
+** Windmove
+   Windmove is a nice little feature to let you move between open
+   windows by pressing =Shift= + the arrow keys. I like to add the
+   ability to also do this using =C-c=, as using =Shift= may not work
+   on all terminals.
+
+#+begin_src emacs-lisp
+  (windmove-default-keybindings 'shift)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+#+end_src
+
+* Local Configuration
+  No matter how universal your configuration is, you will find
+  yourself someday needing to configuration something different for a
+  specific computer. I keep that code in =local.el=, which gets loaded
+  at the end of my main configuration.
+
+#+begin_src emacs-lisp
+  (let ((local-config (expand-file-name "local.el" user-emacs-directory)))
+    (when (file-exists-p local-config)
+      (load local-config)))
+#+end_src

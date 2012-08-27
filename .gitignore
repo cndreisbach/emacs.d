@@ -10,3 +10,5 @@ eshell
 swank
 session.*
 ac-comphist.dat
+start.el
+_site
