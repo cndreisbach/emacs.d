@@ -107,6 +107,17 @@
       (add-to-list 'load-path project)))
 #+end_src
 
+** Multiple Buffers
+I often have multiple buffers open with the same name. Emacs usually
+deals with this by appending the buffer number to the buffer
+name. This is hard to keep track of. Instead, the uniquify library
+uses the parent directory name as a prefix to the file name.
+
+#+begin_src emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+end_src
+
 * Emacs Server
   It is very annoying to find that you cannot close a buffer that has
   been opened via =emacsclient= in the same way you would close any
