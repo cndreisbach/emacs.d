@@ -68,26 +68,6 @@
   (setq column-number-mode t)
 #+end_src
 
-* Indentation
-   By default, I want to indent with 2 spaces and no tabs.
-
-#+begin_src emacs-lisp
-  (setq-default indent-tabs-mode nil
-                tab-width 2)
-#+end_src
-
-* Backups
-   Default Emacs behavior around backups dates from a time of
-   barbarism and should be avoided. On the other hand, it's saved me
-   once or twice. Therefore, I allow Emacs to keep backups, but
-   instead of keeping them in the same directory as the file being
-   edited, I force them to be kept in a temporary directory.
-
-#+begin_src emacs-lisp
-  (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-#+end_src
-
 * Files and Directories
   I like to set up a vendor directory for any random elisp files I
   pull in. I get the majority of my functionality from packages
@@ -107,31 +87,6 @@
       (add-to-list 'load-path project)))
 #+end_src
 
-** Multiple Buffers
-I often have multiple buffers open with the same name. Emacs usually
-deals with this by appending the buffer number to the buffer
-name. This is hard to keep track of. Instead, the uniquify library
-uses the parent directory name as a prefix to the file name.
-
-#+begin_src emacs-lisp
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
-#+end_src
-
-* Emacs Server
-  It is very annoying to find that you cannot close a buffer that has
-  been opened via =emacsclient= in the same way you would close any
-  other buffer. The following code fixes that.
-
-#+begin_src emacs-lisp
-  (add-hook 'server-switch-hook
-            (lambda ()
-              (when (current-local-map)
-                (use-local-map (copy-keymap (current-local-map))))
-              (when server-buffer-clients
-                (local-set-key (kbd "C-x k") 'server-edit))))
-#+end_src
-
 * Functions
 #+begin_src emacs-lisp
   (defun cnd/clean-buffer ()
@@ -140,15 +95,23 @@ uses the parent directory name as a prefix to the file name.
     (save-excursion
       (indent-region (point-min) (point-max) nil)
       (whitespace-cleanup-region (point-min) (point-max))))
-
+  
   (defun cnd/save-buffer-always ()
     "Save the buffer even if it is not modified."
     (interactive)
     (set-buffer-modified-p t)
     (save-buffer))
+  
+  (defun cnd/edit-config ()
+    (interactive)
+    (find-file "~/.emacs.d/start.org"))
+  
+  (defun cnd/reload-config ()
+    (interactive)
+    (load-file "~/.emacs.d/init.el"))
 #+end_src
 
-* Packages
+* Package Management
 ** Package Repositories
    In addition to the default ELPA package repository, I use
    Marmalade, which is community-run and has new packages more
@@ -226,8 +189,7 @@ uses the parent directory name as a prefix to the file name.
     (when (not (package-installed-p pkg))
       (package-install pkg))))
 #+end_src
-   
-* Utilities
+* Package Configuration
 ** Deft
    http://jblevins.org/projects/deft/
 
@@ -271,7 +233,44 @@ uses the parent directory name as a prefix to the file name.
   (setq ido-enable-flex-matching t
         ido-use-virtual-buffers t)
 #+end_src
+* Text Editing
+** Backups
+   Default Emacs behavior around backups dates from a time of
+   barbarism and should be avoided. On the other hand, it's saved me
+   once or twice. Therefore, I allow Emacs to keep backups, but
+   instead of keeping them in the same directory as the file being
+   edited, I force them to be kept in a temporary directory.
 
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+#+end_src
+
+** File Behavior
+   All files should end with a final newline.
+
+#+begin_src emacs-lisp
+  (setq require-final-newline t)
+#+end_src
+
+** Indentation
+   By default, I want to indent with 2 spaces and no tabs.
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil
+                tab-width 2)
+#+end_src
+
+** Multiple Buffers
+I often have multiple buffers open with the same name. Emacs usually
+deals with this by appending the buffer number to the buffer
+name. This is hard to keep track of. Instead, the uniquify library
+uses the parent directory name as a prefix to the file name.
+
+#+begin_src emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+end_src
 * Programming
 ** Ack
    =ack= is an enhanced grep.
@@ -279,9 +278,11 @@ uses the parent directory name as a prefix to the file name.
 #+begin_src emacs-lisp
   (setq ack-prompt-for-directory t)
 #+end_src
-
+   
 ** autopair-mode
-   =autopair-mode= automatically adds closing parentheses, brackets, and the like, which is very useful when writing code. It doesn't get auto-loaded, so I have to require it explicitly.
+   =autopair-mode= automatically adds closing parentheses, brackets,
+   and the like, which is very useful when writing code. It doesn't
+   get auto-loaded, so I have to require it explicitly.
 
 #+begin_src emacs-lisp
   (require 'autopair)
@@ -402,28 +403,6 @@ uses the parent directory name as a prefix to the file name.
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
 #+end_src
-
-* OS-Specific Settings
-** OS X
-   Emacs works pretty great on OS X, but there are a few adjustments I
-   like. =mdfind= is a command-line interface to Spotlight which works
-   great when using the =locate= function in Emacs. =aspell= is used
-   instead of =ispell=. Lastly, OS X has annoying issues with the
-   =PATH= environment variable. If you launch Emacs as an app instead
-   of on the command-line, it will not have the path you set up in
-   =.profile= (or wherever you set up your environment variables.)
-   Therefore, I set it explicitly.
-
-#+begin_src emacs-lisp
-  (when (eq system-type 'darwin)
-    (setq locate-command "mdfind")
-    (setq ispell-program-name "aspell")
-    (setq exec-path '("~/bin" "/usr/local/bin" "/usr/local/sbin" "/usr/bin" "/usr/sbin"))
-    (setenv "PATH" (reduce
-                    (lambda (path dir) (concat path ":" dir))
-                    exec-path)))
-#+end_src
-
 * Keybindings
   Keybindings are a really personal matter. My philosophy with Emacs
   is this: keep as many keybindings as possible the same as the
@@ -456,7 +435,8 @@ uses the parent directory name as a prefix to the file name.
   (global-set-key (kbd "C-c m") 'cnd/clean-buffer)
   (global-set-key (kbd "C-c q") 'join-line)
   (global-set-key (kbd "C-c r") 'revert-buffer)
-  (global-set-key (kbd "C-c s") 'cnd/save-buffer-always)
+  (global-set-key (kbd "C-c s e") 'cnd/edit-config)
+  (global-set-key (kbd "C-c s r") 'cnd/reload-config)
   (global-set-key (kbd "C-c C-s") 'cnd/save-buffer-always)
   (global-set-key (kbd "C-c v") 'eval-buffer)
   (global-set-key (kbd "C-c w") 'whitespace-mode)
@@ -477,7 +457,39 @@ uses the parent directory name as a prefix to the file name.
   (global-set-key (kbd "C-c <up>")    'windmove-up)
   (global-set-key (kbd "C-c <down>")  'windmove-down)
 #+end_src
+* Emacs Server
+  It is very annoying to find that you cannot close a buffer that has
+  been opened via =emacsclient= in the same way you would close any
+  other buffer. The following code fixes that.
 
+#+begin_src emacs-lisp
+  (add-hook 'server-switch-hook
+            (lambda ()
+              (when (current-local-map)
+                (use-local-map (copy-keymap (current-local-map))))
+              (when server-buffer-clients
+                (local-set-key (kbd "C-x k") 'server-edit))))
+#+end_src
+* OS-Specific Settings
+** OS X
+   Emacs works pretty great on OS X, but there are a few adjustments I
+   like. =mdfind= is a command-line interface to Spotlight which works
+   great when using the =locate= function in Emacs. =aspell= is used
+   instead of =ispell=. Lastly, OS X has annoying issues with the
+   =PATH= environment variable. If you launch Emacs as an app instead
+   of on the command-line, it will not have the path you set up in
+   =.profile= (or wherever you set up your environment variables.)
+   Therefore, I set it explicitly.
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq locate-command "mdfind")
+    (setq ispell-program-name "aspell")
+    (setq exec-path '("~/bin" "/usr/local/bin" "/usr/local/sbin" "/usr/bin" "/usr/sbin"))
+    (setenv "PATH" (reduce
+                    (lambda (path dir) (concat path ":" dir))
+                    exec-path)))
+#+end_src
 * Local Configuration
   No matter how universal your configuration is, you will find
   yourself someday needing to configuration something different for a
