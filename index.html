@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Emacs 24 configuration for Clinton Dreisbach"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-08-26 21:06:28 EDT"/>
+<meta name="generated" content="2012-08-29 09:00:21 EDT"/>
 <meta name="author" content="Clinton Dreisbach"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -113,7 +113,11 @@
 </li>
 <li><a href="#sec-5">Indentation</a></li>
 <li><a href="#sec-6">Backups</a></li>
-<li><a href="#sec-7">Files and Directories</a></li>
+<li><a href="#sec-7">Files and Directories</a>
+<ul>
+<li><a href="#sec-7-1">Multiple Buffers</a></li>
+</ul>
+</li>
 <li><a href="#sec-8">Emacs Server</a></li>
 <li><a href="#sec-9">Functions</a></li>
 <li><a href="#sec-10">Packages</a>
@@ -252,10 +256,9 @@
   (<code>transient-mark-mode</code>). Other GUI setings will be based on personal
   preferences. I personally don't want to see a tool bar, a scroll
   bar, a menu bar, or really, any kind of bar. I also don't want Emacs
-  to make me type out "yes" or "no" when a "y" or "n" will
-  suffice. Right now, I like <code>visual-line-mode</code>, which makes word wrap
-  way better in Emacs, but I go back and forth on it. Lastly, I like
-  seeing where my files end, so I toggle on <code>indicate-empty-lines</code>.
+  to make me type out "yes" or "no" when a "y" or "n" will suffice.
+  Lastly, I like seeing where my files end, so I toggle on
+  <code>indicate-empty-lines</code>.
 </p>
 
 
@@ -266,7 +269,6 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(global-visual-line-mode t)
 (<span style="color: #a020f0;">if</span> (not indicate-empty-lines)
   (toggle-indicate-empty-lines))
 </pre>
@@ -359,6 +361,27 @@
 </pre>
 
 
+
+</div>
+
+<div id="outline-container-7-1" class="outline-3">
+<h3 id="sec-7-1">Multiple Buffers</h3>
+<div class="outline-text-3" id="text-7-1">
+
+<p>I often have multiple buffers open with the same name. Emacs usually
+deals with this by appending the buffer number to the buffer
+name. This is hard to keep track of. Instead, the uniquify library
+uses the parent directory name as a prefix to the file name.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">uniquify</span>)
+(setq uniquify-buffer-name-style 'forward)
+</pre>
+
+
+</div>
 </div>
 
 </div>
@@ -424,17 +447,28 @@
 <h3 id="sec-10-1">Package Repositories</h3>
 <div class="outline-text-3" id="text-10-1">
 
-<p>   In addition to the default ELPA package repository, I use Marmalade,
-   which is community-run and has new packages more quickly.
+<p>   In addition to the default ELPA package repository, I use
+   Marmalade, which is community-run and has new packages more
+   quickly. I also use MELPA, which has up-to-date versions of
+   packages built straight from their repos. I don't want to get all
+   my packages from there, since they might be flaky, but if I want a
+   particular package to use the HEAD version, I can throw it in the
+   <code>package-archive-enable-alist</code>.
 </p>
 
 
 
 <pre class="src src-emacs-lisp">(load <span style="color: #8b2252;">"package"</span>)
+
 (package-initialize)
 
 (add-to-list 'package-archives
              '(<span style="color: #8b2252;">"marmalade"</span> . <span style="color: #8b2252;">"http://marmalade-repo.org/packages/"</span>))
+(add-to-list 'package-archives
+             '(<span style="color: #8b2252;">"melpa"</span> . <span style="color: #8b2252;">"http://melpa.milkbox.net/packages/"</span>) t)
+
+(setq package-archive-enable-alist '((<span style="color: #8b2252;">"melpa"</span> deft magit)))
+
 </pre>
 
 
@@ -479,6 +513,7 @@
                        solarized-theme
                        yaml-mode)
   <span style="color: #8b2252;">"Packages I always want installed."</span>)
+
 </pre>
 
 
@@ -540,6 +575,8 @@
 
 
 <pre class="src src-emacs-lisp">(setq deft-directory <span style="color: #8b2252;">"~/Dropbox/Notes/"</span>)
+(setq deft-use-filename-as-title t)
+(setq deft-extension <span style="color: #8b2252;">"org"</span>)
 (setq deft-text-mode 'org-mode)
 </pre>
 
@@ -986,7 +1023,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-08-26 21:06:28 EDT</p>
+<p class="date">Date: 2012-08-29 09:00:21 EDT</p>
 <p class="author">Author: Clinton Dreisbach</p>
 <p class="creator">Org version 7.8.11 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
