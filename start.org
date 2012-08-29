@@ -168,7 +168,7 @@ uses the parent directory name as a prefix to the file name.
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
   
-  (setq package-archive-enable-alist '(("melpa" deft smex magit)))
+  (setq package-archive-enable-alist '(("melpa" deft magit)))
   
 #+end_src
 
