@@ -39,54 +39,6 @@
   (winner-mode t)
 #+end_src
 
-* GUI Settings
-  Emacs' default GUI settings are not great ones. No one wants to see
-  the Emacs splash screen. Everyone wants to see what text is selected
-  (=transient-mark-mode=). Other GUI setings will be based on personal
-  preferences. I personally don't want to see a tool bar, a scroll
-  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
-  to make me type out "yes" or "no" when a "y" or "n" will suffice.
-  Lastly, I like seeing where my files end, so I toggle on
-  =indicate-empty-lines=.
-
-#+begin_src emacs-lisp
-  (setq inhibit-splash-screen t)
-  (transient-mark-mode t)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (fset 'yes-or-no-p 'y-or-n-p)
-  (if (not indicate-empty-lines)
-    (toggle-indicate-empty-lines))
-#+end_src
-
-** Modeline Improvements
-   I like having the column number in my modeline to help with stack
-   traces and just as a sanity check.
-
-#+begin_src emacs-lisp
-  (setq column-number-mode t)
-#+end_src
-
-* Files and Directories
-  I like to set up a vendor directory for any random elisp files I
-  pull in. I get the majority of my functionality from packages
-  distributed through ELPA or Marmalade, but sometimes, you find
-  something random on EmacsWiki that you may want to pull in. After
-  adding that directory, you're going to want to throw it in your
-  load-path. Often, you'll have subdirectories in your vendor
-  directory. Go ahead and add those to the load-path as well.
-
-#+begin_src emacs-lisp
-  (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
-    "Location of any random elisp files I find from other authors.")
-  (add-to-list 'load-path cnd/vendor-dir)
-
-  (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
-    (when (file-directory-p project)
-      (add-to-list 'load-path project)))
-#+end_src
-
 * Functions
 #+begin_src emacs-lisp
   (defun cnd/clean-buffer ()
@@ -145,6 +97,7 @@
                          autopair
                          clojure-mode
                          coffee-mode
+                         color-theme-sanityinc-solarized
                          cperl-mode
                          deft
                          feature-mode
@@ -164,7 +117,6 @@
                          sass-mode
                          scss-mode
                          smex
-                         solarized-theme
                          yaml-mode)
     "Packages I always want installed.")
   
@@ -233,6 +185,63 @@
   (setq ido-enable-flex-matching t
         ido-use-virtual-buffers t)
 #+end_src
+** Ack
+   =ack= is an enhanced grep.
+
+#+begin_src emacs-lisp
+  (setq ack-prompt-for-directory t)
+  (setq ack-executable (executable-find "ack-grep"))
+#+end_src
+
+* GUI Settings
+  Emacs' default GUI settings are not great ones. No one wants to see
+  the Emacs splash screen. Everyone wants to see what text is selected
+  (=transient-mark-mode=). Other GUI setings will be based on personal
+  preferences. I personally don't want to see a tool bar, a scroll
+  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
+  to make me type out "yes" or "no" when a "y" or "n" will suffice.
+  Lastly, I like seeing where my files end, so I toggle on
+  =indicate-empty-lines=.
+
+#+begin_src emacs-lisp
+  (setq inhibit-splash-screen t)
+  (transient-mark-mode t)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (if (not indicate-empty-lines)
+    (toggle-indicate-empty-lines))
+  (load-theme 'sanityinc-solarized-light t)
+#+end_src
+
+** Modeline Improvements
+   I like having the column number in my modeline to help with stack
+   traces and just as a sanity check.
+
+#+begin_src emacs-lisp
+  (setq column-number-mode t)
+#+end_src
+
+* Files and Directories
+  I like to set up a vendor directory for any random elisp files I
+  pull in. I get the majority of my functionality from packages
+  distributed through ELPA or Marmalade, but sometimes, you find
+  something random on EmacsWiki that you may want to pull in. After
+  adding that directory, you're going to want to throw it in your
+  load-path. Often, you'll have subdirectories in your vendor
+  directory. Go ahead and add those to the load-path as well.
+
+#+begin_src emacs-lisp
+  (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
+    "Location of any random elisp files I find from other authors.")
+  (add-to-list 'load-path cnd/vendor-dir)
+
+  (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
+    (when (file-directory-p project)
+      (add-to-list 'load-path project)))
+#+end_src
+
 * Text Editing
 ** Backups
    Default Emacs behavior around backups dates from a time of
@@ -272,13 +281,6 @@ uses the parent directory name as a prefix to the file name.
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
 * Programming
-** Ack
-   =ack= is an enhanced grep.
-
-#+begin_src emacs-lisp
-  (setq ack-prompt-for-directory t)
-#+end_src
-   
 ** autopair-mode
    =autopair-mode= automatically adds closing parentheses, brackets,
    and the like, which is very useful when writing code. It doesn't
