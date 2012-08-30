@@ -1,0 +1,3 @@
+[submodule "vendor/o-blog"]
+	path = vendor/o-blog
+	url = git://github.com/renard/o-blog.git
