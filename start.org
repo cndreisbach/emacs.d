@@ -48,6 +48,22 @@
       (indent-region (point-min) (point-max) nil)
       (whitespace-cleanup-region (point-min) (point-max))))
   
+  (defun cnd/increase-font-size ()
+    (interactive)
+    (set-face-attribute 'default
+                        nil
+                        :height
+                        (ceiling (* 1.10
+                                    (face-attribute 'default :height)))))
+  
+  (defun cnd/decrease-font-size ()
+    (interactive)
+    (set-face-attribute 'default
+                        nil
+                        :height
+                        (floor (* 0.9
+                                  (face-attribute 'default :height)))))
+  
   (defun cnd/save-buffer-always ()
     "Save the buffer even if it is not modified."
     (interactive)
@@ -61,6 +77,7 @@
   (defun cnd/reload-config ()
     (interactive)
     (load-file "~/.emacs.d/init.el"))
+  
 #+end_src
 
 * Package Management
@@ -434,6 +451,10 @@ uses the parent directory name as a prefix to the file name.
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   (if window-system (global-unset-key (kbd "C-z")))
+  
+  (global-set-key (kbd "C-+") 'cnd/increase-font-size)
+  (global-set-key (kbd "C-=") 'cnd/increase-font-size)
+  (global-set-key (kbd "C--") 'cnd/decrease-font-size)
 #+end_src
 
 ** Super-Special Personal Keybindings
