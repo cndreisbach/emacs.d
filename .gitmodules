@@ -1,3 +1,6 @@
 [submodule "vendor/o-blog"]
 	path = vendor/o-blog
 	url = git://github.com/renard/o-blog.git
+[submodule "vendor/elnode"]
+	path = vendor/elnode
+	url = git://github.com/nicferrier/elnode.git
