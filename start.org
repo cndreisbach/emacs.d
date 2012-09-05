@@ -195,25 +195,38 @@
 #+end_src
 
 * GUI Settings
-  Emacs' default GUI settings are not great ones. No one wants to see
-  the Emacs splash screen. Everyone wants to see what text is selected
-  (=transient-mark-mode=). Other GUI setings will be based on personal
-  preferences. I personally don't want to see a tool bar, a scroll
-  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
-  to make me type out "yes" or "no" when a "y" or "n" will suffice.
-  Lastly, I like seeing where my files end, so I toggle on
-  =indicate-empty-lines=.
+  Emacs' default GUI settings are not great and cause it to not
+  resemble a modern application. Luckily, they are very
+  configurable.
 
 #+begin_src emacs-lisp
+  ;; Do not show a splash screen.
   (setq inhibit-splash-screen t)
+  
+  ;; Show what text is selected.
   (transient-mark-mode t)
-  (menu-bar-mode -1)
+  
+  ;; Hide the scroll bar and tool bar.
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
-  (fset 'yes-or-no-p 'y-or-n-p)
-  (if (not indicate-empty-lines)
+  
+  ;; Allow us to type "y" or "n" instead of "yes" or "no".
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  
+  ;; Always show matching sets of parameters.
+  (show-paren-mode t)
+  
+  ;; Show the end of files.
+  (when (not indicate-empty-lines)
     (toggle-indicate-empty-lines))
-  (load-theme 'sanityinc-solarized-light t)
+  
+  (when window-system
+    ;; Make the window title reflect the current buffer.
+    (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+    ;; Load my favorite color theme. By passing t as the second parameter,
+    ;; we are not prompted to set the theme as safe.
+    (load-theme 'sanityinc-solarized-light t))
+  
 #+end_src
 
 ** Modeline Improvements
@@ -348,8 +361,7 @@ uses the parent directory name as a prefix to the file name.
    Lisp is the most awesome family of programming languages ever. When
    I'm using Lisp, I want ultimate power, so I turn on paredit, which
    gives me amazing abilities to move code around inside
-   S-expressions, and show-paren-mode, which shows me matching sets of
-   parentheses.
+   S-expressions.
 
    This section is a good example of how to extend Emacs with keymaps
    and minor-modes.
@@ -361,19 +373,18 @@ uses the parent directory name as a prefix to the file name.
                      common-lisp-mode
                      scheme-mode
                      clojure-mode))
-
+  
   (defvar lisp-power-map (make-keymap))
   (define-minor-mode lisp-power-mode "Fix keybindings; add power."
     :lighter " (power)"
     :keymap lisp-power-map
-    (paredit-mode t)
-    (show-paren-mode t))
+    (paredit-mode t))
   (define-key lisp-power-map [delete] 'paredit-forward-delete)
   (define-key lisp-power-map [backspace] 'paredit-backward-delete)
-
+  
   (defun cnd/engage-lisp-power ()
     (lisp-power-mode t))
-
+  
   (dolist (mode lisp-modes)
     (add-hook (intern (format "%s-hook" mode))
               #'cnd/engage-lisp-power))
