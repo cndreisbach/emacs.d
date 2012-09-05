@@ -16,6 +16,7 @@
    - https://github.com/avdi/.emacs24.d
    - http://technomancy.us/153
    - http://pavpanchekha.com/blog/emacs.html
+   - http://senny.github.com/cabbage/
 
 * Personal Info
    Emacs will try and guess information about you from your
@@ -217,32 +218,51 @@
   configurable.
 
 #+begin_src emacs-lisp
-  ;; Do not show a splash screen.
-  (setq inhibit-splash-screen t)
-  
+  (setq
+   ;; Do not show a splash screen.
+   inhibit-splash-screen t
+   ;; Show incomplete commands while typing them.
+   echo-keystrokes 0.1
+   ;; Never show dialog boxes.
+   use-dialog-box nil
+   ;; Flash the screen on errors.
+   visible-bell t)
+    
+  (setq-default
+   ;; Make the cursor a thin vertical line.
+   cursor-type 'bar
+   ;; Show the end of files inside buffers.
+   indicate-empty-lines t)
+    
   ;; Show what text is selected.
   (transient-mark-mode t)
+  ;; And delete selected text if we type over it.
+  (delete-selection-mode t)
   
+  ;; Always show matching sets of parentheses.
+  (show-paren-mode t)
+  
+  ;; Highlight the current line.
+  (global-hl-line-mode t)
+    
   ;; Hide the scroll bar and tool bar.
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
-  
+    
   ;; Allow us to type "y" or "n" instead of "yes" or "no".
   (defalias 'yes-or-no-p 'y-or-n-p)
-  
-  ;; Always show matching sets of parameters.
-  (show-paren-mode t)
-  
+      
   ;; Show the end of files.
   (when (not indicate-empty-lines)
     (toggle-indicate-empty-lines))
-  
+    
   (when window-system
     ;; Make the window title reflect the current buffer.
     (setq frame-title-format '(buffer-file-name "%f" ("%b")))
     ;; Load my favorite color theme. By passing t as the second parameter,
     ;; we are not prompted to set the theme as safe.
     (load-theme 'sanityinc-solarized-light t))
+    
   
 #+end_src
 
