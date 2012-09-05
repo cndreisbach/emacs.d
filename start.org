@@ -83,7 +83,7 @@
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
   
-  (setq package-archive-enable-alist '(("melpa" deft magit)))
+  (setq package-archive-enable-alist '(("melpa" deft magit org)))
   
 #+end_src
 
@@ -113,6 +113,7 @@
                          markdown-mode
                          marmalade
                          nrepl
+                         org
                          paredit
                          sass-mode
                          scss-mode
