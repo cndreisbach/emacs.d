@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Emacs 24 configuration for Clinton Dreisbach"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-08-29 09:00:21 EDT"/>
+<meta name="generated" content="2012-09-06 16:48:56 EDT"/>
 <meta name="author" content="Clinton Dreisbach"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -106,60 +106,63 @@
 </li>
 <li><a href="#sec-2">Personal Info</a></li>
 <li><a href="#sec-3">Must-Have Configuration</a></li>
-<li><a href="#sec-4">GUI Settings</a>
+<li><a href="#sec-4">Functions</a></li>
+<li><a href="#sec-5">Package Management</a>
 <ul>
-<li><a href="#sec-4-1">Modeline Improvements</a></li>
+<li><a href="#sec-5-1">Package Repositories</a></li>
+<li><a href="#sec-5-2">Packages to Install</a></li>
+<li><a href="#sec-5-3">Installing Packages</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">Indentation</a></li>
-<li><a href="#sec-6">Backups</a></li>
-<li><a href="#sec-7">Files and Directories</a>
+<li><a href="#sec-6">Package Configuration</a>
 <ul>
-<li><a href="#sec-7-1">Multiple Buffers</a></li>
+<li><a href="#sec-6-1">Deft</a></li>
+<li><a href="#sec-6-2">Smex</a></li>
+<li><a href="#sec-6-3">Ido</a></li>
+<li><a href="#sec-6-4">Ack</a></li>
 </ul>
 </li>
-<li><a href="#sec-8">Emacs Server</a></li>
-<li><a href="#sec-9">Functions</a></li>
-<li><a href="#sec-10">Packages</a>
+<li><a href="#sec-7">GUI Settings</a>
 <ul>
-<li><a href="#sec-10-1">Package Repositories</a></li>
-<li><a href="#sec-10-2">Packages to Install</a></li>
-<li><a href="#sec-10-3">Installing Packages</a></li>
+<li><a href="#sec-7-1">Modeline Improvements</a></li>
 </ul>
 </li>
-<li><a href="#sec-11">Utilities</a>
+<li><a href="#sec-8">Files and Directories</a></li>
+<li><a href="#sec-9">Text Editing</a>
 <ul>
-<li><a href="#sec-11-1">Deft</a></li>
-<li><a href="#sec-11-2">Smex</a></li>
-<li><a href="#sec-11-3">Ido</a></li>
+<li><a href="#sec-9-1">Backups</a></li>
+<li><a href="#sec-9-2">File Behavior</a></li>
+<li><a href="#sec-9-3">Indentation</a></li>
+<li><a href="#sec-9-4">Multiple Buffers</a></li>
+<li><a href="#sec-9-5">Markdown</a></li>
 </ul>
 </li>
-<li><a href="#sec-12">Programming</a>
+<li><a href="#sec-10">Programming</a>
 <ul>
-<li><a href="#sec-12-1">Ack</a></li>
-<li><a href="#sec-12-2">autopair-mode</a></li>
-<li><a href="#sec-12-3">C</a></li>
-<li><a href="#sec-12-4">Clojure</a></li>
-<li><a href="#sec-12-5">CSS/SCSS</a></li>
-<li><a href="#sec-12-6">Go</a></li>
-<li><a href="#sec-12-7">Javascript</a></li>
-<li><a href="#sec-12-8">Lisp</a></li>
-<li><a href="#sec-12-9">Ruby</a></li>
-<li><a href="#sec-12-10">YAML</a></li>
+<li><a href="#sec-10-1">autopair-mode</a></li>
+<li><a href="#sec-10-2">C</a></li>
+<li><a href="#sec-10-3">Clojure</a></li>
+<li><a href="#sec-10-4">CSS/SCSS</a></li>
+<li><a href="#sec-10-5">Go</a></li>
+<li><a href="#sec-10-6">Javascript</a></li>
+<li><a href="#sec-10-7">Lisp</a></li>
+<li><a href="#sec-10-8">Ruby</a></li>
+<li><a href="#sec-10-9">YAML</a></li>
 </ul>
 </li>
+<li><a href="#sec-11">Keybindings</a>
+<ul>
+<li><a href="#sec-11-1">Super-Special Personal Keybindings</a></li>
+<li><a href="#sec-11-2">Windmove</a></li>
+</ul>
+</li>
+<li><a href="#sec-12">Emacs Server</a></li>
 <li><a href="#sec-13">OS-Specific Settings</a>
 <ul>
 <li><a href="#sec-13-1">OS X</a></li>
 </ul>
 </li>
-<li><a href="#sec-14">Keybindings</a>
-<ul>
-<li><a href="#sec-14-1">Super-Special Personal Keybindings</a></li>
-<li><a href="#sec-14-2">Windmove</a></li>
-</ul>
-</li>
-<li><a href="#sec-15">Local Configuration</a></li>
+<li><a href="#sec-14">Local Configuration</a></li>
 </ul>
 </div>
 </div>
@@ -197,6 +200,8 @@
 </li>
 <li><a href="http://pavpanchekha.com/blog/emacs.html">http://pavpanchekha.com/blog/emacs.html</a>
 </li>
+<li><a href="http://senny.github.com/cabbage/">http://senny.github.com/cabbage/</a>
+</li>
 </ul>
 
 
@@ -215,8 +220,8 @@
 
 
 
-<pre class="src src-emacs-lisp">(setq user-full-name <span style="color: #8b2252;">"Clinton N. Dreisbach"</span>)
-(setq user-mail-address <span style="color: #8b2252;">"clinton@dreisbach.us"</span>)
+<pre class="src src-emacs-lisp">(setq user-full-name <span style="color: #259185;">"Clinton N. Dreisbach"</span>)
+(setq user-mail-address <span style="color: #259185;">"clinton@dreisbach.us"</span>)
 </pre>
 
 
@@ -237,7 +242,7 @@
 
 
 
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">cl</span>)
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">cl</span>)
 (global-auto-revert-mode t)
 (winner-mode t)
 </pre>
@@ -248,204 +253,66 @@
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4">GUI Settings</h2>
+<h2 id="sec-4">Functions</h2>
 <div class="outline-text-2" id="text-4">
 
-<p>  Emacs' default GUI settings are not great ones. No one wants to see
-  the Emacs splash screen. Everyone wants to see what text is selected
-  (<code>transient-mark-mode</code>). Other GUI setings will be based on personal
-  preferences. I personally don't want to see a tool bar, a scroll
-  bar, a menu bar, or really, any kind of bar. I also don't want Emacs
-  to make me type out "yes" or "no" when a "y" or "n" will suffice.
-  Lastly, I like seeing where my files end, so I toggle on
-  <code>indicate-empty-lines</code>.
-</p>
 
 
 
-<pre class="src src-emacs-lisp">(setq inhibit-splash-screen t)
-(transient-mark-mode t)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(fset 'yes-or-no-p 'y-or-n-p)
-(<span style="color: #a020f0;">if</span> (not indicate-empty-lines)
-  (toggle-indicate-empty-lines))
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/clean-buffer</span> ()
+  <span style="color: #c61b6e;">"Re-indent the entire buffer and cleanup whitespace."</span>
+  (interactive)
+  (<span style="color: #728a05;">save-excursion</span>
+    (indent-region (point-min) (point-max) nil)
+    (whitespace-cleanup-region (point-min) (point-max))))
+
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/increase-font-size</span> ()
+  (interactive)
+  (set-face-attribute 'default
+                      nil
+                      <span style="color: #5859b7;">:height</span>
+                      (ceiling (* 1.10
+                                  (face-attribute 'default <span style="color: #5859b7;">:height</span>)))))
+
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/decrease-font-size</span> ()
+  (interactive)
+  (set-face-attribute 'default
+                      nil
+                      <span style="color: #5859b7;">:height</span>
+                      (floor (* 0.9
+                                (face-attribute 'default <span style="color: #5859b7;">:height</span>)))))
+
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/save-buffer-always</span> ()
+  <span style="color: #c61b6e;">"Save the buffer even if it is not modified."</span>
+  (interactive)
+  (set-buffer-modified-p t)
+  (save-buffer))
+
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/edit-config</span> ()
+  (interactive)
+  (find-file <span style="color: #259185;">"~/.emacs.d/start.org"</span>))
+
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/reload-config</span> ()
+  (interactive)
+  (load-file <span style="color: #259185;">"~/.emacs.d/init.el"</span>))
+
 </pre>
 
 
-
-</div>
-
-<div id="outline-container-4-1" class="outline-3">
-<h3 id="sec-4-1">Modeline Improvements</h3>
-<div class="outline-text-3" id="text-4-1">
-
-<p>   I like having the column number in my modeline to help with stack
-   traces and just as a sanity check.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(setq column-number-mode t)
-</pre>
-
-
-</div>
 </div>
 
 </div>
 
 <div id="outline-container-5" class="outline-2">
-<h2 id="sec-5">Indentation</h2>
+<h2 id="sec-5">Package Management</h2>
 <div class="outline-text-2" id="text-5">
 
-<p>   By default, I want to indent with 2 spaces and no tabs.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(setq-default indent-tabs-mode nil
-              tab-width 2)
-</pre>
-
 
 </div>
 
-</div>
-
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6">Backups</h2>
-<div class="outline-text-2" id="text-6">
-
-<p>   Default Emacs behavior around backups dates from a time of
-   barbarism and should be avoided. On the other hand, it's saved me
-   once or twice. Therefore, I allow Emacs to keep backups, but
-   instead of keeping them in the same directory as the file being
-   edited, I force them to be kept in a temporary directory.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(setq backup-directory-alist `((<span style="color: #8b2252;">".*"</span> . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((<span style="color: #8b2252;">".*"</span> ,temporary-file-directory t)))
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7">Files and Directories</h2>
-<div class="outline-text-2" id="text-7">
-
-<p>  I like to set up a vendor directory for any random elisp files I
-  pull in. I get the majority of my functionality from packages
-  distributed through ELPA or Marmalade, but sometimes, you find
-  something random on EmacsWiki that you may want to pull in. After
-  adding that directory, you're going to want to throw it in your
-  load-path. Often, you'll have subdirectories in your vendor
-  directory. Go ahead and add those to the load-path as well.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">cnd/vendor-dir</span> (expand-file-name <span style="color: #8b2252;">"vendor"</span> user-emacs-directory)
-  <span style="color: #8b2252;">"Location of any random elisp files I find from other authors."</span>)
-(add-to-list 'load-path cnd/vendor-dir)
-
-(<span style="color: #a020f0;">dolist</span> (project (directory-files cnd/vendor-dir t <span style="color: #8b2252;">"\\w+"</span>))
-  (<span style="color: #a020f0;">when</span> (file-directory-p project)
-    (add-to-list 'load-path project)))
-</pre>
-
-
-
-</div>
-
-<div id="outline-container-7-1" class="outline-3">
-<h3 id="sec-7-1">Multiple Buffers</h3>
-<div class="outline-text-3" id="text-7-1">
-
-<p>I often have multiple buffers open with the same name. Emacs usually
-deals with this by appending the buffer number to the buffer
-name. This is hard to keep track of. Instead, the uniquify library
-uses the parent directory name as a prefix to the file name.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">uniquify</span>)
-(setq uniquify-buffer-name-style 'forward)
-</pre>
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8">Emacs Server</h2>
-<div class="outline-text-2" id="text-8">
-
-<p>  It is very annoying to find that you cannot close a buffer that has
-  been opened via <code>emacsclient</code> in the same way you would close any
-  other buffer. The following code fixes that.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(add-hook 'server-switch-hook
-          (<span style="color: #a020f0;">lambda</span> ()
-            (<span style="color: #a020f0;">when</span> (current-local-map)
-              (use-local-map (copy-keymap (current-local-map))))
-            (<span style="color: #a020f0;">when</span> server-buffer-clients
-              (local-set-key (kbd <span style="color: #8b2252;">"C-x k"</span>) 'server-edit))))
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9">Functions</h2>
-<div class="outline-text-2" id="text-9">
-
-
-
-
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/clean-buffer</span> ()
-  <span style="color: #8b2252;">"Re-indent the entire buffer and cleanup whitespace."</span>
-  (interactive)
-  (<span style="color: #a020f0;">save-excursion</span>
-    (indent-region (point-min) (point-max) nil)
-    (whitespace-cleanup-region (point-min) (point-max))))
-
-(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/save-buffer-always</span> ()
-  <span style="color: #8b2252;">"Save the buffer even if it is not modified."</span>
-  (interactive)
-  (set-buffer-modified-p t)
-  (save-buffer))
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10">Packages</h2>
-<div class="outline-text-2" id="text-10">
-
-
-</div>
-
-<div id="outline-container-10-1" class="outline-3">
-<h3 id="sec-10-1">Package Repositories</h3>
-<div class="outline-text-3" id="text-10-1">
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1">Package Repositories</h3>
+<div class="outline-text-3" id="text-5-1">
 
 <p>   In addition to the default ELPA package repository, I use
    Marmalade, which is community-run and has new packages more
@@ -458,16 +325,16 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(load <span style="color: #8b2252;">"package"</span>)
+<pre class="src src-emacs-lisp">(load <span style="color: #259185;">"package"</span>)
 
 (package-initialize)
 
 (add-to-list 'package-archives
-             '(<span style="color: #8b2252;">"marmalade"</span> . <span style="color: #8b2252;">"http://marmalade-repo.org/packages/"</span>))
+             '(<span style="color: #259185;">"marmalade"</span> . <span style="color: #259185;">"http://marmalade-repo.org/packages/"</span>))
 (add-to-list 'package-archives
-             '(<span style="color: #8b2252;">"melpa"</span> . <span style="color: #8b2252;">"http://melpa.milkbox.net/packages/"</span>) t)
+             '(<span style="color: #259185;">"melpa"</span> . <span style="color: #259185;">"http://melpa.milkbox.net/packages/"</span>) t)
 
-(setq package-archive-enable-alist '((<span style="color: #8b2252;">"melpa"</span> deft magit)))
+(setq package-archive-enable-alist '((<span style="color: #259185;">"melpa"</span> deft magit org)))
 
 </pre>
 
@@ -476,9 +343,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-10-2" class="outline-3">
-<h3 id="sec-10-2">Packages to Install</h3>
-<div class="outline-text-3" id="text-10-2">
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2">Packages to Install</h3>
+<div class="outline-text-3" id="text-5-2">
 
 <p>  There's no way I can list each package I use and why here. The
   important thing to note is that I set up a var with a list of the
@@ -487,10 +354,11 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">cnd/packages</span> '(auto-complete
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">defvar</span> <span style="color: #a57705;">cnd/packages</span> '(auto-complete
                        autopair
                        clojure-mode
                        coffee-mode
+                       color-theme-sanityinc-solarized
                        cperl-mode
                        deft
                        feature-mode
@@ -506,13 +374,13 @@ uses the parent directory name as a prefix to the file name.
                        markdown-mode
                        marmalade
                        nrepl
+                       org
                        paredit
                        sass-mode
                        scss-mode
                        smex
-                       solarized-theme
                        yaml-mode)
-  <span style="color: #8b2252;">"Packages I always want installed."</span>)
+  <span style="color: #c61b6e;">"Packages I always want installed."</span>)
 
 </pre>
 
@@ -521,9 +389,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-10-3" class="outline-3">
-<h3 id="sec-10-3">Installing Packages</h3>
-<div class="outline-text-3" id="text-10-3">
+<div id="outline-container-5-3" class="outline-3">
+<h3 id="sec-5-3">Installing Packages</h3>
+<div class="outline-text-3" id="text-5-3">
 
 <p>   This is the magic incantation to get your packages installed. It
    will require a network connection if you don't have all your
@@ -533,35 +401,34 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/packages-installed-p</span> ()
-  (<span style="color: #a020f0;">loop</span> for pkg in cnd/packages
-        when (not (package-installed-p pkg)) do (<span style="color: #a020f0;">return</span> nil)
-        finally (<span style="color: #a020f0;">return</span> t)))
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/packages-installed-p</span> ()
+  (<span style="color: #728a05;">loop</span> for pkg in cnd/packages
+        when (not (package-installed-p pkg)) do (<span style="color: #728a05;">return</span> nil)
+        finally (<span style="color: #728a05;">return</span> t)))
 
-(<span style="color: #a020f0;">unless</span> (cnd/packages-installed-p)
-  (message <span style="color: #8b2252;">"%s"</span> <span style="color: #8b2252;">"Refreshing package database..."</span>)
+(<span style="color: #728a05;">unless</span> (cnd/packages-installed-p)
+  (message <span style="color: #259185;">"%s"</span> <span style="color: #259185;">"Refreshing package database..."</span>)
   (package-refresh-contents)
-  (<span style="color: #a020f0;">dolist</span> (pkg cnd/packages)
-  (<span style="color: #a020f0;">when</span> (not (package-installed-p pkg))
+  (<span style="color: #728a05;">dolist</span> (pkg cnd/packages)
+  (<span style="color: #728a05;">when</span> (not (package-installed-p pkg))
     (package-install pkg))))
 </pre>
 
-
 </div>
 </div>
 
 </div>
 
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11">Utilities</h2>
-<div class="outline-text-2" id="text-11">
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">Package Configuration</h2>
+<div class="outline-text-2" id="text-6">
 
 
 </div>
 
-<div id="outline-container-11-1" class="outline-3">
-<h3 id="sec-11-1">Deft</h3>
-<div class="outline-text-3" id="text-11-1">
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1">Deft</h3>
+<div class="outline-text-3" id="text-6-1">
 
 <p>   <a href="http://jblevins.org/projects/deft/">http://jblevins.org/projects/deft/</a>
 </p>
@@ -574,9 +441,9 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(setq deft-directory <span style="color: #8b2252;">"~/Dropbox/Notes/"</span>)
+<pre class="src src-emacs-lisp">(setq deft-directory <span style="color: #259185;">"~/Dropbox/Notes/"</span>)
 (setq deft-use-filename-as-title t)
-(setq deft-extension <span style="color: #8b2252;">"org"</span>)
+(setq deft-extension <span style="color: #259185;">"org"</span>)
 (setq deft-text-mode 'org-mode)
 </pre>
 
@@ -585,9 +452,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-11-2" class="outline-3">
-<h3 id="sec-11-2">Smex</h3>
-<div class="outline-text-3" id="text-11-2">
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2">Smex</h3>
+<div class="outline-text-3" id="text-6-2">
 
 <p>   Smex is a replacement for the default behavior of <code>M-x</code> with better
    history and completion.
@@ -595,7 +462,7 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(setq smex-save-file (expand-file-name <span style="color: #8b2252;">".smex-items"</span> user-emacs-directory))
+<pre class="src src-emacs-lisp">(setq smex-save-file (expand-file-name <span style="color: #259185;">".smex-items"</span> user-emacs-directory))
 (smex-initialize)
 </pre>
 
@@ -604,9 +471,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-11-3" class="outline-3">
-<h3 id="sec-11-3">Ido</h3>
-<div class="outline-text-3" id="text-11-3">
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3">Ido</h3>
+<div class="outline-text-3" id="text-6-3">
 
 <p>   Ido stands for Interactively Do Things, but it might as well stand
    for "Do the Right Thing." It makes Emacs have something resembling
@@ -631,22 +498,13 @@ uses the parent directory name as a prefix to the file name.
       ido-use-virtual-buffers t)
 </pre>
 
-
-</div>
 </div>
 
 </div>
 
-<div id="outline-container-12" class="outline-2">
-<h2 id="sec-12">Programming</h2>
-<div class="outline-text-2" id="text-12">
-
-
-</div>
-
-<div id="outline-container-12-1" class="outline-3">
-<h3 id="sec-12-1">Ack</h3>
-<div class="outline-text-3" id="text-12-1">
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4">Ack</h3>
+<div class="outline-text-3" id="text-6-4">
 
 <p>   <code>ack</code> is an enhanced grep.
 </p>
@@ -654,23 +512,119 @@ uses the parent directory name as a prefix to the file name.
 
 
 <pre class="src src-emacs-lisp">(setq ack-prompt-for-directory t)
+(setq ack-executable (executable-find <span style="color: #259185;">"ack-grep"</span>))
 </pre>
 
 
 </div>
+</div>
 
 </div>
 
-<div id="outline-container-12-2" class="outline-3">
-<h3 id="sec-12-2">autopair-mode</h3>
-<div class="outline-text-3" id="text-12-2">
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7">GUI Settings</h2>
+<div class="outline-text-2" id="text-7">
 
-<p>   <code>autopair-mode</code> automatically adds closing parentheses, brackets, and the like, which is very useful when writing code. It doesn't get auto-loaded, so I have to require it explicitly.
+<p>  Emacs' default GUI settings are not great and cause it to not
+  resemble a modern application. Luckily, they are very
+  configurable.
 </p>
 
 
 
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">autopair</span>)
+<pre class="src src-emacs-lisp">(setq
+ <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Do not show a splash screen.</span>
+ inhibit-splash-screen t
+ <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Show incomplete commands while typing them.</span>
+ echo-keystrokes 0.1
+ <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Never show dialog boxes.</span>
+ use-dialog-box nil
+ <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Flash the screen on errors.</span>
+ visible-bell t)
+
+(setq-default
+ <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Make the cursor a thin vertical line.</span>
+ cursor-type 'bar
+ <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Show the end of files inside buffers.</span>
+ indicate-empty-lines t)
+
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Show what text is selected.</span>
+(transient-mark-mode t)
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">And delete selected text if we type over it.</span>
+(delete-selection-mode t)
+
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Always show matching sets of parentheses.</span>
+(show-paren-mode t)
+
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Highlight the current line.</span>
+(global-hl-line-mode t)
+
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Hide the scroll bar and tool bar.</span>
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Allow us to type "y" or "n" instead of "yes" or "no".</span>
+(<span style="color: #728a05;">defalias</span> '<span style="color: #2075c7;">yes-or-no-p</span> 'y-or-n-p)
+
+<span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Show the end of files.</span>
+(<span style="color: #728a05;">when</span> (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+
+(<span style="color: #728a05;">when</span> window-system
+  <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Make the window title reflect the current buffer.</span>
+  (setq frame-title-format '(buffer-file-name <span style="color: #259185;">"%f"</span> (<span style="color: #259185;">"%b"</span>)))
+  <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Load my favorite color theme. By passing t as the second parameter,</span>
+  <span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">we are not prompted to set the theme as safe.</span>
+  (load-theme 'sanityinc-solarized-light t))
+
+
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-7-1" class="outline-3">
+<h3 id="sec-7-1">Modeline Improvements</h3>
+<div class="outline-text-3" id="text-7-1">
+
+<p>   I like having the column number in my modeline to help with stack
+   traces and just as a sanity check.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq column-number-mode t)
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8">Files and Directories</h2>
+<div class="outline-text-2" id="text-8">
+
+<p>  I like to set up a vendor directory for any random elisp files I
+  pull in. I get the majority of my functionality from packages
+  distributed through ELPA or Marmalade, but sometimes, you find
+  something random on EmacsWiki that you may want to pull in. After
+  adding that directory, you're going to want to throw it in your
+  load-path. Often, you'll have subdirectories in your vendor
+  directory. Go ahead and add those to the load-path as well.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">defvar</span> <span style="color: #a57705;">cnd/vendor-dir</span> (expand-file-name <span style="color: #259185;">"vendor"</span> user-emacs-directory)
+  <span style="color: #c61b6e;">"Location of any random elisp files I find from other authors."</span>)
+(add-to-list 'load-path cnd/vendor-dir)
+
+(<span style="color: #728a05;">dolist</span> (project (directory-files cnd/vendor-dir t <span style="color: #259185;">"\\w+"</span>))
+  (<span style="color: #728a05;">when</span> (file-directory-p project)
+    (add-to-list 'load-path project)))
 </pre>
 
 
@@ -678,9 +632,162 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-3" class="outline-3">
-<h3 id="sec-12-3">C</h3>
-<div class="outline-text-3" id="text-12-3">
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9">Text Editing</h2>
+<div class="outline-text-2" id="text-9">
+
+
+</div>
+
+<div id="outline-container-9-1" class="outline-3">
+<h3 id="sec-9-1">Backups</h3>
+<div class="outline-text-3" id="text-9-1">
+
+<p>   Default Emacs behavior around backups dates from a time of
+   barbarism and should be avoided. On the other hand, it's saved me
+   once or twice. Therefore, I allow Emacs to keep backups, but
+   instead of keeping them in the same directory as the file being
+   edited, I force them to be kept in a temporary directory.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq backup-directory-alist `((<span style="color: #259185;">".*"</span> . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((<span style="color: #259185;">".*"</span> ,temporary-file-directory t)))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9-2" class="outline-3">
+<h3 id="sec-9-2">File Behavior</h3>
+<div class="outline-text-3" id="text-9-2">
+
+<p>   All files should end with a final newline.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq require-final-newline t)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9-3" class="outline-3">
+<h3 id="sec-9-3">Indentation</h3>
+<div class="outline-text-3" id="text-9-3">
+
+<p>   By default, I want to indent with 2 spaces and no tabs.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq-default indent-tabs-mode nil
+              tab-width 2)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9-4" class="outline-3">
+<h3 id="sec-9-4">Multiple Buffers</h3>
+<div class="outline-text-3" id="text-9-4">
+
+<p>I often have multiple buffers open with the same name. Emacs usually
+deals with this by appending the buffer number to the buffer
+name. This is hard to keep track of. Instead, the uniquify library
+uses the parent directory name as a prefix to the file name.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">uniquify</span>)
+(setq uniquify-buffer-name-style 'forward)
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-9-5" class="outline-3">
+<h3 id="sec-9-5">Markdown</h3>
+<div class="outline-text-3" id="text-9-5">
+
+<p>Make sure that all Markdown file extensions trigger <code>markdown-mode</code>.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.md$"</span> . markdown-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.mdown$"</span> . markdown-mode))
+</pre>
+
+
+<p>
+Also use <code>visual-line-mode</code> to get decent word-wrap when in
+<code>markdown-mode</code>.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(add-hook 'markdown-mode-hook (<span style="color: #728a05;">lambda</span> () (visual-line-mode t)))
+</pre>
+
+
+<p>
+I use <code>pandoc</code> for converting Markdown, so I want to set that as the
+command to use when exporting from <code>markdown-mode</code>. I want to enable
+smart quotes. I use <a href="http://kevinburke.bitbucket.org/markdowncss/">markdown.css</a> to beautify the output.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(setq markdown-command <span style="color: #259185;">"pandoc --smart -f markdown -t html"</span>)
+(setq markdown-css-path (expand-file-name <span style="color: #259185;">"markdown.css"</span> cnd/vendor-dir))
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10">Programming</h2>
+<div class="outline-text-2" id="text-10">
+
+
+</div>
+
+<div id="outline-container-10-1" class="outline-3">
+<h3 id="sec-10-1">autopair-mode</h3>
+<div class="outline-text-3" id="text-10-1">
+
+<p>   <code>autopair-mode</code> automatically adds closing parentheses, brackets,
+   and the like, which is very useful when writing code. It doesn't
+   get auto-loaded, so I have to require it explicitly.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">autopair</span>)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10-2" class="outline-3">
+<h3 id="sec-10-2">C</h3>
+<div class="outline-text-3" id="text-10-2">
 
 <p>   C has its own indentation rules, so I have to set them with a
    separate variable.
@@ -695,16 +802,16 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-4" class="outline-3">
-<h3 id="sec-12-4">Clojure</h3>
-<div class="outline-text-3" id="text-12-4">
+<div id="outline-container-10-3" class="outline-3">
+<h3 id="sec-10-3">Clojure</h3>
+<div class="outline-text-3" id="text-10-3">
 
 <p>   I want Emacs to open up ClojureScript files with Clojure syntax.
 </p>
 
 
 
-<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.cljs$"</span> . clojure-mode))
+<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.cljs$"</span> . clojure-mode))
 </pre>
 
 
@@ -712,9 +819,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-5" class="outline-3">
-<h3 id="sec-12-5">CSS/SCSS</h3>
-<div class="outline-text-3" id="text-12-5">
+<div id="outline-container-10-4" class="outline-3">
+<h3 id="sec-10-4">CSS/SCSS</h3>
+<div class="outline-text-3" id="text-10-4">
 
 <p>   CSS has its own indentation rules, so I have to set them with a
    separate variable.
@@ -734,9 +841,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-6" class="outline-3">
-<h3 id="sec-12-6">Go</h3>
-<div class="outline-text-3" id="text-12-6">
+<div id="outline-container-10-5" class="outline-3">
+<h3 id="sec-10-5">Go</h3>
+<div class="outline-text-3" id="text-10-5">
 
 <p>   Go is a rad systems language from Google. One thing I like about it
    is that it has exquisite tools built for it. In particular, it has
@@ -752,12 +859,12 @@ uses the parent directory name as a prefix to the file name.
 
 
 <pre class="src src-emacs-lisp">(add-hook 'go-mode-hook
-          (<span style="color: #a020f0;">lambda</span> ()
+          (<span style="color: #728a05;">lambda</span> ()
             (autopair-mode)
             (add-hook 'before-save-hook 'gofmt-before-save nil t)))
 
-(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">go-autocomplete</span>)
-(<span style="color: #a020f0;">require</span> '<span style="color: #008b8b;">auto-complete-config</span>)
+(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">go-autocomplete</span>)
+(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">auto-complete-config</span>)
 </pre>
 
 
@@ -765,9 +872,9 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-7" class="outline-3">
-<h3 id="sec-12-7">Javascript</h3>
-<div class="outline-text-3" id="text-12-7">
+<div id="outline-container-10-6" class="outline-3">
+<h3 id="sec-10-6">Javascript</h3>
+<div class="outline-text-3" id="text-10-6">
 
 <p>   JS has its own indentation rules, so I have to set them with a
    separate variable.
@@ -783,15 +890,14 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-8" class="outline-3">
-<h3 id="sec-12-8">Lisp</h3>
-<div class="outline-text-3" id="text-12-8">
+<div id="outline-container-10-7" class="outline-3">
+<h3 id="sec-10-7">Lisp</h3>
+<div class="outline-text-3" id="text-10-7">
 
 <p>   Lisp is the most awesome family of programming languages ever. When
    I'm using Lisp, I want ultimate power, so I turn on paredit, which
    gives me amazing abilities to move code around inside
-   S-expressions, and show-paren-mode, which shows me matching sets of
-   parentheses.
+   S-expressions.
 </p>
 <p>
    This section is a good example of how to extend Emacs with keymaps
@@ -800,27 +906,26 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">lisp.el</span>
+<pre class="src src-emacs-lisp"><span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">lisp.el</span>
 (setq lisp-modes '(lisp-mode
                    emacs-lisp-mode
                    common-lisp-mode
                    scheme-mode
                    clojure-mode))
 
-(<span style="color: #a020f0;">defvar</span> <span style="color: #a0522d;">lisp-power-map</span> (make-keymap))
-(<span style="color: #a020f0;">define-minor-mode</span> <span style="color: #0000ff;">lisp-power-mode</span> <span style="color: #8b2252;">"Fix keybindings; add power."</span>
-  <span style="color: #483d8b;">:lighter</span> <span style="color: #8b2252;">" (power)"</span>
-  <span style="color: #483d8b;">:keymap</span> lisp-power-map
-  (paredit-mode t)
-  (show-paren-mode t))
+(<span style="color: #728a05;">defvar</span> <span style="color: #a57705;">lisp-power-map</span> (make-keymap))
+(<span style="color: #728a05;">define-minor-mode</span> <span style="color: #2075c7;">lisp-power-mode</span> <span style="color: #c61b6e;">"Fix keybindings; add power."</span>
+  <span style="color: #5859b7;">:lighter</span> <span style="color: #259185;">" (power)"</span>
+  <span style="color: #5859b7;">:keymap</span> lisp-power-map
+  (paredit-mode t))
 (define-key lisp-power-map [delete] 'paredit-forward-delete)
 (define-key lisp-power-map [backspace] 'paredit-backward-delete)
 
-(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">cnd/engage-lisp-power</span> ()
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">cnd/engage-lisp-power</span> ()
   (lisp-power-mode t))
 
-(<span style="color: #a020f0;">dolist</span> (mode lisp-modes)
-  (add-hook (intern (format <span style="color: #8b2252;">"%s-hook"</span> mode))
+(<span style="color: #728a05;">dolist</span> (mode lisp-modes)
+  (add-hook (intern (format <span style="color: #259185;">"%s-hook"</span> mode))
             #'cnd/engage-lisp-power))
 </pre>
 
@@ -829,32 +934,32 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-9" class="outline-3">
-<h3 id="sec-12-9">Ruby</h3>
-<div class="outline-text-3" id="text-12-9">
+<div id="outline-container-10-8" class="outline-3">
+<h3 id="sec-10-8">Ruby</h3>
+<div class="outline-text-3" id="text-10-8">
 
 <p>   There are a lot of different file names and extensions that are associated with Ruby. I've listed all I can think of so that <code>ruby-mode</code> is loaded for each of them.
 </p>
 
 
 
-<pre class="src src-emacs-lisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">Rake files are ruby, too, as are gemspecs, rackup files, etc.</span>
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.rake$"</span> . ruby-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.gemspec$"</span> . ruby-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.ru$"</span> . ruby-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Rakefile$"</span> . ruby-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Gemfile$"</span> . ruby-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Capfile$"</span> . ruby-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"Vagrantfile$"</span> . ruby-mode))
+<pre class="src src-emacs-lisp"><span style="color: #81908f; font-style: italic;">;; </span><span style="color: #708183; font-style: italic;">Rake files are ruby, too, as are gemspecs, rackup files, etc.</span>
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.rake$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.gemspec$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.ru$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"Rakefile$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"Gemfile$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"Capfile$"</span> . ruby-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"Vagrantfile$"</span> . ruby-mode))
 </pre>
 
 
 
 <pre class="src src-emacs-lisp">(add-hook 'ruby-mode-hook
-          (<span style="color: #a020f0;">lambda</span> ()
+          (<span style="color: #728a05;">lambda</span> ()
             (autopair-mode)
             (add-hook 'before-save-hook 'whitespace-cleanup nil t)
-            (define-key ruby-mode-map (kbd <span style="color: #8b2252;">"RET"</span>) 'newline-and-indent)))
+            (define-key ruby-mode-map (kbd <span style="color: #259185;">"RET"</span>) 'newline-and-indent)))
 </pre>
 
 
@@ -862,19 +967,129 @@ uses the parent directory name as a prefix to the file name.
 
 </div>
 
-<div id="outline-container-12-10" class="outline-3">
-<h3 id="sec-12-10">YAML</h3>
-<div class="outline-text-3" id="text-12-10">
+<div id="outline-container-10-9" class="outline-3">
+<h3 id="sec-10-9">YAML</h3>
+<div class="outline-text-3" id="text-10-9">
 
 
 
 
-<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.yml$"</span> . yaml-mode))
-(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.yaml$"</span> . yaml-mode))
+<pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.yml$"</span> . yaml-mode))
+(add-to-list 'auto-mode-alist '(<span style="color: #259185;">"\\.yaml$"</span> . yaml-mode))
+</pre>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11">Keybindings</h2>
+<div class="outline-text-2" id="text-11">
+
+<p>  Keybindings are a really personal matter. My philosophy with Emacs
+  is this: keep as many keybindings as possible the same as the
+  out-of-the-box Emacs config, and use <code>C-c</code> for your own special
+  preferences. It's cool to extend the default functionality (setting
+  Return to <code>newline-and-indent</code> instead of <code>newline</code>, for example),
+  but radically altering it is only going to frustrate you when you
+  have use Emacs without your configuration. Plus, it's nice to anyone
+  you ever have to pair program with.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(global-set-key (kbd <span style="color: #259185;">"RET"</span>) 'newline-and-indent)
+(global-set-key (kbd <span style="color: #259185;">"C-;"</span>) 'comment-or-uncomment-region)
+(global-set-key (kbd <span style="color: #259185;">"M-/"</span>) 'hippie-expand)
+(global-set-key (kbd <span style="color: #259185;">"M-x"</span>) 'smex)
+(global-set-key (kbd <span style="color: #259185;">"M-X"</span>) 'smex-major-mode-commands)
+(<span style="color: #728a05;">if</span> window-system (global-unset-key (kbd <span style="color: #259185;">"C-z"</span>)))
+
+(global-set-key (kbd <span style="color: #259185;">"C-+"</span>) 'cnd/increase-font-size)
+(global-set-key (kbd <span style="color: #259185;">"C-="</span>) 'cnd/increase-font-size)
+(global-set-key (kbd <span style="color: #259185;">"C--"</span>) 'cnd/decrease-font-size)
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-11-1" class="outline-3">
+<h3 id="sec-11-1">Super-Special Personal Keybindings</h3>
+<div class="outline-text-3" id="text-11-1">
+
+
+
+
+
+<pre class="src src-emacs-lisp">(global-set-key (kbd <span style="color: #259185;">"C-c a"</span>) 'mark-whole-buffer)
+(global-set-key (kbd <span style="color: #259185;">"C-c c"</span>) 'query-replace-regexp)
+(global-set-key (kbd <span style="color: #259185;">"C-c d"</span>) 'deft)
+(global-set-key (kbd <span style="color: #259185;">"C-c f"</span>) 'find-file-in-project)
+(global-set-key (kbd <span style="color: #259185;">"C-c C-f"</span>) 'find-file-in-project)
+(global-set-key (kbd <span style="color: #259185;">"C-c g"</span>) 'magit-status)
+(global-set-key (kbd <span style="color: #259185;">"C-c C-g"</span>) 'find-file-in-git-repo)
+(global-set-key (kbd <span style="color: #259185;">"C-c m"</span>) 'cnd/clean-buffer)
+(global-set-key (kbd <span style="color: #259185;">"C-c q"</span>) 'join-line)
+(global-set-key (kbd <span style="color: #259185;">"C-c r"</span>) 'revert-buffer)
+(global-set-key (kbd <span style="color: #259185;">"C-c s e"</span>) 'cnd/edit-config)
+(global-set-key (kbd <span style="color: #259185;">"C-c s r"</span>) 'cnd/reload-config)
+(global-set-key (kbd <span style="color: #259185;">"C-c C-s"</span>) 'cnd/save-buffer-always)
+(global-set-key (kbd <span style="color: #259185;">"C-c v"</span>) 'eval-buffer)
+(global-set-key (kbd <span style="color: #259185;">"C-c w"</span>) 'whitespace-mode)
+(global-set-key (kbd <span style="color: #259185;">"C-c x"</span>) 'execute-extended-command)
+(global-set-key (kbd <span style="color: #259185;">"C-c z"</span>) 'zap-to-char)
 </pre>
 
 
 </div>
+
+</div>
+
+<div id="outline-container-11-2" class="outline-3">
+<h3 id="sec-11-2">Windmove</h3>
+<div class="outline-text-3" id="text-11-2">
+
+<p>   Windmove is a nice little feature to let you move between open
+   windows by pressing <code>Shift</code> + the arrow keys. I like to add the
+   ability to also do this using <code>C-c</code>, as using <code>Shift</code> may not work
+   on all terminals.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(windmove-default-keybindings 'shift)
+(global-set-key (kbd <span style="color: #259185;">"C-c &lt;left&gt;"</span>)  'windmove-left)
+(global-set-key (kbd <span style="color: #259185;">"C-c &lt;right&gt;"</span>) 'windmove-right)
+(global-set-key (kbd <span style="color: #259185;">"C-c &lt;up&gt;"</span>)    'windmove-up)
+(global-set-key (kbd <span style="color: #259185;">"C-c &lt;down&gt;"</span>)  'windmove-down)
+</pre>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12">Emacs Server</h2>
+<div class="outline-text-2" id="text-12">
+
+<p>  It is very annoying to find that you cannot close a buffer that has
+  been opened via <code>emacsclient</code> in the same way you would close any
+  other buffer. The following code fixes that.
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(add-hook 'server-switch-hook
+          (<span style="color: #728a05;">lambda</span> ()
+            (<span style="color: #728a05;">when</span> (current-local-map)
+              (use-local-map (copy-keymap (current-local-map))))
+            (<span style="color: #728a05;">when</span> server-buffer-clients
+              (local-set-key (kbd <span style="color: #259185;">"C-x k"</span>) 'server-edit))))
+</pre>
+
 </div>
 
 </div>
@@ -902,15 +1117,14 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">when</span> (eq system-type 'darwin)
-  (setq locate-command <span style="color: #8b2252;">"mdfind"</span>)
-  (setq ispell-program-name <span style="color: #8b2252;">"aspell"</span>)
-  (setq exec-path '(<span style="color: #8b2252;">"~/bin"</span> <span style="color: #8b2252;">"/usr/local/bin"</span> <span style="color: #8b2252;">"/usr/local/sbin"</span> <span style="color: #8b2252;">"/usr/bin"</span> <span style="color: #8b2252;">"/usr/sbin"</span>))
-  (setenv <span style="color: #8b2252;">"PATH"</span> (reduce
-                  (<span style="color: #a020f0;">lambda</span> (path dir) (concat path <span style="color: #8b2252;">":"</span> dir))
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">when</span> (eq system-type 'darwin)
+  (setq locate-command <span style="color: #259185;">"mdfind"</span>)
+  (setq ispell-program-name <span style="color: #259185;">"aspell"</span>)
+  (setq exec-path '(<span style="color: #259185;">"~/bin"</span> <span style="color: #259185;">"/usr/local/bin"</span> <span style="color: #259185;">"/usr/local/sbin"</span> <span style="color: #259185;">"/usr/bin"</span> <span style="color: #259185;">"/usr/sbin"</span>))
+  (setenv <span style="color: #259185;">"PATH"</span> (reduce
+                  (<span style="color: #728a05;">lambda</span> (path dir) (concat path <span style="color: #259185;">":"</span> dir))
                   exec-path)))
 </pre>
-
 
 </div>
 </div>
@@ -918,92 +1132,8 @@ uses the parent directory name as a prefix to the file name.
 </div>
 
 <div id="outline-container-14" class="outline-2">
-<h2 id="sec-14">Keybindings</h2>
+<h2 id="sec-14">Local Configuration</h2>
 <div class="outline-text-2" id="text-14">
-
-<p>  Keybindings are a really personal matter. My philosophy with Emacs
-  is this: keep as many keybindings as possible the same as the
-  out-of-the-box Emacs config, and use <code>C-c</code> for your own special
-  preferences. It's cool to extend the default functionality (setting
-  Return to <code>newline-and-indent</code> instead of <code>newline</code>, for example),
-  but radically altering it is only going to frustrate you when you
-  have use Emacs without your configuration. Plus, it's nice to anyone
-  you ever have to pair program with.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(global-set-key (kbd <span style="color: #8b2252;">"RET"</span>) 'newline-and-indent)
-(global-set-key (kbd <span style="color: #8b2252;">"C-;"</span>) 'comment-or-uncomment-region)
-(global-set-key (kbd <span style="color: #8b2252;">"M-/"</span>) 'hippie-expand)
-(global-set-key (kbd <span style="color: #8b2252;">"M-x"</span>) 'smex)
-(global-set-key (kbd <span style="color: #8b2252;">"M-X"</span>) 'smex-major-mode-commands)
-(<span style="color: #a020f0;">if</span> window-system (global-unset-key (kbd <span style="color: #8b2252;">"C-z"</span>)))
-</pre>
-
-
-
-</div>
-
-<div id="outline-container-14-1" class="outline-3">
-<h3 id="sec-14-1">Super-Special Personal Keybindings</h3>
-<div class="outline-text-3" id="text-14-1">
-
-
-
-
-
-<pre class="src src-emacs-lisp">(global-set-key (kbd <span style="color: #8b2252;">"C-c a"</span>) 'mark-whole-buffer)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c c"</span>) 'query-replace-regexp)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c d"</span>) 'deft)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c f"</span>) 'find-file-in-project)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c C-f"</span>) 'find-file-in-project)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c g"</span>) 'magit-status)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c C-g"</span>) 'find-file-in-git-repo)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c m"</span>) 'cnd/clean-buffer)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c q"</span>) 'join-line)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c r"</span>) 'revert-buffer)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c s"</span>) 'cnd/save-buffer-always)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c C-s"</span>) 'cnd/save-buffer-always)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c v"</span>) 'eval-buffer)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c w"</span>) 'whitespace-mode)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c x"</span>) 'execute-extended-command)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c z"</span>) 'zap-to-char)
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-14-2" class="outline-3">
-<h3 id="sec-14-2">Windmove</h3>
-<div class="outline-text-3" id="text-14-2">
-
-<p>   Windmove is a nice little feature to let you move between open
-   windows by pressing <code>Shift</code> + the arrow keys. I like to add the
-   ability to also do this using <code>C-c</code>, as using <code>Shift</code> may not work
-   on all terminals.
-</p>
-
-
-
-<pre class="src src-emacs-lisp">(windmove-default-keybindings 'shift)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;left&gt;"</span>)  'windmove-left)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;right&gt;"</span>) 'windmove-right)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;up&gt;"</span>)    'windmove-up)
-(global-set-key (kbd <span style="color: #8b2252;">"C-c &lt;down&gt;"</span>)  'windmove-down)
-</pre>
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-15" class="outline-2">
-<h2 id="sec-15">Local Configuration</h2>
-<div class="outline-text-2" id="text-15">
 
 <p>  No matter how universal your configuration is, you will find
   yourself someday needing to configuration something different for a
@@ -1013,8 +1143,8 @@ uses the parent directory name as a prefix to the file name.
 
 
 
-<pre class="src src-emacs-lisp">(<span style="color: #a020f0;">let</span> ((local-config (expand-file-name <span style="color: #8b2252;">"local.el"</span> user-emacs-directory)))
-  (<span style="color: #a020f0;">when</span> (file-exists-p local-config)
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">let</span> ((local-config (expand-file-name <span style="color: #259185;">"local.el"</span> user-emacs-directory)))
+  (<span style="color: #728a05;">when</span> (file-exists-p local-config)
     (load local-config)))
 </pre>
 
@@ -1023,7 +1153,7 @@ uses the parent directory name as a prefix to the file name.
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-08-29 09:00:21 EDT</p>
+<p class="date">Date: 2012-09-06 16:48:56 EDT</p>
 <p class="author">Author: Clinton Dreisbach</p>
 <p class="creator">Org version 7.8.11 with Emacs version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
