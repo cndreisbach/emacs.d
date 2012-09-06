@@ -346,6 +346,15 @@ Also use =visual-line-mode= to get decent word-wrap when in
   (add-hook 'markdown-mode-hook (lambda () (visual-line-mode t)))
 #+END_SRC
 
+I use =pandoc= for converting Markdown, so I want to set that as the
+command to use when exporting from =markdown-mode=. I want to enable
+smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css]] to beautify the output.
+
+#+begin_src emacs-lisp
+  (setq markdown-command "pandoc --smart -f markdown -t html")
+  (setq markdown-css-path (expand-file-name "markdown.css" cnd/vendor-dir))
+#+end_src
+
 * Programming
 ** autopair-mode
    =autopair-mode= automatically adds closing parentheses, brackets,
