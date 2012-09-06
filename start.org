@@ -312,7 +312,7 @@
 #+begin_src emacs-lisp
   (setq require-final-newline t)
 #+end_src
-
+   
 ** Indentation
    By default, I want to indent with 2 spaces and no tabs.
 
@@ -331,6 +331,21 @@ uses the parent directory name as a prefix to the file name.
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
+** Markdown
+Make sure that all Markdown file extensions trigger =markdown-mode=.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+#+END_SRC
+
+Also use =visual-line-mode= to get decent word-wrap when in
+=markdown-mode=.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'markdown-mode-hook (lambda () (visual-line-mode t)))
+#+END_SRC
+
 * Programming
 ** autopair-mode
    =autopair-mode= automatically adds closing parentheses, brackets,
