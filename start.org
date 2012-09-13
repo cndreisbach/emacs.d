@@ -101,8 +101,7 @@
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
   
-  (setq package-archive-enable-alist '(("melpa" deft magit org)))
-  
+  (setq package-archive-enable-alist '(("melpa" deft magit autopair)))
 #+end_src
 
 ** Packages to Install
@@ -470,9 +469,11 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
             (lambda ()
               (autopair-mode)
               (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+              (define-key ruby-mode-map "{" 'self-insert-command)
+              (define-key ruby-mode-map "}" 'self-insert-command)
               (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
 #+end_src
-
+   
 ** YAML
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
