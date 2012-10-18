@@ -568,7 +568,15 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
     (setq exec-path '("~/bin" "/usr/local/bin" "/usr/local/sbin" "/usr/bin" "/usr/sbin"))
     (setenv "PATH" (reduce
                     (lambda (path dir) (concat path ":" dir))
-                    exec-path)))
+                    exec-path))
+    (set-face-attribute 'default nil
+                  :family "Ubuntu Mono" :height 180 :weight 'normal)
+    (setq mac-command-modifier 'super)
+    (setq mac-option-modifier 'meta)
+    (global-set-key (kbd "s-+") 'cnd/increase-font-size)
+    (global-set-key (kbd "s-=") 'cnd/increase-font-size)
+    (global-set-key (kbd "s--") 'cnd/decrease-font-size))
+  
 #+end_src
 * Local Configuration
   No matter how universal your configuration is, you will find
