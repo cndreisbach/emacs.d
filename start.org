@@ -126,12 +126,14 @@
                          haml-mode
                          htmlize
                          ido-ubiquitous
+                         jinja2-mode
                          magit
                          markdown-mode
                          marmalade
                          nrepl
                          org
                          paredit
+                         python-mode
                          sass-mode
                          scss-mode
                          smex
@@ -156,8 +158,8 @@
     (message "%s" "Refreshing package database...")
     (package-refresh-contents)
     (dolist (pkg cnd/packages)
-    (when (not (package-installed-p pkg))
-      (package-install pkg))))
+      (when (not (package-installed-p pkg))
+        (package-install pkg))))
 #+end_src
 * Package Configuration
 ** Deft
