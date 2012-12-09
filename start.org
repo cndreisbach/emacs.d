@@ -80,7 +80,7 @@
     (load-file "~/.emacs.d/init.el"))
   
 #+end_src
-
+  
 * Package Management
 ** Package Repositories
    In addition to the default ELPA package repository, I use
@@ -315,13 +315,16 @@
 #+end_src
    
 ** Indentation
-   By default, I want to indent with 2 spaces and no tabs.
+*** EditorConfig
+    I'm trying out a new package called EditorConfig that keeps your
+    indentation settings the same across editors. Unfortunately, it
+    isn't available from standard Emacs package repos, so I have 
+    vendored it.
 
 #+begin_src emacs-lisp
-  (setq-default indent-tabs-mode nil
-                tab-width 2)
+  (load "editorconfig")
 #+end_src
-
+    
 ** Multiple Buffers
 I often have multiple buffers open with the same name. Emacs usually
 deals with this by appending the buffer number to the buffer
@@ -366,13 +369,6 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (require 'autopair)
 #+end_src
 
-** C
-   C has its own indentation rules, so I have to set them with a
-   separate variable.
-#+begin_src emacs-lisp
-  (setq c-basic-offset 2)
-#+end_src
-
 ** Clojure
    I want Emacs to open up ClojureScript files with Clojure syntax.
 
@@ -381,14 +377,10 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 #+end_src
 
 ** CSS/SCSS
-   CSS has its own indentation rules, so I have to set them with a
-   separate variable.
-
    I do not want SCSS to automatically compile to CSS upon save.
 
 #+begin_src emacs-lisp
-  (setq css-indent-offset 2
-        scss-compile-at-save nil)
+  (setq scss-compile-at-save nil)
 #+end_src
 
 ** Go
@@ -409,14 +401,6 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 
   (require 'go-autocomplete)
   (require 'auto-complete-config)
-#+end_src
-
-** Javascript
-   JS has its own indentation rules, so I have to set them with a
-   separate variable.
-
-#+begin_src emacs-lisp
-  (setq js-indent-level 2)
 #+end_src
 
 ** Lisp
@@ -577,7 +561,8 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
     (setq mac-option-modifier 'meta)
     (global-set-key (kbd "s-+") 'cnd/increase-font-size)
     (global-set-key (kbd "s-=") 'cnd/increase-font-size)
-    (global-set-key (kbd "s--") 'cnd/decrease-font-size))
+    (global-set-key (kbd "s--") 'cnd/decrease-font-size)
+    (global-set-key (kbd "s-x") 'execute-extended-command))
   
 #+end_src
 * Local Configuration
