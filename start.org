@@ -22,10 +22,10 @@
    Emacs will try and guess information about you from your
    environment. I prefer to be explicit about it.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq user-full-name "Clinton N. Dreisbach")
   (setq user-mail-address "clinton@dreisbach.us")
-#+end_src
+#+END_SRC
 
 * Must-Have Configuration
   There are a few settings that any user of Emacs should have. You do
@@ -34,14 +34,14 @@
   also changed them in Emacs (=global-auto-revert-mode=). You want
   winner-mode, because you are a winner.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (require 'cl)
   (global-auto-revert-mode t)
   (winner-mode t)
-#+end_src
+#+END_SRC
 
 * Functions
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defun cnd/clean-buffer ()
     "Re-indent the entire buffer and cleanup whitespace."
     (interactive)
@@ -79,7 +79,7 @@
     (interactive)
     (load-file "~/.emacs.d/init.el"))
   
-#+end_src
+#+END_SRC
   
 * Package Management
 ** Package Repositories
@@ -91,7 +91,7 @@
    particular package to use the HEAD version, I can throw it in the
    =package-archive-enable-alist=.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (load "package")
   
   (package-initialize)
@@ -102,14 +102,14 @@
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
   
   (setq package-archive-enable-alist '(("melpa" deft magit autopair)))
-#+end_src
+#+END_SRC
 
 ** Packages to Install
   There's no way I can list each package I use and why here. The
   important thing to note is that I set up a var with a list of the
   packages I want to have installed.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defvar cnd/packages '(auto-complete
                          autopair
                          clojure-mode
@@ -140,7 +140,7 @@
                          yaml-mode)
     "Packages I always want installed.")
   
-#+end_src
+#+END_SRC
   
 ** Installing Packages
    This is the magic incantation to get your packages installed. It
@@ -148,7 +148,7 @@
    packages currently installed, but otherwise, does not make any
    connections.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defun cnd/packages-installed-p ()
     (loop for pkg in cnd/packages
           when (not (package-installed-p pkg)) do (return nil)
@@ -160,7 +160,7 @@
     (dolist (pkg cnd/packages)
       (when (not (package-installed-p pkg))
         (package-install pkg))))
-#+end_src
+#+END_SRC
 * Package Configuration
 ** Deft
    http://jblevins.org/projects/deft/
@@ -170,21 +170,21 @@
    like it a lot. I want it to store all my notes in my Dropbox, and I
    want it to use org-mode for those notes
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq deft-directory "~/Dropbox/Notes/")
   (setq deft-use-filename-as-title t)
   (setq deft-extension "org")
   (setq deft-text-mode 'org-mode)
-#+end_src
+#+END_SRC
 
 ** Smex
    Smex is a replacement for the default behavior of =M-x= with better
    history and completion.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
   (smex-initialize)
-#+end_src
+#+END_SRC
 
 ** Ido
    Ido stands for Interactively Do Things, but it might as well stand
@@ -199,26 +199,26 @@
    and using virtual buffers lets me switch to (and re-open) closed
    buffers from my buffer search.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (ido-mode t)
   (ido-ubiquitous t)
   (setq ido-enable-flex-matching t
         ido-use-virtual-buffers t)
-#+end_src
+#+END_SRC
 ** Ack
    =ack= is an enhanced grep.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq ack-prompt-for-directory t)
   (setq ack-executable (executable-find "ack-grep"))
-#+end_src
+#+END_SRC
 
 * GUI Settings
   Emacs' default GUI settings are not great and cause it to not
   resemble a modern application. Luckily, they are very
   configurable.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq
    ;; Do not show a splash screen.
    inhibit-splash-screen t
@@ -265,15 +265,15 @@
     (load-theme 'sanityinc-solarized-light t))
     
   
-#+end_src
+#+END_SRC
 
 ** Modeline Improvements
    I like having the column number in my modeline to help with stack
    traces and just as a sanity check.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq column-number-mode t)
-#+end_src
+#+END_SRC
 
 * Files and Directories
   I like to set up a vendor directory for any random elisp files I
@@ -284,7 +284,7 @@
   load-path. Often, you'll have subdirectories in your vendor
   directory. Go ahead and add those to the load-path as well.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
     "Location of any random elisp files I find from other authors.")
   (add-to-list 'load-path cnd/vendor-dir)
@@ -292,7 +292,7 @@
   (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
     (when (file-directory-p project)
       (add-to-list 'load-path project)))
-#+end_src
+#+END_SRC
 
 * Text Editing
 ** Backups
@@ -302,17 +302,17 @@
    instead of keeping them in the same directory as the file being
    edited, I force them to be kept in a temporary directory.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-#+end_src
+#+END_SRC
 
 ** File Behavior
    All files should end with a final newline.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq require-final-newline t)
-#+end_src
+#+END_SRC
    
 ** Indentation
 *** EditorConfig
@@ -321,9 +321,9 @@
     isn't available from standard Emacs package repos, so I have 
     vendored it.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (load "editorconfig")
-#+end_src
+#+END_SRC
     
 ** Multiple Buffers
 I often have multiple buffers open with the same name. Emacs usually
@@ -331,10 +331,10 @@ deals with this by appending the buffer number to the buffer
 name. This is hard to keep track of. Instead, the uniquify library
 uses the parent directory name as a prefix to the file name.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
-#+end_src
+#+END_SRC
 ** Markdown
 Make sure that all Markdown file extensions trigger =markdown-mode=.
 
@@ -354,10 +354,10 @@ I use =pandoc= for converting Markdown, so I want to set that as the
 command to use when exporting from =markdown-mode=. I want to enable
 smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css]] to beautify the output.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq markdown-command "pandoc --smart -f markdown -t html")
   (setq markdown-css-path (expand-file-name "markdown.css" cnd/vendor-dir))
-#+end_src
+#+END_SRC
 
 * Programming
 ** autopair-mode
@@ -365,23 +365,23 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
    and the like, which is very useful when writing code. It doesn't
    get auto-loaded, so I have to require it explicitly.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (require 'autopair)
-#+end_src
+#+END_SRC
 
 ** Clojure
    I want Emacs to open up ClojureScript files with Clojure syntax.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
-#+end_src
+#+END_SRC
 
 ** CSS/SCSS
    I do not want SCSS to automatically compile to CSS upon save.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq scss-compile-at-save nil)
-#+end_src
+#+END_SRC
 
 ** Go
    Go is a rad systems language from Google. One thing I like about it
@@ -393,7 +393,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
    I am also adding =go-autocomplete=, which will allow me to complete
    on methods from my own code and the Go libraries I am using.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (add-hook 'go-mode-hook
             (lambda ()
               (autopair-mode)
@@ -401,7 +401,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 
   (require 'go-autocomplete)
   (require 'auto-complete-config)
-#+end_src
+#+END_SRC
 
 ** Lisp
    Lisp is the most awesome family of programming languages ever. When
@@ -412,7 +412,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
    This section is a good example of how to extend Emacs with keymaps
    and minor-modes.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; lisp.el
   (setq lisp-modes '(lisp-mode
                      emacs-lisp-mode
@@ -434,12 +434,12 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (dolist (mode lisp-modes)
     (add-hook (intern (format "%s-hook" mode))
               #'cnd/engage-lisp-power))
-#+end_src
+#+END_SRC
 
 ** Ruby
    There are a lot of different file names and extensions that are associated with Ruby. I've listed all I can think of so that =ruby-mode= is loaded for each of them.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; Rake files are ruby, too, as are gemspecs, rackup files, etc.
   (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
@@ -448,9 +448,9 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
-#+end_src
+#+END_SRC
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (add-hook 'ruby-mode-hook
             (lambda ()
               (autopair-mode)
@@ -458,13 +458,13 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
               (define-key ruby-mode-map "{" 'self-insert-command)
               (define-key ruby-mode-map "}" 'self-insert-command)
               (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
-#+end_src
+#+END_SRC
    
 ** YAML
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
-#+end_src
+#+END_SRC
 * Keybindings
   Keybindings are a really personal matter. My philosophy with Emacs
   is this: keep as many keybindings as possible the same as the
@@ -475,7 +475,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   have use Emacs without your configuration. Plus, it's nice to anyone
   you ever have to pair program with.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "RET") 'newline-and-indent)
   (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
   (global-set-key (kbd "M-/") 'hippie-expand)
@@ -486,11 +486,11 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (global-set-key (kbd "C-+") 'cnd/increase-font-size)
   (global-set-key (kbd "C-=") 'cnd/increase-font-size)
   (global-set-key (kbd "C--") 'cnd/decrease-font-size)
-#+end_src
+#+END_SRC
 
 ** Super-Special Personal Keybindings
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c a") 'mark-whole-buffer)
   (global-set-key (kbd "C-c c") 'query-replace-regexp)
   (global-set-key (kbd "C-c d") 'deft)
@@ -508,7 +508,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (global-set-key (kbd "C-c w") 'whitespace-mode)
   (global-set-key (kbd "C-c x") 'execute-extended-command)
   (global-set-key (kbd "C-c z") 'zap-to-char)
-#+end_src
+#+END_SRC
 
 ** Windmove
    Windmove is a nice little feature to let you move between open
@@ -516,26 +516,26 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
    ability to also do this using =C-c=, as using =Shift= may not work
    on all terminals.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (windmove-default-keybindings 'shift)
   (global-set-key (kbd "C-c <left>")  'windmove-left)
   (global-set-key (kbd "C-c <right>") 'windmove-right)
   (global-set-key (kbd "C-c <up>")    'windmove-up)
   (global-set-key (kbd "C-c <down>")  'windmove-down)
-#+end_src
+#+END_SRC
 * Emacs Server
   It is very annoying to find that you cannot close a buffer that has
   been opened via =emacsclient= in the same way you would close any
   other buffer. The following code fixes that.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (add-hook 'server-switch-hook
             (lambda ()
               (when (current-local-map)
                 (use-local-map (copy-keymap (current-local-map))))
               (when server-buffer-clients
                 (local-set-key (kbd "C-x k") 'server-edit))))
-#+end_src
+#+END_SRC
 * OS-Specific Settings
 ** OS X
    Emacs works pretty great on OS X, but there are a few adjustments I
@@ -547,7 +547,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
    =.profile= (or wherever you set up your environment variables.)
    Therefore, I set it explicitly.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (when (eq system-type 'darwin)
     (setq locate-command "mdfind")
     (setq ispell-program-name "aspell")
@@ -564,15 +564,15 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
     (global-set-key (kbd "s--") 'cnd/decrease-font-size)
     (global-set-key (kbd "s-x") 'execute-extended-command))
   
-#+end_src
+#+END_SRC
 * Local Configuration
   No matter how universal your configuration is, you will find
   yourself someday needing to configuration something different for a
   specific computer. I keep that code in =local.el=, which gets loaded
   at the end of my main configuration.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (let ((local-config (expand-file-name "local.el" user-emacs-directory)))
     (when (file-exists-p local-config)
       (load local-config)))
-#+end_src
+#+END_SRC
