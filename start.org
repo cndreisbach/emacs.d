@@ -120,6 +120,9 @@
                          feature-mode
                          find-file-in-git-repo
                          find-file-in-project
+                         flymake
+                         flymake-cursor
+                         flymake-python-pyflakes
                          full-ack
                          go-mode
                          gist
@@ -477,7 +480,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "RET") 'newline-and-indent)
-  (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+  (global-set-key (kbd "C-;") 'comment-dwim)
   (global-set-key (kbd "M-/") 'hippie-expand)
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
