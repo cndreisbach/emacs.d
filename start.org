@@ -117,6 +117,8 @@
                          color-theme-sanityinc-solarized
                          cperl-mode
                          deft
+                         diminish
+                         elisp-slime-nav
                          feature-mode
                          find-file-in-git-repo
                          find-file-in-project
@@ -141,8 +143,7 @@
                          scss-mode
                          smex
                          yaml-mode)
-    "Packages I always want installed.")
-  
+    "Packages I always want installed.")    
 #+END_SRC
   
 ** Installing Packages
@@ -215,6 +216,32 @@
   (setq ack-prompt-for-directory t)
   (setq ack-executable (executable-find "ack-grep"))
 #+END_SRC
+
+** Magit
+
+Instead of having magit run next to another window, I like having it
+take up the whole frame, so I can take care of all my git stuff at
+once and then it can go away. In order for this to work, I have to go
+ahead and require magit first.
+
+Source: http://whattheemacsd.com//setup-magit.el-01.html
+
+#+begin_src emacs-lisp
+  (require 'magit)
+  
+  (defadvice magit-status (around magit-fullscreen activate)
+    (window-configuration-to-register :magit-fullscreen)
+    ad-do-it
+    (delete-other-windows))
+  
+  (defun magit-quit-session ()
+    "Restores the previous window configuration and kills the magit buffer"
+    (interactive)
+    (kill-buffer)
+    (jump-to-register :magit-fullscreen))
+  
+  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
+#+end_src
 
 * GUI Settings
   Emacs' default GUI settings are not great and cause it to not
@@ -338,6 +365,14 @@ uses the parent directory name as a prefix to the file name.
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
+** Zap to Char
+Zap to char is very useful, but zapping up to a character is even more
+useful. A method to do this is in =misc.el=.
+
+#+begin_src emacs-lisp
+  (require 'misc)
+#+end_src
+
 ** Markdown
 Make sure that all Markdown file extensions trigger =markdown-mode=.
 
@@ -386,6 +421,16 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (setq scss-compile-at-save nil)
 #+END_SRC
 
+** Emacs Lisp
+Give us the power of SLIME when coding in elisp; specifically, allow
+us to go to definition with M-. and back again with M-,.
+
+#+begin_src emacs-lisp
+  (autoload 'elisp-slime-nav-mode "elisp-slime-nav")
+  (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))
+  (eval-after-load 'elisp-slime-nav '(diminish 'elisp-slime-nav-mode))
+#+end_src
+
 ** Go
    Go is a rad systems language from Google. One thing I like about it
    is that it has exquisite tools built for it. In particular, it has
@@ -428,6 +473,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
     :lighter " (power)"
     :keymap lisp-power-map
     (paredit-mode t))
+  (diminish 'lisp-power-mode)
   (define-key lisp-power-map [delete] 'paredit-forward-delete)
   (define-key lisp-power-map [backspace] 'paredit-backward-delete)
   
@@ -480,7 +526,7 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "RET") 'newline-and-indent)
-  (global-set-key (kbd "C-;") 'comment-dwim)
+  (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
   (global-set-key (kbd "M-/") 'hippie-expand)
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -511,6 +557,8 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (global-set-key (kbd "C-c w") 'whitespace-mode)
   (global-set-key (kbd "C-c x") 'execute-extended-command)
   (global-set-key (kbd "C-c z") 'zap-to-char)
+  (global-set-key (kbd "M-Z") 'zap-to-char)
+  (global-set-key (kbd "M-z") 'zap-up-to-char)
 #+END_SRC
 
 ** Windmove
