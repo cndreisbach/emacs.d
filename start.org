@@ -138,6 +138,7 @@
                          nrepl
                          org
                          paredit
+                         pony-mode
                          python-mode
                          sass-mode
                          scss-mode
@@ -318,7 +319,7 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
   (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
     "Location of any random elisp files I find from other authors.")
   (add-to-list 'load-path cnd/vendor-dir)
-
+  
   (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
     (when (file-directory-p project)
       (add-to-list 'load-path project)))
@@ -345,16 +346,13 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
 #+END_SRC
    
 ** Indentation
-*** EditorConfig
-    I'm trying out a new package called EditorConfig that keeps your
-    indentation settings the same across editors. Unfortunately, it
-    isn't available from standard Emacs package repos, so I have 
-    vendored it.
+   By default, I want to indent with 2 spaces and no tabs.
 
-#+BEGIN_SRC emacs-lisp
-  (load "editorconfig")
-#+END_SRC
-    
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil
+                tab-width 2)
+#+end_src
+
 ** Multiple Buffers
 I often have multiple buffers open with the same name. Emacs usually
 deals with this by appending the buffer number to the buffer
@@ -365,6 +363,20 @@ uses the parent directory name as a prefix to the file name.
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
 #+END_SRC
+** Multiple Cursors
+
+Having multiple cursors is the new magic, and I'm still not used to
+it. [[http://emacsrocks.com/e13.html][Check out the great video about it at Emacs Rocks.]]
+
+#+begin_src emacs-lisp
+  (require 'multiple-cursors)
+  
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
+#+end_src
+
 ** Zap to Char
 Zap to char is very useful, but zapping up to a character is even more
 useful. A method to do this is in =misc.el=.
@@ -407,6 +419,13 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (require 'autopair)
 #+END_SRC
 
+** C
+   C has its own indentation rules, so I have to set them with a
+   separate variable.
+#+begin_src emacs-lisp
+  (setq c-basic-offset 2)
+#+end_src
+
 ** Clojure
    I want Emacs to open up ClojureScript files with Clojure syntax.
 
@@ -415,11 +434,15 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 #+END_SRC
 
 ** CSS/SCSS
+   CSS has its own indentation rules, so I have to set them with a
+   separate variable.
+
    I do not want SCSS to automatically compile to CSS upon save.
 
-#+BEGIN_SRC emacs-lisp
-  (setq scss-compile-at-save nil)
-#+END_SRC
+#+begin_src emacs-lisp
+  (setq css-indent-offset 2
+        scss-compile-at-save nil)
+#+end_src
 
 ** Emacs Lisp
 Give us the power of SLIME when coding in elisp; specifically, allow
@@ -450,6 +473,14 @@ us to go to definition with M-. and back again with M-,.
   (require 'go-autocomplete)
   (require 'auto-complete-config)
 #+END_SRC
+
+** Javascript
+   JS has its own indentation rules, so I have to set them with a
+   separate variable.
+
+#+begin_src emacs-lisp
+  (setq js-indent-level 2)
+#+end_src
 
 ** Lisp
    Lisp is the most awesome family of programming languages ever. When
@@ -484,6 +515,29 @@ us to go to definition with M-. and back again with M-,.
     (add-hook (intern (format "%s-hook" mode))
               #'cnd/engage-lisp-power))
 #+END_SRC
+
+** Python
+I have customized pychecker to run my own version, which runs
+autopep8, pyflakes, and pep8.
+
+#+begin_src emacs-lisp
+  (setq py-pychecker-command "~/.emacs.d/vendor/pychecker"
+        py-pychecker-command-args '("")
+        python-check-command "~/.emacs.d/vendor/pychecker")
+#+end_src
+
+*** Django
+
+I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs when I'm working with Django. I
+have it vendored, since it's not on Marmalade. I have to require it to
+get =pony-tpl-mode= (a minor mode for Django templates) working, which
+I should figure out.
+
+#+begin_src emacs-lisp
+  ;; TODO autoload this instead of using require
+  
+  (require 'pony-mode)
+#+end_src
 
 ** Ruby
    There are a lot of different file names and extensions that are associated with Ruby. I've listed all I can think of so that =ruby-mode= is loaded for each of them.
@@ -612,8 +666,7 @@ us to go to definition with M-. and back again with M-,.
     (setq mac-option-modifier 'meta)
     (global-set-key (kbd "s-+") 'cnd/increase-font-size)
     (global-set-key (kbd "s-=") 'cnd/increase-font-size)
-    (global-set-key (kbd "s--") 'cnd/decrease-font-size)
-    (global-set-key (kbd "s-x") 'execute-extended-command))
+    (global-set-key (kbd "s--") 'cnd/decrease-font-size))
   
 #+END_SRC
 * Local Configuration

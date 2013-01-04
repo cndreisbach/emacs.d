@@ -4,3 +4,6 @@
 [submodule "vendor/elnode"]
 	path = vendor/elnode
 	url = git://github.com/nicferrier/elnode.git
+[submodule "vendor/multiple-cursors"]
+	path = vendor/multiple-cursors
+	url = git://github.com/magnars/multiple-cursors.el.git
