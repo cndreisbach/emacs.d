@@ -175,12 +175,12 @@
    like it a lot. I want it to store all my notes in my Dropbox, and I
    want it to use org-mode for those notes
 
-#+BEGIN_SRC emacs-lisp
-  (setq deft-directory "~/Dropbox/Notes/")
+#+begin_src emacs-lisp
+  (setq deft-directory "~/Notes/")
   (setq deft-use-filename-as-title t)
   (setq deft-extension "org")
   (setq deft-text-mode 'org-mode)
-#+END_SRC
+#+end_src
 
 ** Smex
    Smex is a replacement for the default behavior of =M-x= with better
