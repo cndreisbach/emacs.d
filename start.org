@@ -173,7 +173,7 @@
    Deft is an Emacs mode for quickly browsing, filtering, and editing
    directories of plain text notes, inspired by Notational Velocity. I
    like it a lot. I want it to store all my notes in my Dropbox, and I
-   want it to use org-mode for those notes
+   want it to use org-mode for those notes.
 
 #+begin_src emacs-lisp
   (setq deft-directory "~/Notes/")
