@@ -110,7 +110,8 @@
   packages I want to have installed.
 
 #+BEGIN_SRC emacs-lisp
-  (defvar cnd/packages '(auto-complete
+  (defvar cnd/packages '(adoc-mode
+                         auto-complete
                          autopair
                          clojure-mode
                          coffee-mode
