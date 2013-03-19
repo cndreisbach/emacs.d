@@ -79,6 +79,10 @@
     (interactive)
     (load-file "~/.emacs.d/init.el"))
   
+  (defun cnd/join-line ()
+    (interactive)
+    (join-line -1))
+  
 #+END_SRC
   
 * Package Management
@@ -132,6 +136,7 @@
                          haml-mode
                          htmlize
                          ido-ubiquitous
+                         inf-mongo
                          jinja2-mode
                          magit
                          markdown-mode
@@ -139,8 +144,11 @@
                          nrepl
                          org
                          paredit
+                         phoenix-dark-mono-theme
+                         phoenix-dark-pink-theme
                          pony-mode
                          python-mode
+                         rainbow-delimiters
                          sass-mode
                          scss-mode
                          smex
@@ -294,7 +302,7 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
     (setq frame-title-format '(buffer-file-name "%f" ("%b")))
     ;; Load my favorite color theme. By passing t as the second parameter,
     ;; we are not prompted to set the theme as safe.
-    (load-theme 'sanityinc-solarized-light t))
+    (load-theme 'phoenix-dark-pink t))
     
   
 #+END_SRC
@@ -434,6 +442,13 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
   (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
 #+END_SRC
 
+   =nrepl=, the Emacs client for the Clojure REPL, can be configured
+   to be less annoying. We want to hide its special buffers.
+
+#+begin_src emacs-lisp
+  (setq nrepl-hide-special-buffers t)
+#+end_src
+
 ** CSS/SCSS
    CSS has its own indentation rules, so I have to set them with a
    separate variable.
@@ -515,6 +530,7 @@ us to go to definition with M-. and back again with M-,.
   (dolist (mode lisp-modes)
     (add-hook (intern (format "%s-hook" mode))
               #'cnd/engage-lisp-power))
+  
 #+END_SRC
 
 ** Python
@@ -590,6 +606,8 @@ I should figure out.
   (global-set-key (kbd "C-+") 'cnd/increase-font-size)
   (global-set-key (kbd "C-=") 'cnd/increase-font-size)
   (global-set-key (kbd "C--") 'cnd/decrease-font-size)
+  
+  (global-set-key (kbd "M-j") 'cnd/join-line)
 #+END_SRC
 
 ** Super-Special Personal Keybindings
@@ -663,11 +681,13 @@ I should figure out.
                     exec-path))
     (set-face-attribute 'default nil
                   :family "Ubuntu Mono" :height 180 :weight 'normal)
-    (setq mac-command-modifier 'super)
+    (setq mac-option-key-is-meta t)
+    (setq mac-command-key-is-meta t)
+    (setq mac-command-modifier 'meta)
     (setq mac-option-modifier 'meta)
-    (global-set-key (kbd "s-+") 'cnd/increase-font-size)
-    (global-set-key (kbd "s-=") 'cnd/increase-font-size)
-    (global-set-key (kbd "s--") 'cnd/decrease-font-size))
+    (global-set-key (kbd "M-+") 'cnd/increase-font-size)
+    (global-set-key (kbd "M-=") 'cnd/increase-font-size)
+    (global-set-key (kbd "M--") 'cnd/decrease-font-size))
   
 #+END_SRC
 * Local Configuration
