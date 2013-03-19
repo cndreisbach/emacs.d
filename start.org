@@ -42,13 +42,49 @@
 
 * Functions
 #+BEGIN_SRC emacs-lisp
+  (defun cnd/clean-buffer-safe ()
+    "Cleanup whitespace and make sure we are using UTF-8."
+    (save-excursion
+      (whitespace-cleanup-region (point-min) (point-max))
+      (set-buffer-file-coding-system 'utf-8)))
+
   (defun cnd/clean-buffer ()
     "Re-indent the entire buffer and cleanup whitespace."
     (interactive)
     (save-excursion
       (indent-region (point-min) (point-max) nil)
-      (whitespace-cleanup-region (point-min) (point-max))))
-  
+      (cnd/clean-buffer-safe)))
+
+  (defun cnd/rename-current-buffer-file ()
+    "Renames current buffer and file it is visiting. From http://whattheemacsd.com/file-defuns.el-01.html."
+    (interactive)
+    (let ((name (buffer-name))
+          (filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (error "Buffer '%s' is not visiting a file!" name)
+        (let ((new-name (read-file-name "New name: " filename)))
+          (if (get-buffer new-name)
+              (error "A buffer named '%s' already exists!" new-name)
+            (rename-file filename new-name 1)
+            (rename-buffer new-name)
+            (set-visited-file-name new-name)
+            (set-buffer-modified-p nil)
+            (message "File '%s' successfully renamed to '%s'"
+                     name (file-name-nondirectory new-name)))))))
+
+  (defun cnd/kill-current-buffer-file ()
+    "Removes file connected to current buffer and kills buffer. From http://whattheemacsd.com/file-defuns.el-02.html."
+    (interactive)
+    (let ((filename (buffer-file-name))
+          (buffer (current-buffer))
+          (name (buffer-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (ido-kill-buffer)
+        (when (yes-or-no-p "Are you sure you want to remove this file? ")
+          (delete-file filename)
+          (kill-buffer buffer)
+          (message "File '%s' successfully removed" filename)))))
+
   (defun cnd/increase-font-size ()
     (interactive)
     (set-face-attribute 'default
@@ -56,7 +92,7 @@
                         :height
                         (ceiling (* 1.10
                                     (face-attribute 'default :height)))))
-  
+
   (defun cnd/decrease-font-size ()
     (interactive)
     (set-face-attribute 'default
@@ -64,27 +100,54 @@
                         :height
                         (floor (* 0.9
                                   (face-attribute 'default :height)))))
-  
+
   (defun cnd/save-buffer-always ()
     "Save the buffer even if it is not modified."
     (interactive)
     (set-buffer-modified-p t)
     (save-buffer))
-  
+
   (defun cnd/edit-config ()
     (interactive)
     (find-file "~/.emacs.d/start.org"))
-  
+
   (defun cnd/reload-config ()
     (interactive)
     (load-file "~/.emacs.d/init.el"))
-  
-  (defun cnd/join-line ()
+
+  ;; All below from http://whattheemacsd.com/
+
+  (defun cnd/move-line-down ()
     (interactive)
-    (join-line -1))
-  
+    (let ((col (current-column)))
+      (save-excursion
+        (forward-line)
+        (transpose-lines 1))
+      (forward-line)
+      (move-to-column col)))
+
+  (defun cnd/move-line-up ()
+    (interactive)
+    (let ((col (current-column)))
+      (save-excursion
+        (forward-line)
+        (transpose-lines -1))
+      (move-to-column col)))
+
+  (defun cnd/open-line-below ()
+    (interactive)
+    (end-of-line)
+    (newline)
+    (indent-for-tab-command))
+
+  (defun cnd/open-line-above ()
+    (interactive)
+    (beginning-of-line)
+    (newline)
+    (forward-line -1)
+    (indent-for-tab-command))
 #+END_SRC
-  
+
 * Package Management
 ** Package Repositories
    In addition to the default ELPA package repository, I use
@@ -97,14 +160,14 @@
 
 #+BEGIN_SRC emacs-lisp
   (load "package")
-  
+
   (package-initialize)
-  
+
   (add-to-list 'package-archives
                '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  
+
   (setq package-archive-enable-alist '(("melpa" deft magit autopair)))
 #+END_SRC
 
@@ -153,9 +216,9 @@
                          scss-mode
                          smex
                          yaml-mode)
-    "Packages I always want installed.")    
+    "Packages I always want installed.")
 #+END_SRC
-  
+
 ** Installing Packages
    This is the magic incantation to get your packages installed. It
    will require a network connection if you don't have all your
@@ -167,7 +230,7 @@
     (loop for pkg in cnd/packages
           when (not (package-installed-p pkg)) do (return nil)
           finally (return t)))
-  
+
   (unless (cnd/packages-installed-p)
     (message "%s" "Refreshing package database...")
     (package-refresh-contents)
@@ -238,18 +301,18 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
 
 #+begin_src emacs-lisp
   (require 'magit)
-  
+
   (defadvice magit-status (around magit-fullscreen activate)
     (window-configuration-to-register :magit-fullscreen)
     ad-do-it
     (delete-other-windows))
-  
+
   (defun magit-quit-session ()
     "Restores the previous window configuration and kills the magit buffer"
     (interactive)
     (kill-buffer)
     (jump-to-register :magit-fullscreen))
-  
+
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 #+end_src
 
@@ -268,35 +331,35 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
    use-dialog-box nil
    ;; Flash the screen on errors.
    visible-bell t)
-    
+
   (setq-default
    ;; Make the cursor a thin vertical line.
    cursor-type 'bar
    ;; Show the end of files inside buffers.
    indicate-empty-lines t)
-    
+
   ;; Show what text is selected.
   (transient-mark-mode t)
   ;; And delete selected text if we type over it.
   (delete-selection-mode t)
-  
+
   ;; Always show matching sets of parentheses.
   (show-paren-mode t)
-  
+
   ;; Highlight the current line.
   (global-hl-line-mode t)
-    
+
   ;; Hide the scroll bar and tool bar.
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
-    
+
   ;; Allow us to type "y" or "n" instead of "yes" or "no".
   (defalias 'yes-or-no-p 'y-or-n-p)
-      
+
   ;; Show the end of files.
   (when (not indicate-empty-lines)
     (toggle-indicate-empty-lines))
-    
+
   (when window-system
     ;; Make the window title reflect the current buffer.
     (setq frame-title-format '(buffer-file-name "%f" ("%b")))
@@ -328,12 +391,31 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
   (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
     "Location of any random elisp files I find from other authors.")
   (add-to-list 'load-path cnd/vendor-dir)
-  
+
   (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
     (when (file-directory-p project)
       (add-to-list 'load-path project)))
 #+END_SRC
 
+* Shells
+  =C-d= on an empty line in the shell terminates the current
+  process. Using the following, hitting =C-d= again will close the
+  buffer.
+
+#+begin_src emacs-lisp
+  ;; From http://whattheemacsd.com/setup-shell.el-01.html
+
+  (defun comint-delchar-or-eof-or-kill-buffer (arg)
+    (interactive "p")
+    (if (null (get-buffer-process (current-buffer)))
+        (kill-buffer)
+      (comint-delchar-or-maybe-eof arg)))
+
+  (add-hook 'shell-mode-hook
+            (lambda ()
+              (define-key shell-mode-map
+                (kbd "C-d") 'comint-delchar-or-eof-or-kill-buffer)))
+#+end_src
 * Text Editing
 ** Backups
    Default Emacs behavior around backups dates from a time of
@@ -353,7 +435,7 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
 #+BEGIN_SRC emacs-lisp
   (setq require-final-newline t)
 #+END_SRC
-   
+
 ** Indentation
    By default, I want to indent with 2 spaces and no tabs.
 
@@ -379,7 +461,7 @@ it. [[http://emacsrocks.com/e13.html][Check out the great video about it at Emac
 
 #+begin_src emacs-lisp
   (require 'multiple-cursors)
-  
+
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
@@ -514,7 +596,7 @@ us to go to definition with M-. and back again with M-,.
                      common-lisp-mode
                      scheme-mode
                      clojure-mode))
-  
+
   (defvar lisp-power-map (make-keymap))
   (define-minor-mode lisp-power-mode "Fix keybindings; add power."
     :lighter " (power)"
@@ -523,10 +605,10 @@ us to go to definition with M-. and back again with M-,.
   (diminish 'lisp-power-mode)
   (define-key lisp-power-map [delete] 'paredit-forward-delete)
   (define-key lisp-power-map [backspace] 'paredit-backward-delete)
-  
+
   (defun cnd/engage-lisp-power ()
     (lisp-power-mode t))
-  
+
   (dolist (mode lisp-modes)
     (add-hook (intern (format "%s-hook" mode))
               #'cnd/engage-lisp-power))
@@ -552,7 +634,7 @@ I should figure out.
 
 #+begin_src emacs-lisp
   ;; TODO autoload this instead of using require
-  
+
   (require 'pony-mode)
 #+end_src
 
@@ -579,7 +661,7 @@ I should figure out.
               (define-key ruby-mode-map "}" 'self-insert-command)
               (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
 #+END_SRC
-   
+
 ** YAML
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -602,12 +684,10 @@ I should figure out.
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   (if window-system (global-unset-key (kbd "C-z")))
-  
+
   (global-set-key (kbd "C-+") 'cnd/increase-font-size)
   (global-set-key (kbd "C-=") 'cnd/increase-font-size)
   (global-set-key (kbd "C--") 'cnd/decrease-font-size)
-  
-  (global-set-key (kbd "M-j") 'cnd/join-line)
 #+END_SRC
 
 ** Super-Special Personal Keybindings
@@ -620,9 +700,11 @@ I should figure out.
   (global-set-key (kbd "C-c C-f") 'find-file-in-project)
   (global-set-key (kbd "C-c g") 'magit-status)
   (global-set-key (kbd "C-c C-g") 'find-file-in-git-repo)
-  (global-set-key (kbd "C-c m") 'cnd/clean-buffer)
+  (global-set-key (kbd "C-c C-k") 'cnd/kill-current-buffer-file)
+  (global-set-key (kbd "C-c n") 'cnd/clean-buffer)
   (global-set-key (kbd "C-c q") 'join-line)
   (global-set-key (kbd "C-c r") 'revert-buffer)
+  (global-set-key (kbd "C-c C-r") 'cnd/rename-current-buffer-file)
   (global-set-key (kbd "C-c s e") 'cnd/edit-config)
   (global-set-key (kbd "C-c s r") 'cnd/reload-config)
   (global-set-key (kbd "C-c C-s") 'cnd/save-buffer-always)
@@ -632,6 +714,15 @@ I should figure out.
   (global-set-key (kbd "C-c z") 'zap-to-char)
   (global-set-key (kbd "M-Z") 'zap-to-char)
   (global-set-key (kbd "M-z") 'zap-up-to-char)
+  (global-set-key (kbd "<C-S-down>") 'cnd/move-line-down)
+  (global-set-key (kbd "<C-S-up>") 'cnd/move-line-up)
+  (global-set-key (kbd "<C-return>") 'cnd/open-line-below)
+  (global-set-key (kbd "<C-S-return>") 'cnd/open-line-above)
+ 
+  (global-set-key (kbd "M-j")
+            (lambda ()
+                  (interactive)
+                  (join-line -1)))
 #+END_SRC
 
 ** Windmove
