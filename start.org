@@ -520,16 +520,25 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 ** Clojure
    I want Emacs to open up ClojureScript files with Clojure syntax.
 
+   I want paredit-mode when I am editing Clojure files as well as
+   rainbow delimiters.
+
+   Lastly, =nrepl= is the Emacs client for the Clojure REPL, and I
+   want to configure it to hide its special buffers, use eldoc, and be
+   easy to switch to.
+
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
-#+END_SRC
-
-   =nrepl=, the Emacs client for the Clojure REPL, can be configured
-   to be less annoying. We want to hide its special buffers.
-
-#+begin_src emacs-lisp
+  
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'nrepl-mode-hook 'paredit-mode)
+  (add-hook 'nrepl-mode-hook 'rainbow-delimiters-mode)
+  
+  (add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
   (setq nrepl-hide-special-buffers t)
-#+end_src
+  (add-to-list 'same-window-buffer-names "*nrepl*")
+#+END_SRC
 
 ** CSS/SCSS
    CSS has its own indentation rules, so I have to set them with a
@@ -591,27 +600,27 @@ us to go to definition with M-. and back again with M-,.
 
 #+BEGIN_SRC emacs-lisp
   ;; lisp.el
-  (setq lisp-modes '(lisp-mode
-                     emacs-lisp-mode
-                     common-lisp-mode
-                     scheme-mode
-                     clojure-mode))
-
-  (defvar lisp-power-map (make-keymap))
-  (define-minor-mode lisp-power-mode "Fix keybindings; add power."
-    :lighter " (power)"
-    :keymap lisp-power-map
-    (paredit-mode t))
-  (diminish 'lisp-power-mode)
-  (define-key lisp-power-map [delete] 'paredit-forward-delete)
-  (define-key lisp-power-map [backspace] 'paredit-backward-delete)
-
-  (defun cnd/engage-lisp-power ()
-    (lisp-power-mode t))
-
-  (dolist (mode lisp-modes)
-    (add-hook (intern (format "%s-hook" mode))
-              #'cnd/engage-lisp-power))
+  ;; (setq lisp-modes '(lisp-mode
+  ;;                    emacs-lisp-mode
+  ;;                    common-lisp-mode
+  ;;                    scheme-mode
+  ;;                    clojure-mode))
+  ;; 
+  ;; (defvar lisp-power-map (make-keymap))
+  ;; (define-minor-mode lisp-power-mode "Fix keybindings; add power."
+  ;;   :lighter " (power)"
+  ;;   :keymap lisp-power-map
+  ;;   (paredit-mode t))
+  ;; (diminish 'lisp-power-mode)
+  ;; (define-key lisp-power-map [delete] 'paredit-forward-delete)
+  ;; (define-key lisp-power-map [backspace] 'paredit-backward-delete)
+  ;; 
+  ;; (defun cnd/engage-lisp-power ()
+  ;;   (lisp-power-mode t))
+  ;; 
+  ;; (dolist (mode lisp-modes)
+  ;;   (add-hook (intern (format "%s-hook" mode))
+  ;;             #'cnd/engage-lisp-power))
   
 #+END_SRC
 
