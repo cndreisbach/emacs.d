@@ -207,6 +207,7 @@
                          phoenix-dark-mono-theme
                          phoenix-dark-pink-theme
                          pony-mode
+                         projectile
                          python-mode
                          rainbow-delimiters
                          sass-mode
