@@ -314,6 +314,21 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
 #+end_src
 
+** Org-mode
+
+Org-mode, the most useful thing in the world. This configuration 
+file is in org-mode.
+
+I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode files.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-ditaa-jar-path "~/.emacs.d/vendor/ditaa0_9.jar")
+  
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ditaa . t)))
+#+END_SRC
+
 * GUI Settings
   Emacs' default GUI settings are not great and cause it to not
   resemble a modern application. Luckily, they are very
