@@ -210,6 +210,7 @@
                          pony-mode
                          projectile
                          python-mode
+                         qsimpleq-theme
                          rainbow-delimiters
                          sass-mode
                          scss-mode
@@ -320,7 +321,7 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
 Org-mode, the most useful thing in the world. This configuration 
 file is in org-mode.
 
-I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode files.
+I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] and Clojure in my org-mode files.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-ditaa-jar-path "~/.emacs.d/vendor/ditaa0_9.jar")
@@ -328,6 +329,30 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ditaa . t)))
+  
+  (require 'ob-clojure)
+  
+  (defvar org-babel-default-header-args:clojure 
+    '((:exports . "code") (:results . "silent")))
+  
+  (declare-function nrepl-send-string-sync "ext:nrepl" (code &optional ns))
+  
+  (defun org-babel-execute:clojure (body params)
+    "Execute a block of Clojure code with Babel."
+    (require 'nrepl)
+    (with-temp-buffer
+      (insert (org-babel-expand-body:clojure body params))
+      ((lambda (result)
+         (let ((result-params (cdr (assoc :result-params params))))
+           (if (or (member "scalar" result-params)
+                   (member "verbatim" result-params))
+               result
+             (condition-case nil (org-babel-script-escape result)
+               (error result)))))
+       (plist-get (nrepl-send-string-sync
+                   (buffer-substring-no-properties (point-min) (point-max))
+                   (cdr (assoc :package params)))
+                  :value))))
 #+END_SRC
 
 * GUI Settings
@@ -380,7 +405,7 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
     (setq frame-title-format '(buffer-file-name "%f" ("%b")))
     ;; Load my favorite color theme. By passing t as the second parameter,
     ;; we are not prompted to set the theme as safe.
-    (load-theme 'phoenix-dark-pink t))
+    (load-theme 'qsimpleq t))
     
   
 #+END_SRC
