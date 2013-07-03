@@ -501,7 +501,8 @@ it. [[http://emacsrocks.com/e13.html][Check out the great video about it at Emac
 
 #+begin_src emacs-lisp
   (require 'multiple-cursors)
-
+  
+  (global-set-key (quote [C-return]) 'set-rectangular-region-anchor)
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
