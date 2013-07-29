@@ -405,7 +405,7 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] and Clojure in
     (setq frame-title-format '(buffer-file-name "%f" ("%b")))
     ;; Load my favorite color theme. By passing t as the second parameter,
     ;; we are not prompted to set the theme as safe.
-    (load-theme 'qsimpleq t))
+    (load-theme 'phoenix-dark-pink t))
     
   
 #+END_SRC
