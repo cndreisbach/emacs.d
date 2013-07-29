@@ -12,3 +12,4 @@ session.*
 ac-comphist.dat
 start.el
 _site
+.mc-lists.el
