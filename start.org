@@ -617,6 +617,11 @@ us to go to definition with M-. and back again with M-,.
   (eval-after-load 'elisp-slime-nav '(diminish 'elisp-slime-nav-mode))
 #+end_src
 
+** Gherkin
+
+#+BEGIN_SRC emacs-lisp
+  (require 'gherkin-mode)
+#+END_SRC
 ** Go
    Go is a rad systems language from Google. One thing I like about it
    is that it has exquisite tools built for it. In particular, it has
