@@ -181,6 +181,7 @@
                          ag
                          auto-complete
                          autopair
+                         cider
                          clojure-mode
                          coffee-mode
                          cperl-mode
@@ -191,6 +192,7 @@
                          flymake-cursor
                          flymake-python-pyflakes
                          go-mode
+                         god-mode
                          gist
                          haml-mode
                          htmlize
@@ -202,7 +204,7 @@
                          marmalade
                          multiple-cursors
                          mustache-mode
-                         nrepl
+                         noctilux-theme
                          org
                          paredit
                          phoenix-dark-mono-theme
@@ -355,6 +357,19 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] and Clojure in
                   :value))))
 #+END_SRC
 
+** God-mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<escape>") 'god-local-mode)
+  (defun my-update-cursor ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only)
+                          'box
+                        'bar)))
+  
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
+#+END_SRC
+
 * GUI Settings
   Emacs' default GUI settings are not great and cause it to not
   resemble a modern application. Luckily, they are very
@@ -406,8 +421,6 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] and Clojure in
     ;; Load my favorite color theme. By passing t as the second parameter,
     ;; we are not prompted to set the theme as safe.
     (load-theme 'phoenix-dark-pink t))
-    
-  
 #+END_SRC
 
 ** Modeline Improvements
@@ -564,19 +577,21 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
    I want paredit-mode when I am editing Clojure files as well as
    rainbow delimiters.
 
-   Lastly, =nrepl= is the Emacs client for the Clojure REPL, and I
+   Lastly, =cider= is the Emacs client for the Clojure REPL, and I
    want to configure it to hide its special buffers, use eldoc, and be
    easy to switch to.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
-  
+    
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'nrepl-mode-hook 'paredit-mode)
-  (add-hook 'nrepl-mode-hook 'rainbow-delimiters-mode)
-  
-  (add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
+  (add-hook 'clojure-mode-hook 'subword-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook 'subword-mode)
+    
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (setq nrepl-hide-special-buffers t)
   (add-to-list 'same-window-buffer-names "*nrepl*")
 #+END_SRC
