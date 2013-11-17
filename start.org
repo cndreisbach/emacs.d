@@ -196,6 +196,7 @@
                          gist
                          haml-mode
                          htmlize
+                         hy-mode
                          ido-ubiquitous
                          inf-mongo
                          jinja2-mode
@@ -646,7 +647,6 @@ us to go to definition with M-. and back again with M-,.
    Hy is a Lisp implemented on top of Python. It is rad.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'hy-mode)
   (add-hook 'hy-mode-hook 'paredit-mode)
   (add-hook 'hy-mode-hook 'rainbow-delimiters-mode)
 #+END_SRC
