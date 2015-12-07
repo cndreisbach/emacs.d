@@ -163,12 +163,12 @@
 
   (package-initialize)
 
-  (add-to-list 'package-archives
-               '("marmalade" . "http://marmalade-repo.org/packages/"))
+  ;  (add-to-list 'package-archives
+  ;               '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-  (setq package-archive-enable-alist '(("melpa" deft magit autopair)))
+  ;  (setq package-archive-enable-alist '(("melpa" deft magit autopair)))
 #+END_SRC
 
 ** Packages to Install
@@ -181,9 +181,6 @@
                          ag
                          auto-complete
                          autopair
-                         cider
-                         clojure-mode
-                         coffee-mode
                          cperl-mode
                          deft
                          diminish
@@ -192,13 +189,11 @@
                          flymake-cursor
                          flymake-python-pyflakes
                          go-mode
-                         god-mode
                          gist
                          haml-mode
                          htmlize
                          hy-mode
                          ido-ubiquitous
-                         inf-mongo
                          jinja2-mode
                          magit
                          markdown-mode
@@ -213,6 +208,7 @@
                          pony-mode
                          projectile
                          python-mode
+                         pyvenv
                          qsimpleq-theme
                          rainbow-delimiters
                          sass-mode
@@ -285,14 +281,6 @@
   (setq ido-enable-flex-matching t
         ido-use-virtual-buffers t)
 #+END_SRC
-** Ack
-   =ack= is an enhanced grep.
-
-#+BEGIN_SRC emacs-lisp
-  (setq ack-prompt-for-directory t)
-  (setq ack-executable (executable-find "ack-grep"))
-#+END_SRC
-
 ** Magit
 
 Instead of having magit run next to another window, I like having it
@@ -324,51 +312,14 @@ Source: http://whattheemacsd.com//setup-magit.el-01.html
 Org-mode, the most useful thing in the world. This configuration 
 file is in org-mode.
 
-I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] and Clojure in my org-mode files.
+I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode files.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-ditaa-jar-path "~/.emacs.d/vendor/ditaa0_9.jar")
   
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((ditaa . t)))
-  
-  (require 'ob-clojure)
-  
-  (defvar org-babel-default-header-args:clojure 
-    '((:exports . "code") (:results . "silent")))
-  
-  (declare-function nrepl-send-string-sync "ext:nrepl" (code &optional ns))
-  
-  (defun org-babel-execute:clojure (body params)
-    "Execute a block of Clojure code with Babel."
-    (require 'nrepl)
-    (with-temp-buffer
-      (insert (org-babel-expand-body:clojure body params))
-      ((lambda (result)
-         (let ((result-params (cdr (assoc :result-params params))))
-           (if (or (member "scalar" result-params)
-                   (member "verbatim" result-params))
-               result
-             (condition-case nil (org-babel-script-escape result)
-               (error result)))))
-       (plist-get (nrepl-send-string-sync
-                   (buffer-substring-no-properties (point-min) (point-max))
-                   (cdr (assoc :package params)))
-                  :value))))
-#+END_SRC
-
-** God-mode
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<escape>") 'god-local-mode)
-  (defun my-update-cursor ()
-    (setq cursor-type (if (or god-local-mode buffer-read-only)
-                          'box
-                        'bar)))
-  
-  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
-  (add-hook 'god-mode-disabled-hook 'my-update-cursor)
+   '((ditaa . t)))  
 #+END_SRC
 
 * GUI Settings
