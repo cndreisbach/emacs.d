@@ -209,12 +209,13 @@
                          projectile
                          python-mode
                          pyvenv
-                         qsimpleq-theme
                          rainbow-delimiters
                          sass-mode
                          scss-mode
                          smex
-                         yaml-mode)
+                         spacemacs-theme
+                         yaml-mode
+                         yasnippet)
     "Packages I always want installed.")
 #+END_SRC
 
@@ -513,6 +514,15 @@ I prefer =doc-mode= to other Asciidoc editing modes.
   (require 'doc-mode)
   (add-to-list 'auto-mode-alist '("\\.adoc$" . doc-mode))
 #+END_SRC
+
+** Snippets
+   Yasnippet allows us to have snippets for our most commonly used
+   pieces of code.
+
+   #+BEGIN_SRC emacs-lisp
+     (require 'yasnippet)
+     (yas-global-mode 1)
+   #+END_SRC
 
 * Programming
 ** autopair-mode
