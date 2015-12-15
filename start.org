@@ -160,7 +160,6 @@
 
 #+BEGIN_SRC emacs-lisp
   (load "package")
-
   (package-initialize)
 
   ;  (add-to-list 'package-archives
@@ -185,6 +184,7 @@
                          deft
                          diminish
                          elisp-slime-nav
+                         fish-mode
                          flymake
                          flymake-cursor
                          flymake-python-pyflakes
@@ -202,6 +202,7 @@
                          mustache-mode
                          noctilux-theme
                          org
+                         paradox
                          paredit
                          phoenix-dark-mono-theme
                          phoenix-dark-pink-theme
@@ -218,7 +219,7 @@
                          yasnippet)
     "Packages I always want installed.")
 #+END_SRC
-
+  
 ** Installing Packages
    This is the magic incantation to get your packages installed. It
    will require a network connection if you don't have all your
@@ -404,6 +405,14 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
 #+END_SRC
 
 * Shells
+  I use fish shell, but Emacs should not internally.
+
+  #+BEGIN_SRC emacs-lisp
+    (setq explicit-shell-file-name "/bin/sh")
+    (setq shell-file-name "sh")
+    (setenv "SHELL" shell-file-name)
+  #+END_SRC
+
   =C-d= on an empty line in the shell terminates the current
   process. Using the following, hitting =C-d= again will close the
   buffer.
@@ -541,31 +550,6 @@ I prefer =doc-mode= to other Asciidoc editing modes.
   (setq c-basic-offset 2)
 #+end_src
 
-** Clojure
-   I want Emacs to open up ClojureScript files with Clojure syntax.
-
-   I want paredit-mode when I am editing Clojure files as well as
-   rainbow delimiters.
-
-   Lastly, =cider= is the Emacs client for the Clojure REPL, and I
-   want to configure it to hide its special buffers, use eldoc, and be
-   easy to switch to.
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
-    
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'clojure-mode-hook 'subword-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook 'subword-mode)
-    
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (setq nrepl-hide-special-buffers t)
-  (add-to-list 'same-window-buffer-names "*nrepl*")
-#+END_SRC
-
 ** CSS/SCSS
    CSS has its own indentation rules, so I have to set them with a
    separate variable.
@@ -587,10 +571,9 @@ us to go to definition with M-. and back again with M-,.
   (eval-after-load 'elisp-slime-nav '(diminish 'elisp-slime-nav-mode))
 #+end_src
 
-** Gherkin
-
+** Fish Shell
 #+BEGIN_SRC emacs-lisp
-  (require 'gherkin-mode)
+  (add-to-list 'auto-mode-alist '("\\.fish$" . fish-mode))
 #+END_SRC
 ** Go
    Go is a rad systems language from Google. One thing I like about it
@@ -610,14 +593,6 @@ us to go to definition with M-. and back again with M-,.
 
   (require 'go-autocomplete)
   (require 'auto-complete-config)
-#+END_SRC
-
-** Hy
-   Hy is a Lisp implemented on top of Python. It is rad.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'hy-mode-hook 'paredit-mode)
-  (add-hook 'hy-mode-hook 'rainbow-delimiters-mode)
 #+END_SRC
 
 ** Javascript
@@ -664,6 +639,18 @@ us to go to definition with M-. and back again with M-,.
 #+END_SRC
 
 ** Python
+#+BEGIN_SRC emacs-lisp
+  ;; keybindings
+  (eval-after-load 'python
+    '(define-key python-mode-map (kbd "C-c !") 'python-shell-switch-to-shell))
+  (eval-after-load 'python
+    '(define-key python-mode-map (kbd "C-c |") 'python-shell-send-region))
+
+  (add-hook 'python-mode-hook 'pyvenv-mode)
+
+  (setq python-indent-offset 4)
+#+END_SRC
+
 I have customized pychecker to run my own version, which runs
 autopep8, pyflakes, and pep8.
 
@@ -819,7 +806,7 @@ I should figure out.
   (global-set-key (kbd "C-c C-r") 'cnd/rename-current-buffer-file)
   (global-set-key (kbd "C-c s e") 'cnd/edit-config)
   (global-set-key (kbd "C-c s r") 'cnd/reload-config)
-  (global-set-key (kbd "C-c C-s") 'cnd/save-buffer-always)
+  (global-set-key (kbd "C-c M-s") 'cnd/save-buffer-always)
   (global-set-key (kbd "C-c v") 'eval-buffer)
   (global-set-key (kbd "C-c w") 'whitespace-mode)
   (global-set-key (kbd "C-c x") 'execute-extended-command)
