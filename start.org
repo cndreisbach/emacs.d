@@ -210,6 +210,7 @@
                          projectile
                          python-mode
                          pyvenv
+                         racket-mode
                          rainbow-delimiters
                          sass-mode
                          scss-mode

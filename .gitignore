@@ -15,3 +15,4 @@ _site
 .mc-lists.el
 ido.last
 recentf
+*.log
