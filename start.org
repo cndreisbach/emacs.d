@@ -192,6 +192,7 @@
                          htmlize
                          ido-ubiquitous
                          jinja2-mode
+                         jsx-mode
                          magit
                          markdown-mode
                          marmalade
@@ -585,8 +586,14 @@ us to go to definition with M-. and back again with M-,.
    separate variable.
 
 #+begin_src emacs-lisp
-  (setq js-indent-level 2)
+  (setq js-indent-level 4)
 #+end_src
+
+   JSX needs to be set up to work.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . jsx-mode))
+#+END_SRC
 
 ** Lisp
    Lisp is the most awesome family of programming languages ever. When
