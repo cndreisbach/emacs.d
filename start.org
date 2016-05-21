@@ -162,12 +162,13 @@
   (load "package")
   (package-initialize)
 
-  ;  (add-to-list 'package-archives
-  ;               '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives
-               '("melpa" . "http://melpa.milkbox.net/packages/") t)
+               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
-  ;  (setq package-archive-enable-alist '(("melpa" deft magit autopair)))
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+
+  (setq package-archive-enable-alist '(("melpa" phoenix-dark-mono-theme)))
 #+END_SRC
 
 ** Packages to Install
@@ -177,7 +178,6 @@
 
 #+BEGIN_SRC emacs-lisp
   (defvar cnd/packages '(adoc-mode
-                         ag
                          auto-complete
                          autopair
                          cperl-mode
@@ -188,11 +188,8 @@
                          flymake
                          flymake-cursor
                          flymake-python-pyflakes
-                         go-mode
                          gist
-                         haml-mode
                          htmlize
-                         hy-mode
                          ido-ubiquitous
                          jinja2-mode
                          magit
@@ -200,7 +197,6 @@
                          marmalade
                          multiple-cursors
                          mustache-mode
-                         noctilux-theme
                          org
                          paradox
                          paredit
@@ -219,6 +215,14 @@
                          yaml-mode
                          yasnippet)
     "Packages I always want installed.")
+
+  (setq package-pinned-packages
+        '(
+          (flymake            . "melpa-stable")
+          (smex               . "melpa-stable")
+          (rainbow-delimiters . "melpa-stable")
+          (paredit            . "melpa-stable")
+          ))
 #+END_SRC
   
 ** Installing Packages
@@ -453,11 +457,11 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
 #+END_SRC
 
 ** Indentation
-   By default, I want to indent with 2 spaces and no tabs.
+   By default, I want to indent with 4 spaces and no tabs.
 
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil
-                tab-width 2)
+                tab-width 4)
 #+end_src
 
 ** Multiple Buffers
@@ -576,26 +580,6 @@ us to go to definition with M-. and back again with M-,.
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.fish$" . fish-mode))
 #+END_SRC
-** Go
-   Go is a rad systems language from Google. One thing I like about it
-   is that it has exquisite tools built for it. In particular, it has
-   =gofmt=, which formats the code according to Google's specs. I am
-   adding a hook to =go-mode= to turn on =autopair-mode= and to run
-   =gofmt= before saving a file.
-
-   I am also adding =go-autocomplete=, which will allow me to complete
-   on methods from my own code and the Go libraries I am using.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'go-mode-hook
-            (lambda ()
-              (autopair-mode)
-              (add-hook 'before-save-hook 'gofmt-before-save nil t)))
-
-  (require 'go-autocomplete)
-  (require 'auto-complete-config)
-#+END_SRC
-
 ** Javascript
    JS has its own indentation rules, so I have to set them with a
    separate variable.
@@ -674,30 +658,6 @@ I should figure out.
   (require 'pony-mode)
 #+end_src
 
-** Ruby
-   There are a lot of different file names and extensions that are associated with Ruby. I've listed all I can think of so that =ruby-mode= is loaded for each of them.
-
-#+BEGIN_SRC emacs-lisp
-  ;; Rake files are ruby, too, as are gemspecs, rackup files, etc.
-  (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
-  (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'ruby-mode-hook
-            (lambda ()
-              (autopair-mode)
-              (add-hook 'before-save-hook 'whitespace-cleanup nil t)
-              (define-key ruby-mode-map "{" 'self-insert-command)
-              (define-key ruby-mode-map "}" 'self-insert-command)
-              (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)))
-#+END_SRC
-   
 ** Scheme
 
 #+BEGIN_SRC emacs-lisp
