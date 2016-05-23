@@ -17,3 +17,5 @@ ido.last
 recentf
 *.log
 anaconda-mode
+projectile-bookmarks.eld
+custom.el

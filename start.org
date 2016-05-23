@@ -179,6 +179,7 @@
                          diminish
                          elisp-slime-nav
                          fish-mode
+                         flx-ido
                          flymake
                          flymake-cursor
                          flymake-python-pyflakes
@@ -279,9 +280,11 @@
 #+BEGIN_SRC emacs-lisp
   (ido-mode t)
   (ido-ubiquitous t)
+  (flx-ido-mode t)
   (setq ido-enable-flex-matching t
         ido-use-virtual-buffers t)
 #+END_SRC
+
 ** Magit
 
 Instead of having magit run next to another window, I like having it
@@ -321,6 +324,13 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ditaa . t)))  
+#+END_SRC
+
+** Projectile
+   [[https://github.com/bbatsov/projectile][Projectile]] is a package to allow you to search over projects.
+
+#+BEGIN_SRC emacs-lisp
+(projectile-global-mode)
 #+END_SRC
 
 * GUI Settings
@@ -811,27 +821,27 @@ I should figure out.
    Therefore, I set it explicitly.
 
 #+BEGIN_SRC emacs-lisp
-    (when (eq system-type 'darwin)
-      (setq locate-command "mdfind")
-      (setq ispell-program-name "aspell")
-      
-      (defun set-exec-path-from-shell-PATH ()
-        (let ((path-from-shell (shell-command-to-string "$SHELL -i -c 'echo $PATH'")))
-          (setenv "PATH" path-from-shell)
-          (setq exec-path (split-string path-from-shell path-separator))))
-  
-      (when window-system (set-exec-path-from-shell-PATH))
-  
-      (set-face-attribute 'default nil
-                    :family "Ubuntu Mono" :height 180 :weight 'normal)
-      (setq mac-option-key-is-meta t)
-      (setq mac-command-key-is-meta t)
-      (setq mac-command-modifier 'meta)
-      (setq mac-option-modifier 'meta)
-      (global-set-key (kbd "M-+") 'cnd/increase-font-size)
-      (global-set-key (kbd "M-=") 'cnd/increase-font-size)
-      (global-set-key (kbd "M--") 'cnd/decrease-font-size))
+  (when (eq system-type 'darwin)
+    (setq locate-command "mdfind")
+    (setq ispell-program-name "aspell")
     
+    (defun set-exec-path-from-shell-PATH ()
+      (let ((path-from-shell (shell-command-to-string "$SHELL -i -c 'echo $PATH'")))
+        (setenv "PATH" path-from-shell)
+        (setq exec-path (split-string path-from-shell path-separator))))
+
+    (when window-system (set-exec-path-from-shell-PATH))
+
+    (set-face-attribute 'default nil
+                  :family "Ubuntu Mono" :height 180 :weight 'normal)
+    (setq mac-option-key-is-meta t)
+    (setq mac-command-key-is-meta t)
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'meta)
+    (global-set-key (kbd "M-+") 'cnd/increase-font-size)
+    (global-set-key (kbd "M-=") 'cnd/increase-font-size)
+    (global-set-key (kbd "M--") 'cnd/decrease-font-size))
+
 #+END_SRC
 * Local Configuration
   No matter how universal your configuration is, you will find
