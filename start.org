@@ -151,12 +151,7 @@
 * Package Management
 ** Package Repositories
    In addition to the default ELPA package repository, I use
-   Marmalade, which is community-run and has new packages more
-   quickly. I also use MELPA, which has up-to-date versions of
-   packages built straight from their repos. I don't want to get all
-   my packages from there, since they might be flaky, but if I want a
-   particular package to use the HEAD version, I can throw it in the
-   =package-archive-enable-alist=.
+   MELPA and MELPA stable.
 
 #+BEGIN_SRC emacs-lisp
   (load "package")
@@ -167,8 +162,6 @@
 
   (add-to-list 'package-archives
                '("melpa" . "https://melpa.org/packages/"))
-
-  (setq package-archive-enable-alist '(("melpa" phoenix-dark-mono-theme)))
 #+END_SRC
 
 ** Packages to Install
@@ -178,6 +171,7 @@
 
 #+BEGIN_SRC emacs-lisp
   (defvar cnd/packages '(adoc-mode
+                         anaconda-mode
                          auto-complete
                          autopair
                          cperl-mode
@@ -206,7 +200,6 @@
                          pony-mode
                          projectile
                          python-mode
-                         pyvenv
                          racket-mode
                          rainbow-delimiters
                          sass-mode
@@ -377,10 +370,7 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
 
   (when window-system
     ;; Make the window title reflect the current buffer.
-    (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-    ;; Load my favorite color theme. By passing t as the second parameter,
-    ;; we are not prompted to set the theme as safe.
-    (load-theme 'spacemacs-light t))
+    (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
 #+END_SRC
 
 ** Modeline Improvements
@@ -638,19 +628,10 @@ us to go to definition with M-. and back again with M-,.
   (eval-after-load 'python
     '(define-key python-mode-map (kbd "C-c |") 'python-shell-send-region))
 
-  (add-hook 'python-mode-hook 'pyvenv-mode)
+  (add-hook 'python-mode-hook 'anaconda-mode)
 
   (setq python-indent-offset 4)
 #+END_SRC
-
-I have customized pychecker to run my own version, which runs
-autopep8, pyflakes, and pep8.
-
-#+begin_src emacs-lisp
-  (setq py-pychecker-command "~/.emacs.d/vendor/pychecker"
-        py-pychecker-command-args '("")
-        python-check-command "~/.emacs.d/vendor/pychecker")
-#+end_src
 
 *** Django
 
