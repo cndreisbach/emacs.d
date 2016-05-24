@@ -170,7 +170,9 @@
   packages I want to have installed.
 
 #+BEGIN_SRC emacs-lisp
-  (defvar cnd/packages '(adoc-mode
+  (defvar cnd/packages '(ac-anaconda
+                         ac-html
+                         adoc-mode
                          anaconda-mode
                          auto-complete
                          autopair
@@ -186,13 +188,11 @@
                          gist
                          htmlize
                          ido-ubiquitous
-                         jinja2-mode
                          jsx-mode
                          magit
                          markdown-mode
                          marmalade
                          multiple-cursors
-                         mustache-mode
                          org
                          paradox
                          paredit
@@ -207,6 +207,7 @@
                          scss-mode
                          smex
                          spacemacs-theme
+                         web-mode
                          yaml-mode
                          yasnippet)
     "Packages I always want installed.")
@@ -540,6 +541,13 @@ I prefer =doc-mode= to other Asciidoc editing modes.
    #+END_SRC
 
 * Programming
+** auto-complete
+
+#+BEGIN_SRC emacs-lisp
+  (require 'auto-complete-config)
+  (ac-config-default)
+#+END_SRC
+
 ** autopair-mode
    =autopair-mode= automatically adds closing parentheses, brackets,
    and the like, which is very useful when writing code. It doesn't
@@ -556,17 +564,6 @@ I prefer =doc-mode= to other Asciidoc editing modes.
   (setq c-basic-offset 2)
 #+end_src
 
-** CSS/SCSS
-   CSS has its own indentation rules, so I have to set them with a
-   separate variable.
-
-   I do not want SCSS to automatically compile to CSS upon save.
-
-#+begin_src emacs-lisp
-  (setq css-indent-offset 2
-        scss-compile-at-save nil)
-#+end_src
-
 ** Emacs Lisp
 Give us the power of SLIME when coding in elisp; specifically, allow
 us to go to definition with M-. and back again with M-,.
@@ -581,20 +578,6 @@ us to go to definition with M-. and back again with M-,.
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.fish$" . fish-mode))
 #+END_SRC
-** Javascript
-   JS has its own indentation rules, so I have to set them with a
-   separate variable.
-
-#+begin_src emacs-lisp
-  (setq js-indent-level 4)
-#+end_src
-
-   JSX needs to be set up to work.
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.jsx$" . jsx-mode))
-#+END_SRC
-
 ** Lisp
    Lisp is the most awesome family of programming languages ever. When
    I'm using Lisp, I want ultimate power, so I turn on paredit, which
@@ -639,6 +622,7 @@ us to go to definition with M-. and back again with M-,.
     '(define-key python-mode-map (kbd "C-c |") 'python-shell-send-region))
 
   (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'ac-anaconda-setup)
 
   (setq python-indent-offset 4)
 #+END_SRC
@@ -727,6 +711,24 @@ I should figure out.
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+#+END_SRC
+** HTML & Templates
+
+#+BEGIN_SRC emacs-lisp
+  (require 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+
+  (defun my-web-mode-hook ()
+    "Hooks for web-mode."
+    (setq web-mode-markup-indent-offset 4)
+    (setq web-mode-css-indent-offset 4)
+    (setq web-mode-code-indent-offset 4))
+
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
+
 #+END_SRC
 * Keybindings
   Keybindings are a really personal matter. My philosophy with Emacs
