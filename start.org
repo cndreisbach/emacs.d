@@ -346,9 +346,7 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
    ;; Show incomplete commands while typing them.
    echo-keystrokes 0.1
    ;; Never show dialog boxes.
-   use-dialog-box nil
-   ;; Flash the screen on errors.
-   visible-bell t)
+   use-dialog-box nil)
 
   (setq-default
    ;; Make the cursor a thin vertical line.
@@ -812,7 +810,7 @@ I should figure out.
                 (local-set-key (kbd "C-x k") 'server-edit))))
 #+END_SRC
 * OS-Specific Settings
-** OS X
+** COMMENT OS X
    Emacs works pretty great on OS X, but there are a few adjustments I
    like. =mdfind= is a command-line interface to Spotlight which works
    great when using the =locate= function in Emacs. =aspell= is used
