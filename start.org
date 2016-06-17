@@ -457,11 +457,12 @@ I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode
 #+END_SRC
 
 ** Indentation
-   By default, I want to indent with 4 spaces and no tabs.
+   By default, I want to indent with 4 spaces and no tabs, and wrap at 80 characters.
 
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil
                 tab-width 4)
+  (setq-default fill-column 80)
 #+end_src
 
 ** Multiple Buffers
@@ -518,7 +519,8 @@ smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css
 
 #+BEGIN_SRC emacs-lisp
   (setq markdown-command "pandoc --smart -f markdown -t html")
-  (setq markdown-css-path (expand-file-name "markdown.css" cnd/vendor-dir))
+  (setq markdown-css-paths (list (expand-file-name "markdown.css" cnd/vendor-dir)))
+  (add-hook 'markdown-mode-hook 'turn-on-auto-fill)
 #+END_SRC
 
 ** Asciidoc
