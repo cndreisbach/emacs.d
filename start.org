@@ -17,6 +17,7 @@
    - http://technomancy.us/153
    - http://pavpanchekha.com/blog/emacs.html
    - http://senny.github.com/cabbage/
+   - https://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
 
 * Personal Info
    Emacs will try and guess information about you from your
@@ -27,20 +28,169 @@
   (setq user-mail-address "clinton@dreisbach.us")
 #+END_SRC
 
-* Must-Have Configuration
+* Basic Configuration
+** Setup use-package
+
+#+BEGIN_SRC emacs-lisp
+  (eval-when-compile
+    (require 'use-package))
+  (require 'diminish)                ;; if you use :diminish
+  (require 'bind-key)    
+#+END_SRC
+
+** Must-Haves
   There are a few settings that any user of Emacs should have. You do
   want the power of =cl=, which brings in a lot of Common Lisp's
   methods.  You do want Emacs to reload changed files if you haven't
   also changed them in Emacs (=global-auto-revert-mode=). You want
   winner-mode, because you are a winner.
 
+  We want to use UTF-8 for all text.
+
 #+BEGIN_SRC emacs-lisp
   (require 'cl)
   (global-auto-revert-mode t)
   (winner-mode t)
+
+  (setq coding-system-for-read 'utf-8)
+  (setq coding-system-for-write 'utf-8)
 #+END_SRC
 
-* Functions
+** GUI Settings
+  Emacs' default GUI settings are not great and cause it to not
+  resemble a modern application. Luckily, they are very
+  configurable.
+
+#+BEGIN_SRC emacs-lisp
+  (setq
+   ;; Do not show a splash screen.
+   inhibit-splash-screen t
+   ;; Show incomplete commands while typing them.
+   echo-keystrokes 0.1
+   ;; Never show dialog boxes.
+   use-dialog-box nil)
+
+  (setq-default
+   ;; Make the cursor a thin vertical line.
+   cursor-type 'bar
+   ;; Show the end of files inside buffers.
+   indicate-empty-lines t)
+
+  ;; Show what text is selected.
+  (transient-mark-mode t)
+  ;; And delete selected text if we type over it.
+  (delete-selection-mode t)
+
+  ;; Always show matching sets of parentheses.
+  (show-paren-mode t)
+
+  ;; Highlight the current line.
+  (global-hl-line-mode t)
+
+  ;; Hide the scroll bar, tool bar, and menu bar.
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+
+  ;; Allow us to type "y" or "n" instead of "yes" or "no".
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  ;; Show the end of files.
+  (when (not indicate-empty-lines)
+    (toggle-indicate-empty-lines))
+
+  (when window-system
+    ;; Make the window title reflect the current buffer.
+    (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
+#+END_SRC
+
+** Modeline Improvements
+   I like having the column number in my modeline to help with stack
+   traces and just as a sanity check.
+
+#+BEGIN_SRC emacs-lisp
+  (setq column-number-mode t)
+#+END_SRC
+
+** Files and Directories
+  I like to set up a vendor directory for any random elisp files I
+  pull in. I get the majority of my functionality from packages
+  distributed through ELPA or Marmalade, but sometimes, you find
+  something random on EmacsWiki that you may want to pull in. After
+  adding that directory, you're going to want to throw it in your
+  load-path. Often, you'll have subdirectories in your vendor
+  directory. Go ahead and add those to the load-path as well.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
+    "Location of any random elisp files I find from other authors.")
+  (add-to-list 'load-path cnd/vendor-dir)
+
+  (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
+    (when (file-directory-p project)
+      (add-to-list 'load-path project)))
+#+END_SRC
+
+** Shells
+  I use fish shell, but Emacs should not internally.
+
+  #+BEGIN_SRC emacs-lisp
+    (setq explicit-shell-file-name "/bin/sh")
+    (setq shell-file-name "sh")
+    (setenv "SHELL" shell-file-name)
+  #+END_SRC
+
+  =C-d= on an empty line in the shell terminates the current
+  process. Using the following, hitting =C-d= again will close the
+  buffer.
+
+#+begin_src emacs-lisp
+  ;; From http://whattheemacsd.com/setup-shell.el-01.html
+
+  (defun comint-delchar-or-eof-or-kill-buffer (arg)
+    (interactive "p")
+    (if (null (get-buffer-process (current-buffer)))
+        (kill-buffer)
+      (comint-delchar-or-maybe-eof arg)))
+
+  (add-hook 'shell-mode-hook
+            (lambda ()
+              (define-key shell-mode-map
+                (kbd "C-d") 'comint-delchar-or-eof-or-kill-buffer)))
+#+end_src
+
+** Backups
+   Default Emacs behavior around backups dates from a time of
+   barbarism and should be avoided. On the other hand, it's saved me
+   once or twice. Therefore, I allow Emacs to keep backups, but
+   instead of keeping them in the same directory as the file being
+   edited, I force them to be kept in a temporary directory.
+
+#+BEGIN_SRC emacs-lisp
+  (setq delete-old-versions -1)  ; delete excess backup versions silently
+  (setq version-control t)       ; use version control
+  (setq vc-make-backup-files t)  ; make backups file even when in version controlled dir
+  (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+#+END_SRC
+
+** File Behavior
+   All files should end with a final newline.
+
+#+BEGIN_SRC emacs-lisp
+  (setq require-final-newline t)
+#+END_SRC
+
+** Indentation
+   By default, I want to indent with 4 spaces and no tabs, and wrap at 80 characters.
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil
+                tab-width 4)
+  (setq-default fill-column 80)
+#+end_src
+
+** Functions
 #+BEGIN_SRC emacs-lisp
   (defun cnd/clean-buffer-safe ()
     "Cleanup whitespace and make sure we are using UTF-8."
@@ -149,143 +299,102 @@
 #+END_SRC
 
 * Package Management
-** Package Repositories
-   In addition to the default ELPA package repository, I use
-   MELPA and MELPA stable.
+** use-package
+   =use-package= helps us organize the packages we want and configure them.
 
 #+BEGIN_SRC emacs-lisp
-  (load "package")
+  ;; tells emacs not to load any packages before starting up
+  (setq package-enable-at-startup nil)
+
+  ;; the following lines tell emacs where on the internet to look up
+  ;; for new packages.
+  (setq package-archives '(("org"       . "http://orgmode.org/elpa/")
+                           ("gnu"       . "http://elpa.gnu.org/packages/")
+                           ("melpa"     . "https://melpa.org/packages/")
+                           ("marmalade" . "http://marmalade-repo.org/packages/")))
   (package-initialize)
 
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/"))
-#+END_SRC
-
-** Packages to Install
-  There's no way I can list each package I use and why here. The
-  important thing to note is that I set up a var with a list of the
-  packages I want to have installed.
-
-#+BEGIN_SRC emacs-lisp
-  (defvar cnd/packages '(ac-anaconda
-                         ac-html
-                         adoc-mode
-                         anaconda-mode
-                         auto-complete
-                         autopair
-                         cperl-mode
-                         deft
-                         diminish
-                         elisp-slime-nav
-                         fish-mode
-                         flx-ido
-                         flymake
-                         flymake-cursor
-                         flymake-python-pyflakes
-                         gist
-                         htmlize
-                         ido-ubiquitous
-                         jsx-mode
-                         magit
-                         markdown-mode
-                         marmalade
-                         multiple-cursors
-                         org
-                         paradox
-                         paredit
-                         phoenix-dark-mono-theme
-                         phoenix-dark-pink-theme
-                         pony-mode
-                         projectile
-                         python-mode
-                         racket-mode
-                         rainbow-delimiters
-                         sass-mode
-                         scss-mode
-                         smex
-                         spacemacs-theme
-                         web-mode
-                         yaml-mode
-                         yasnippet)
-    "Packages I always want installed.")
-
-  (setq package-pinned-packages
-        '(
-          (flymake            . "melpa-stable")
-          (smex               . "melpa-stable")
-          (rainbow-delimiters . "melpa-stable")
-          (paredit            . "melpa-stable")
-          ))
-#+END_SRC
-  
-** Installing Packages
-   This is the magic incantation to get your packages installed. It
-   will require a network connection if you don't have all your
-   packages currently installed, but otherwise, does not make any
-   connections.
-
-#+BEGIN_SRC emacs-lisp
-  (defun cnd/packages-installed-p ()
-    (loop for pkg in cnd/packages
-          when (not (package-installed-p pkg)) do (return nil)
-          finally (return t)))
-
-  (unless (cnd/packages-installed-p)
-    (message "%s" "Refreshing package database...")
+  ;; Bootstrap =use-package=
+  (unless (package-installed-p 'use-package) ; unless it is already installed
     (package-refresh-contents)
-    (dolist (pkg cnd/packages)
-      (when (not (package-installed-p pkg))
-        (package-install pkg))))
+    (package-install 'use-package))
+
+  (require 'use-package)
 #+END_SRC
+
 * Package Configuration
-** Deft
-   http://jblevins.org/projects/deft/
-
-   Deft is an Emacs mode for quickly browsing, filtering, and editing
-   directories of plain text notes, inspired by Notational Velocity. I
-   like it a lot. I want it to store all my notes in my Dropbox, and I
-   want it to use org-mode for those notes.
-
-#+begin_src emacs-lisp
-  (setq deft-directory "~/Notes/")
-  (setq deft-use-filename-as-title t)
-  (setq deft-extension "org")
-  (setq deft-text-mode 'org-mode)
-#+end_src
-
-** Smex
-   Smex is a replacement for the default behavior of =M-x= with better
-   history and completion.
-
+** general
+   Better key bindings.
 #+BEGIN_SRC emacs-lisp
-  (setq smex-save-file (expand-file-name ".smex-items" user-emacs-directory))
-  (smex-initialize)
+  (use-package general :ensure t)
 #+END_SRC
 
-** Ido
-   Ido stands for Interactively Do Things, but it might as well stand
-   for "Do the Right Thing." It makes Emacs have something resembling
-   a modern interface with fuzzy-finding and autocompletion.
-
-   =ido-ubiquitous= does exactly what you think it does: it takes the
-   power of ido and lets you use it almost everywhere.
-
-   I like to set the two options =ido-enable-flex-matching= and
-   =ido-use-virtual-buffers=. Flex matching gives me fuzzy-finding,
-   and using virtual buffers lets me switch to (and re-open) closed
-   buffers from my buffer search.
+** which-key
+   Show all key bindings associated with the prefix I have typed.
 
 #+BEGIN_SRC emacs-lisp
-  (ido-mode t)
-  (ido-ubiquitous t)
-  (flx-ido-mode t)
-  (setq ido-enable-flex-matching t
-        ido-use-virtual-buffers t)
+  (use-package which-key :ensure t
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (which-key-setup-side-window-right-bottom)
+    (setq which-key-sort-order 'which-key-key-order-alpha
+          which-key-side-window-max-width 0.33
+          which-key-idle-delay 0.05))
 #+END_SRC
 
+** ivy and counsel
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy :ensure t
+    :diminish (ivy-mode . "") ; does not display ivy in the modeline
+    :init (ivy-mode 1)        ; enable ivy globally at startup
+    :config
+    (setq ivy-use-virtual-buffers t)   ; extend searching to bookmarks and …
+    (setq ivy-height 20)               ; set height of the ivy window
+    (setq ivy-count-format "(%d/%d) ") ; count format, from the ivy help page
+    )
+
+  (use-package counsel :ensure t
+    :bind*                           ; load counsel when pressed
+    (("M-x"     . counsel-M-x)       ; M-x use counsel
+     ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
+     ("C-x C-r" . counsel-recentf)   ; search recently edited files
+     ("C-c f"   . counsel-git)       ; search for files in git repo
+     ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
+     ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
+     ("C-c l"   . counsel-locate))   ; search for files or else using locate
+    )
+#+END_SRC
+
+** Projectile
+   [[https://github.com/bbatsov/projectile][Projectile]] is a package to allow you to search over projects.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile :ensure t
+    :init (projectile-global-mode))
+#+END_SRC
+
+** Snippets
+   Yasnippet allows us to have snippets for our most commonly used
+   pieces of code.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet :ensure t
+    :init (yas-global-mode 1))
+#+END_SRC
+
+** org-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package org :ensure t)
+#+END_SRC
+
+** auto-complete
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-complete :ensure t
+    :init (ac-config-default))
+#+END_SRC
 ** Magit
 
 Instead of having magit run next to another window, I like having it
@@ -293,526 +402,66 @@ take up the whole frame, so I can take care of all my git stuff at
 once and then it can go away. In order for this to work, I have to go
 ahead and require magit first.
 
-Source: http://whattheemacsd.com//setup-magit.el-01.html
+Source: http://whattheemacsd.com/setup-magit.el-01.html
 
 #+begin_src emacs-lisp
-  (require 'magit)
+  (use-package magit :ensure t
+    :bind
+    (("q" . magit-quit-session))
+    :config
+    (defadvice magit-status (around magit-fullscreen activate)
+      (window-configuration-to-register :magit-fullscreen)
+      ad-do-it
+      (delete-other-windows))
 
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
-
-  (defun magit-quit-session ()
-    "Restores the previous window configuration and kills the magit buffer"
-    (interactive)
-    (kill-buffer)
-    (jump-to-register :magit-fullscreen))
-
-  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
+    (defun magit-quit-session ()
+      "Restores the previous window configuration and kills the magit buffer"
+      (interactive)
+      (kill-buffer)
+      (jump-to-register :magit-fullscreen)))
 #+end_src
 
-** Org-mode
-
-Org-mode, the most useful thing in the world. This configuration 
-file is in org-mode.
-
-I want to be able to use [[http://ditaa.sourceforge.net/][ditaa]] in my org-mode files.
-
-#+BEGIN_SRC emacs-lisp
-  (setq org-ditaa-jar-path "~/.emacs.d/vendor/ditaa0_9.jar")
-  
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((ditaa . t)))  
-#+END_SRC
-
-** Projectile
-   [[https://github.com/bbatsov/projectile][Projectile]] is a package to allow you to search over projects.
-
-#+BEGIN_SRC emacs-lisp
-(projectile-global-mode)
-#+END_SRC
-
-* GUI Settings
-  Emacs' default GUI settings are not great and cause it to not
-  resemble a modern application. Luckily, they are very
-  configurable.
-
-#+BEGIN_SRC emacs-lisp
-  (setq
-   ;; Do not show a splash screen.
-   inhibit-splash-screen t
-   ;; Show incomplete commands while typing them.
-   echo-keystrokes 0.1
-   ;; Never show dialog boxes.
-   use-dialog-box nil)
-
-  (setq-default
-   ;; Make the cursor a thin vertical line.
-   cursor-type 'bar
-   ;; Show the end of files inside buffers.
-   indicate-empty-lines t)
-
-  ;; Show what text is selected.
-  (transient-mark-mode t)
-  ;; And delete selected text if we type over it.
-  (delete-selection-mode t)
-
-  ;; Always show matching sets of parentheses.
-  (show-paren-mode t)
-
-  ;; Highlight the current line.
-  (global-hl-line-mode t)
-
-  ;; Hide the scroll bar, tool bar, and menu bar.
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-
-  ;; Allow us to type "y" or "n" instead of "yes" or "no".
-  (defalias 'yes-or-no-p 'y-or-n-p)
-
-  ;; Show the end of files.
-  (when (not indicate-empty-lines)
-    (toggle-indicate-empty-lines))
-
-  (when window-system
-    ;; Make the window title reflect the current buffer.
-    (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
-#+END_SRC
-
-** Modeline Improvements
-   I like having the column number in my modeline to help with stack
-   traces and just as a sanity check.
-
-#+BEGIN_SRC emacs-lisp
-  (setq column-number-mode t)
-#+END_SRC
-
-* Files and Directories
-  I like to set up a vendor directory for any random elisp files I
-  pull in. I get the majority of my functionality from packages
-  distributed through ELPA or Marmalade, but sometimes, you find
-  something random on EmacsWiki that you may want to pull in. After
-  adding that directory, you're going to want to throw it in your
-  load-path. Often, you'll have subdirectories in your vendor
-  directory. Go ahead and add those to the load-path as well.
-
-#+BEGIN_SRC emacs-lisp
-  (defvar cnd/vendor-dir (expand-file-name "vendor" user-emacs-directory)
-    "Location of any random elisp files I find from other authors.")
-  (add-to-list 'load-path cnd/vendor-dir)
-
-  (dolist (project (directory-files cnd/vendor-dir t "\\w+"))
-    (when (file-directory-p project)
-      (add-to-list 'load-path project)))
-#+END_SRC
-
-* Shells
-  I use fish shell, but Emacs should not internally.
-
-  #+BEGIN_SRC emacs-lisp
-    (setq explicit-shell-file-name "/bin/sh")
-    (setq shell-file-name "sh")
-    (setenv "SHELL" shell-file-name)
-  #+END_SRC
-
-  =C-d= on an empty line in the shell terminates the current
-  process. Using the following, hitting =C-d= again will close the
-  buffer.
-
-#+begin_src emacs-lisp
-  ;; From http://whattheemacsd.com/setup-shell.el-01.html
-
-  (defun comint-delchar-or-eof-or-kill-buffer (arg)
-    (interactive "p")
-    (if (null (get-buffer-process (current-buffer)))
-        (kill-buffer)
-      (comint-delchar-or-maybe-eof arg)))
-
-  (add-hook 'shell-mode-hook
-            (lambda ()
-              (define-key shell-mode-map
-                (kbd "C-d") 'comint-delchar-or-eof-or-kill-buffer)))
-#+end_src
-* Text Editing
-** Backups
-   Default Emacs behavior around backups dates from a time of
-   barbarism and should be avoided. On the other hand, it's saved me
-   once or twice. Therefore, I allow Emacs to keep backups, but
-   instead of keeping them in the same directory as the file being
-   edited, I force them to be kept in a temporary directory.
-
-#+BEGIN_SRC emacs-lisp
-  (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-#+END_SRC
-
-** File Behavior
-   All files should end with a final newline.
-
-#+BEGIN_SRC emacs-lisp
-  (setq require-final-newline t)
-#+END_SRC
-
-** Indentation
-   By default, I want to indent with 4 spaces and no tabs, and wrap at 80 characters.
-
-#+begin_src emacs-lisp
-  (setq-default indent-tabs-mode nil
-                tab-width 4)
-  (setq-default fill-column 80)
-#+end_src
-
-** Multiple Buffers
-I often have multiple buffers open with the same name. Emacs usually
-deals with this by appending the buffer number to the buffer
-name. This is hard to keep track of. Instead, the uniquify library
-uses the parent directory name as a prefix to the file name.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
-#+END_SRC
-** Multiple Cursors
-
-Having multiple cursors is the new magic, and I'm still not used to
-it. [[http://emacsrocks.com/e13.html][Check out the great video about it at Emacs Rocks.]]
-
-#+begin_src emacs-lisp
-  (require 'multiple-cursors)
-  
-  (global-set-key (quote [C-return]) 'set-rectangular-region-anchor)
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
-#+end_src
-
-** Zap to Char
-Zap to char is very useful, but zapping up to a character is even more
-useful. A method to do this is in =misc.el=.
-
-#+begin_src emacs-lisp
-  (require 'misc)
-#+end_src
-
-** Markdown
-Make sure that all Markdown file extensions trigger =markdown-mode=.
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
-#+END_SRC
-
-Also use =visual-line-mode= to get decent word-wrap when in
-=markdown-mode=.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'markdown-mode-hook (lambda () (visual-line-mode t)))
-#+END_SRC
-
-I use =pandoc= for converting Markdown, so I want to set that as the
-command to use when exporting from =markdown-mode=. I want to enable
-smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css]] to beautify the output.
-
-#+BEGIN_SRC emacs-lisp
-  (setq markdown-command "pandoc --smart -f markdown -t html")
-  (setq markdown-css-paths (list (expand-file-name "markdown.css" cnd/vendor-dir)))
-  (add-hook 'markdown-mode-hook 'turn-on-auto-fill)
-#+END_SRC
-
-** Asciidoc
-I prefer =doc-mode= to other Asciidoc editing modes.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'doc-mode)
-  (add-to-list 'auto-mode-alist '("\\.adoc$" . doc-mode))
-#+END_SRC
-
-** Snippets
-   Yasnippet allows us to have snippets for our most commonly used
-   pieces of code.
-
-   #+BEGIN_SRC emacs-lisp
-     (require 'yasnippet)
-     (yas-global-mode 1)
-   #+END_SRC
-
-* Programming
-** auto-complete
-
-#+BEGIN_SRC emacs-lisp
-  (require 'auto-complete-config)
-  (ac-config-default)
-#+END_SRC
-
-** autopair-mode
+** Programming
+*** autopair-mode
    =autopair-mode= automatically adds closing parentheses, brackets,
    and the like, which is very useful when writing code. It doesn't
    get auto-loaded, so I have to require it explicitly.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'autopair)
+  (use-package autopair :ensure t)
 #+END_SRC
 
-** C
-   C has its own indentation rules, so I have to set them with a
-   separate variable.
-#+begin_src emacs-lisp
-  (setq c-basic-offset 2)
-#+end_src
-
-** Emacs Lisp
-Give us the power of SLIME when coding in elisp; specifically, allow
-us to go to definition with M-. and back again with M-,.
-
-#+begin_src emacs-lisp
-  (autoload 'elisp-slime-nav-mode "elisp-slime-nav")
-  (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))
-  (eval-after-load 'elisp-slime-nav '(diminish 'elisp-slime-nav-mode))
-#+end_src
-
-** Fish Shell
+*** Fish Shell
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.fish$" . fish-mode))
+  (use-package fish-mode :ensure t
+    :mode "\\.fish$")
 #+END_SRC
-** Lisp
-   Lisp is the most awesome family of programming languages ever. When
-   I'm using Lisp, I want ultimate power, so I turn on paredit, which
-   gives me amazing abilities to move code around inside
-   S-expressions.
-
-   This section is a good example of how to extend Emacs with keymaps
-   and minor-modes.
-
+*** Python
 #+BEGIN_SRC emacs-lisp
-  ;; lisp.el
-  ;; (setq lisp-modes '(lisp-mode
-  ;;                    emacs-lisp-mode
-  ;;                    common-lisp-mode
-  ;;                    scheme-mode
-  ;;                    clojure-mode))
-  ;; 
-  ;; (defvar lisp-power-map (make-keymap))
-  ;; (define-minor-mode lisp-power-mode "Fix keybindings; add power."
-  ;;   :lighter " (power)"
-  ;;   :keymap lisp-power-map
-  ;;   (paredit-mode t))
-  ;; (diminish 'lisp-power-mode)
-  ;; (define-key lisp-power-map [delete] 'paredit-forward-delete)
-  ;; (define-key lisp-power-map [backspace] 'paredit-backward-delete)
-  ;; 
-  ;; (defun cnd/engage-lisp-power ()
-  ;;   (lisp-power-mode t))
-  ;; 
-  ;; (dolist (mode lisp-modes)
-  ;;   (add-hook (intern (format "%s-hook" mode))
-  ;;             #'cnd/engage-lisp-power))
-  
-#+END_SRC
+  (use-package python :ensure t
+    :mode ("\\.py\\'" . python-mode)
 
-** Python
-#+BEGIN_SRC emacs-lisp
-  ;; keybindings
-  (eval-after-load 'python
-    '(define-key python-mode-map (kbd "C-c !") 'python-shell-switch-to-shell))
-  (eval-after-load 'python
-    '(define-key python-mode-map (kbd "C-c |") 'python-shell-send-region))
+    :bind* (("C-c !" . python-shell-switch-to-shell)
+            ("C-c |" . python-shell-send-region))
+    :config
+    (setq python-indent-offset 4)
+    (add-hook 'python-mode-hook 'anaconda-mode)
+    (add-hook 'python-mode-hook 'ac-anaconda-setup))
 
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'ac-anaconda-setup)
-
-  (setq python-indent-offset 4)
+  (use-package anaconda-mode :ensure t
+    :commands (anaconda-mode))
 #+END_SRC
 
 *** Django
 
-I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs when I'm working with Django. I
-have it vendored, since it's not on Marmalade. I have to require it to
-get =pony-tpl-mode= (a minor mode for Django templates) working, which
-I should figure out.
+I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs when I'm working with Django.
 
 #+begin_src emacs-lisp
-  ;; TODO autoload this instead of using require
-
-  (require 'pony-mode)
+  (use-package pony-mode :ensure t)
 #+end_src
 
-** Scheme
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'scheme-mode-hook 'paredit-mode)
-  (add-hook 'scheme-mode-hook 'rainbow-delimiters-mode)
-  
-  ;; From chicken scheme wiki
-  
-  (require 'cmuscheme)
-  
-  (setq scheme-program-name "csi -:c")
-  
-  ;; Indenting module body code at column 0
-  (defun scheme-module-indent (state indent-point normal-indent) 0)
-  (put 'module 'scheme-indent-function 'scheme-module-indent)
-  
-  (put 'and-let* 'scheme-indent-function 1)
-  (put 'parameterize 'scheme-indent-function 1)
-  (put 'handle-exceptions 'scheme-indent-function 1)
-  (put 'when 'scheme-indent-function 1)
-  (put 'unless 'scheme-indent-function 1)
-  (put 'match 'scheme-indent-function 1)
-  (put 'pmatch 'scheme-indent-function 1)
-  
-  (define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
-  (define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
-  
-  (defun scheme-load-current-file (&optional switch)
-    (interactive "P")
-    (let ((file-name (buffer-file-name)))
-      (comint-check-source file-name)
-      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
-             (file-name-nondirectory file-name)))
-      (comint-send-string (scheme-proc) (concat "(load \""
-                  file-name
-                  "\"\)\n"))
-      (if switch
-        (switch-to-scheme t)
-        (message "\"%s\" loaded." file-name) ) ) )
-  
-  (defun scheme-compile-current-file (&optional switch)
-    (interactive "P")
-    (let ((file-name (buffer-file-name)))
-      (comint-check-source file-name)
-      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
-             (file-name-nondirectory file-name)))
-      (message "compiling \"%s\" ..." file-name)
-      (comint-send-string (scheme-proc) (concat "(compile-file \""
-                  file-name
-                  "\"\)\n"))
-      (if switch
-        (switch-to-scheme t)
-        (message "\"%s\" compiled and loaded." file-name))))
-  
-  ;; scheme-complete
-  
-  (autoload 'scheme-smart-complete "scheme-complete" nil t)
-  (eval-after-load 'scheme
-    '(define-key scheme-mode-map "\t" 'scheme-complete-or-indent))
-  
-  (autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
-  (add-hook 'scheme-mode-hook
-    (lambda ()
-      (make-local-variable 'eldoc-documentation-function)
-      (setq eldoc-documentation-function 'scheme-get-current-symbol-info)
-      (eldoc-mode)))
-#+END_SRC
-** YAML
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
-#+END_SRC
-** HTML & Templates
-
-#+BEGIN_SRC emacs-lisp
-  (require 'web-mode)
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
-
-  (defun my-web-mode-hook ()
-    "Hooks for web-mode."
-    (setq web-mode-markup-indent-offset 4)
-    (setq web-mode-css-indent-offset 4)
-    (setq web-mode-code-indent-offset 4))
-
-  (add-hook 'web-mode-hook 'my-web-mode-hook)
-
-#+END_SRC
-* Keybindings
-  Keybindings are a really personal matter. My philosophy with Emacs
-  is this: keep as many keybindings as possible the same as the
-  out-of-the-box Emacs config, and use =C-c= for your own special
-  preferences. It's cool to extend the default functionality (setting
-  Return to =newline-and-indent= instead of =newline=, for example),
-  but radically altering it is only going to frustrate you when you
-  have use Emacs without your configuration. Plus, it's nice to anyone
-  you ever have to pair program with.
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "RET") 'newline-and-indent)
-  (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
-  (global-set-key (kbd "M-/") 'hippie-expand)
-  (global-set-key (kbd "M-x") 'smex)
-  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-  (if window-system (global-unset-key (kbd "C-z")))
-
-  (global-set-key (kbd "C-+") 'cnd/increase-font-size)
-  (global-set-key (kbd "C-=") 'cnd/increase-font-size)
-  (global-set-key (kbd "C--") 'cnd/decrease-font-size)
-#+END_SRC
-
-** Super-Special Personal Keybindings
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c a") 'mark-whole-buffer)
-  (global-set-key (kbd "C-c c") 'query-replace-regexp)
-  (global-set-key (kbd "C-c d") 'deft)
-  (global-set-key (kbd "C-c g") 'magit-status)
-  (global-set-key (kbd "C-c M-k") 'cnd/kill-current-buffer-file)
-  (global-set-key (kbd "C-c n") 'cnd/clean-buffer)
-  (global-set-key (kbd "C-c q") 'join-line)
-  (global-set-key (kbd "C-c r") 'revert-buffer)
-  (global-set-key (kbd "C-c C-r") 'cnd/rename-current-buffer-file)
-  (global-set-key (kbd "C-c s e") 'cnd/edit-config)
-  (global-set-key (kbd "C-c s r") 'cnd/reload-config)
-  (global-set-key (kbd "C-c M-s") 'cnd/save-buffer-always)
-  (global-set-key (kbd "C-c v") 'eval-buffer)
-  (global-set-key (kbd "C-c w") 'whitespace-mode)
-  (global-set-key (kbd "C-c x") 'execute-extended-command)
-  (global-set-key (kbd "C-c z") 'zap-to-char)
-  (global-set-key (kbd "M-Z") 'zap-to-char)
-  (global-set-key (kbd "M-z") 'zap-up-to-char)
-  (global-set-key (kbd "<C-S-down>") 'cnd/move-line-down)
-  (global-set-key (kbd "<C-S-up>") 'cnd/move-line-up)
-  (global-set-key (kbd "<C-return>") 'cnd/open-line-below)
-  (global-set-key (kbd "<C-S-return>") 'cnd/open-line-above)
- 
-  (global-set-key (kbd "M-j")
-            (lambda ()
-                  (interactive)
-                  (join-line -1)))
-#+END_SRC
-
-** Windmove
-   Windmove is a nice little feature to let you move between open
-   windows by pressing =Shift= + the arrow keys. I like to add the
-   ability to also do this using =C-c=, as using =Shift= may not work
-   on all terminals.
-
-#+BEGIN_SRC emacs-lisp
-  (windmove-default-keybindings 'shift)
-  (global-set-key (kbd "C-c <left>")  'windmove-left)
-  (global-set-key (kbd "C-c <right>") 'windmove-right)
-  (global-set-key (kbd "C-c <up>")    'windmove-up)
-  (global-set-key (kbd "C-c <down>")  'windmove-down)
-#+END_SRC
-* Emacs Server
-  It is very annoying to find that you cannot close a buffer that has
-  been opened via =emacsclient= in the same way you would close any
-  other buffer. The following code fixes that.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'server-switch-hook
-            (lambda ()
-              (when (current-local-map)
-                (use-local-map (copy-keymap (current-local-map))))
-              (when server-buffer-clients
-                (local-set-key (kbd "C-x k") 'server-edit))))
-#+END_SRC
 * OS-Specific Settings
-** COMMENT OS X
+** OS X
    Emacs works pretty great on OS X, but there are a few adjustments I
    like. =mdfind= is a command-line interface to Spotlight which works
    great when using the =locate= function in Emacs. =aspell= is used

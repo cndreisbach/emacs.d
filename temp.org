@@ -1,0 +1,363 @@
+** Packages to Install
+  There's no way I can list each package I use and why here. The
+  important thing to note is that I set up a var with a list of the
+  packages I want to have installed.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar cnd/packages '(ac-anaconda
+                         ac-html
+                         adoc-mode
+                         anaconda-mode
+                         auto-complete
+                         autopair
+                         cperl-mode
+                         deft
+                         diminish
+                         elisp-slime-nav
+                         fish-mode
+                         flx-ido
+                         flymake
+                         flymake-cursor
+                         flymake-python-pyflakes
+                         gist
+                         htmlize
+                         ido-ubiquitous
+                         jsx-mode
+                         magit
+                         markdown-mode
+                         marmalade
+                         multiple-cursors
+                         org
+                         paradox
+                         paredit
+                         phoenix-dark-mono-theme
+                         phoenix-dark-pink-theme
+                         pony-mode
+                         projectile
+                         python-mode
+                         racket-mode
+                         rainbow-delimiters
+                         sass-mode
+                         scss-mode
+                         smex
+                         spacemacs-theme
+                         web-mode
+                         yaml-mode
+                         yasnippet)
+    "Packages I always want installed.")
+
+  (setq package-pinned-packages
+        '(
+          (flymake            . "melpa-stable")
+          (smex               . "melpa-stable")
+          (rainbow-delimiters . "melpa-stable")
+          (paredit            . "melpa-stable")
+          ))
+#+END_SRC
+  
+* Package Configuration
+** Deft
+   http://jblevins.org/projects/deft/
+
+   Deft is an Emacs mode for quickly browsing, filtering, and editing
+   directories of plain text notes, inspired by Notational Velocity. I
+   like it a lot. I want it to store all my notes in my Dropbox, and I
+   want it to use org-mode for those notes.
+
+#+begin_src emacs-lisp
+  (setq deft-directory "~/Notes/")
+  (setq deft-use-filename-as-title t)
+  (setq deft-extension "org")
+  (setq deft-text-mode 'org-mode)
+#+end_src
+
+
+* Text Editing
+** Multiple Buffers
+I often have multiple buffers open with the same name. Emacs usually
+deals with this by appending the buffer number to the buffer
+name. This is hard to keep track of. Instead, the uniquify library
+uses the parent directory name as a prefix to the file name.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+END_SRC
+** Multiple Cursors
+
+Having multiple cursors is the new magic, and I'm still not used to
+it. [[http://emacsrocks.com/e13.html][Check out the great video about it at Emacs Rocks.]]
+
+#+begin_src emacs-lisp
+  (require 'multiple-cursors)
+  
+  (global-set-key (quote [C-return]) 'set-rectangular-region-anchor)
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this)
+#+end_src
+
+** Zap to Char
+Zap to char is very useful, but zapping up to a character is even more
+useful. A method to do this is in =misc.el=.
+
+#+begin_src emacs-lisp
+  (require 'misc)
+#+end_src
+
+** Markdown
+Make sure that all Markdown file extensions trigger =markdown-mode=.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+#+END_SRC
+
+Also use =visual-line-mode= to get decent word-wrap when in
+=markdown-mode=.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'markdown-mode-hook (lambda () (visual-line-mode t)))
+#+END_SRC
+
+I use =pandoc= for converting Markdown, so I want to set that as the
+command to use when exporting from =markdown-mode=. I want to enable
+smart quotes. I use [[http://kevinburke.bitbucket.org/markdowncss/][markdown.css]] to beautify the output.
+
+#+BEGIN_SRC emacs-lisp
+  (setq markdown-command "pandoc --smart -f markdown -t html")
+  (setq markdown-css-paths (list (expand-file-name "markdown.css" cnd/vendor-dir)))
+  (add-hook 'markdown-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+** Asciidoc
+I prefer =doc-mode= to other Asciidoc editing modes.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'doc-mode)
+  (add-to-list 'auto-mode-alist '("\\.adoc$" . doc-mode))
+#+END_SRC
+
+
+* Programming
+
+** Emacs Lisp
+Give us the power of SLIME when coding in elisp; specifically, allow
+us to go to definition with M-. and back again with M-,.
+
+#+begin_src emacs-lisp
+  (autoload 'elisp-slime-nav-mode "elisp-slime-nav")
+  (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))
+  (eval-after-load 'elisp-slime-nav '(diminish 'elisp-slime-nav-mode))
+#+end_src
+
+
+** Lisp
+   Lisp is the most awesome family of programming languages ever. When
+   I'm using Lisp, I want ultimate power, so I turn on paredit, which
+   gives me amazing abilities to move code around inside
+   S-expressions.
+
+   This section is a good example of how to extend Emacs with keymaps
+   and minor-modes.
+
+#+BEGIN_SRC emacs-lisp
+  ;; lisp.el
+  ;; (setq lisp-modes '(lisp-mode
+  ;;                    emacs-lisp-mode
+  ;;                    common-lisp-mode
+  ;;                    scheme-mode
+  ;;                    clojure-mode))
+  ;; 
+  ;; (defvar lisp-power-map (make-keymap))
+  ;; (define-minor-mode lisp-power-mode "Fix keybindings; add power."
+  ;;   :lighter " (power)"
+  ;;   :keymap lisp-power-map
+  ;;   (paredit-mode t))
+  ;; (diminish 'lisp-power-mode)
+  ;; (define-key lisp-power-map [delete] 'paredit-forward-delete)
+  ;; (define-key lisp-power-map [backspace] 'paredit-backward-delete)
+  ;; 
+  ;; (defun cnd/engage-lisp-power ()
+  ;;   (lisp-power-mode t))
+  ;; 
+  ;; (dolist (mode lisp-modes)
+  ;;   (add-hook (intern (format "%s-hook" mode))
+  ;;             #'cnd/engage-lisp-power))
+  
+#+END_SRC
+
+
+
+** Scheme
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'scheme-mode-hook 'paredit-mode)
+  (add-hook 'scheme-mode-hook 'rainbow-delimiters-mode)
+  
+  ;; From chicken scheme wiki
+  
+  (require 'cmuscheme)
+  
+  (setq scheme-program-name "csi -:c")
+  
+  ;; Indenting module body code at column 0
+  (defun scheme-module-indent (state indent-point normal-indent) 0)
+  (put 'module 'scheme-indent-function 'scheme-module-indent)
+  
+  (put 'and-let* 'scheme-indent-function 1)
+  (put 'parameterize 'scheme-indent-function 1)
+  (put 'handle-exceptions 'scheme-indent-function 1)
+  (put 'when 'scheme-indent-function 1)
+  (put 'unless 'scheme-indent-function 1)
+  (put 'match 'scheme-indent-function 1)
+  (put 'pmatch 'scheme-indent-function 1)
+  
+  (define-key scheme-mode-map "\C-c\C-l" 'scheme-load-current-file)
+  (define-key scheme-mode-map "\C-c\C-k" 'scheme-compile-current-file)
+  
+  (defun scheme-load-current-file (&optional switch)
+    (interactive "P")
+    (let ((file-name (buffer-file-name)))
+      (comint-check-source file-name)
+      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+             (file-name-nondirectory file-name)))
+      (comint-send-string (scheme-proc) (concat "(load \""
+                  file-name
+                  "\"\)\n"))
+      (if switch
+        (switch-to-scheme t)
+        (message "\"%s\" loaded." file-name) ) ) )
+  
+  (defun scheme-compile-current-file (&optional switch)
+    (interactive "P")
+    (let ((file-name (buffer-file-name)))
+      (comint-check-source file-name)
+      (setq scheme-prev-l/c-dir/file (cons (file-name-directory    file-name)
+             (file-name-nondirectory file-name)))
+      (message "compiling \"%s\" ..." file-name)
+      (comint-send-string (scheme-proc) (concat "(compile-file \""
+                  file-name
+                  "\"\)\n"))
+      (if switch
+        (switch-to-scheme t)
+        (message "\"%s\" compiled and loaded." file-name))))
+  
+  ;; scheme-complete
+  
+  (autoload 'scheme-smart-complete "scheme-complete" nil t)
+  (eval-after-load 'scheme
+    '(define-key scheme-mode-map "\t" 'scheme-complete-or-indent))
+  
+  (autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
+  (add-hook 'scheme-mode-hook
+    (lambda ()
+      (make-local-variable 'eldoc-documentation-function)
+      (setq eldoc-documentation-function 'scheme-get-current-symbol-info)
+      (eldoc-mode)))
+#+END_SRC
+** YAML
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+#+END_SRC
+** HTML & Templates
+
+#+BEGIN_SRC emacs-lisp
+  (require 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+
+  (defun my-web-mode-hook ()
+    "Hooks for web-mode."
+    (setq web-mode-markup-indent-offset 4)
+    (setq web-mode-css-indent-offset 4)
+    (setq web-mode-code-indent-offset 4))
+
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+#+END_SRC
+* Keybindings
+  Keybindings are a really personal matter. My philosophy with Emacs
+  is this: keep as many keybindings as possible the same as the
+  out-of-the-box Emacs config, and use =C-c= for your own special
+  preferences. It's cool to extend the default functionality (setting
+  Return to =newline-and-indent= instead of =newline=, for example),
+  but radically altering it is only going to frustrate you when you
+  have use Emacs without your configuration. Plus, it's nice to anyone
+  you ever have to pair program with.
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "RET") 'newline-and-indent)
+  (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+  (global-set-key (kbd "M-/") 'hippie-expand)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (if window-system (global-unset-key (kbd "C-z")))
+
+  (global-set-key (kbd "C-+") 'cnd/increase-font-size)
+  (global-set-key (kbd "C-=") 'cnd/increase-font-size)
+  (global-set-key (kbd "C--") 'cnd/decrease-font-size)
+#+END_SRC
+
+** Super-Special Personal Keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c a") 'mark-whole-buffer)
+  (global-set-key (kbd "C-c c") 'query-replace-regexp)
+  (global-set-key (kbd "C-c d") 'deft)
+  (global-set-key (kbd "C-c g") 'magit-status)
+  (global-set-key (kbd "C-c M-k") 'cnd/kill-current-buffer-file)
+  (global-set-key (kbd "C-c n") 'cnd/clean-buffer)
+  (global-set-key (kbd "C-c q") 'join-line)
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+  (global-set-key (kbd "C-c C-r") 'cnd/rename-current-buffer-file)
+  (global-set-key (kbd "C-c s e") 'cnd/edit-config)
+  (global-set-key (kbd "C-c s r") 'cnd/reload-config)
+  (global-set-key (kbd "C-c M-s") 'cnd/save-buffer-always)
+  (global-set-key (kbd "C-c v") 'eval-buffer)
+  (global-set-key (kbd "C-c w") 'whitespace-mode)
+  (global-set-key (kbd "C-c x") 'execute-extended-command)
+  (global-set-key (kbd "C-c z") 'zap-to-char)
+  (global-set-key (kbd "M-Z") 'zap-to-char)
+  (global-set-key (kbd "M-z") 'zap-up-to-char)
+  (global-set-key (kbd "<C-S-down>") 'cnd/move-line-down)
+  (global-set-key (kbd "<C-S-up>") 'cnd/move-line-up)
+  (global-set-key (kbd "<C-return>") 'cnd/open-line-below)
+  (global-set-key (kbd "<C-S-return>") 'cnd/open-line-above)
+ 
+  (global-set-key (kbd "M-j")
+            (lambda ()
+                  (interactive)
+                  (join-line -1)))
+#+END_SRC
+
+** Windmove
+   Windmove is a nice little feature to let you move between open
+   windows by pressing =Shift= + the arrow keys. I like to add the
+   ability to also do this using =C-c=, as using =Shift= may not work
+   on all terminals.
+
+#+BEGIN_SRC emacs-lisp
+  (windmove-default-keybindings 'shift)
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+#+END_SRC
+* Emacs Server
+  It is very annoying to find that you cannot close a buffer that has
+  been opened via =emacsclient= in the same way you would close any
+  other buffer. The following code fixes that.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'server-switch-hook
+            (lambda ()
+              (when (current-local-map)
+                (use-local-map (copy-keymap (current-local-map))))
+              (when server-buffer-clients
+                (local-set-key (kbd "C-x k") 'server-edit))))
+#+END_SRC
