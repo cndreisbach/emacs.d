@@ -152,7 +152,6 @@ us to go to definition with M-. and back again with M-,.
   (eval-after-load 'elisp-slime-nav '(diminish 'elisp-slime-nav-mode))
 #+end_src
 
-
 ** Lisp
    Lisp is the most awesome family of programming languages ever. When
    I'm using Lisp, I want ultimate power, so I turn on paredit, which
@@ -187,7 +186,6 @@ us to go to definition with M-. and back again with M-,.
   ;;             #'cnd/engage-lisp-power))
   
 #+END_SRC
-
 
 
 ** Scheme

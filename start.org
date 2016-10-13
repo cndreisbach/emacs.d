@@ -18,7 +18,7 @@
    - http://pavpanchekha.com/blog/emacs.html
    - http://senny.github.com/cabbage/
    - https://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
-
+     
 * Personal Info
    Emacs will try and guess information about you from your
    environment. I prefer to be explicit about it.
@@ -373,6 +373,9 @@
 #+BEGIN_SRC emacs-lisp
   (use-package projectile :ensure t
     :init (projectile-global-mode))
+
+  (use-package counsel-projectile :ensure t
+    :init (counsel-projectile-on))
 #+END_SRC
 
 ** Snippets
@@ -395,6 +398,7 @@
   (use-package auto-complete :ensure t
     :init (ac-config-default))
 #+END_SRC
+
 ** Magit
 
 Instead of having magit run next to another window, I like having it
@@ -460,6 +464,18 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
   (use-package pony-mode :ensure t)
 #+end_src
 
+*** web-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode :ensure t
+    :mode ("\\.html?\\'" "\\.mustache\\'" "\\.jsx?\\'" "\\.css\\'")
+    :config
+    (setq web-mode-content-types-alist
+          '(("jsx" . "\\.js[x]?\\'")))
+    (setq web-mode-markup-indent-offset 4)
+    (setq web-mode-css-indent-offset 4)
+    (setq web-mode-code-indent-offset 4))
+
+#+END_SRC
 * OS-Specific Settings
 ** OS X
    Emacs works pretty great on OS X, but there are a few adjustments I
