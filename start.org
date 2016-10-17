@@ -478,6 +478,10 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
     (setq web-mode-code-indent-offset 4))
 
 #+END_SRC
+*** golang
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode :ensure t)
+#+END_SRC
 * OS-Specific Settings
 ** OS X
    Emacs works pretty great on OS X, but there are a few adjustments I
