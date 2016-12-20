@@ -476,11 +476,34 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
     (setq web-mode-markup-indent-offset 4)
     (setq web-mode-css-indent-offset 4)
     (setq web-mode-code-indent-offset 4))
-
 #+END_SRC
 *** golang
+
 #+BEGIN_SRC emacs-lisp
-(use-package go-mode :ensure t)
+  (defun my-go-mode-hook ()
+    ; Call Gofmt before saving
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (add-hook 'go-mode-hook 'auto-complete-for-go)
+    ; Customize compile command to run go build
+    (if (not (string-match "go" compile-command))
+        (set (make-local-variable 'compile-command)
+             "go build -v && go test -v && go vet"))
+    ; Godef jump key binding
+    (local-set-key (kbd "M-.") 'godef-jump))
+
+  (defun auto-complete-for-go ()
+    (auto-complete-mode 1))
+
+  (use-package go-autocomplete :ensure t)
+
+  (use-package go-mode :ensure t
+    :config
+    (add-hook 'go-mode-hook 'my-go-mode-hook))
+#+END_SRC
+
+* Keybindings
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c C-c") 'compile)
 #+END_SRC
 * OS-Specific Settings
 ** OS X
