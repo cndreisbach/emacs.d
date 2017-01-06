@@ -363,8 +363,7 @@
      ("C-c f"   . counsel-git)       ; search for files in git repo
      ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
      ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
-     ("C-c l"   . counsel-locate))   ; search for files or else using locate
-    )
+     ))
 #+END_SRC
 
 ** Projectile
@@ -389,7 +388,12 @@
 
 ** org-mode
 #+BEGIN_SRC emacs-lisp
-  (use-package org :ensure t)
+  (use-package org :ensure t
+    :config
+    (setq org-directory "~/org")
+    (setq org-default-notes-file (concat org-directory "/notes.org"))
+    (define-key global-map (kbd "C-c c") 'org-capture)
+    (define-key global-map (kbd "C-c l") 'org-store-link))
 #+END_SRC
 
 ** auto-complete
