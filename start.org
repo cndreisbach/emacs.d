@@ -328,7 +328,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package general :ensure t)
 #+END_SRC
-
+   
 ** which-key
    Show all key bindings associated with the prefix I have typed.
 
@@ -542,6 +542,10 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
     (global-set-key (kbd "M-=") 'cnd/increase-font-size)
     (global-set-key (kbd "M--") 'cnd/decrease-font-size))
 
+  (when (eq system-type 'gnu/linux)
+    (global-set-key (kbd "C-=") 'cnd/increase-font-size)
+    (global-set-key (kbd "C--") 'cnd/decrease-font-size))
+
 #+END_SRC
 * Local Configuration
   No matter how universal your configuration is, you will find
@@ -554,3 +558,4 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
     (when (file-exists-p local-config)
       (load local-config)))
 #+END_SRC
+  
