@@ -393,7 +393,16 @@
     (setq org-directory "~/org")
     (setq org-default-notes-file (concat org-directory "/notes.org"))
     (define-key global-map (kbd "C-c c") 'org-capture)
-    (define-key global-map (kbd "C-c l") 'org-store-link))
+    (define-key global-map (kbd "C-c l") 'org-store-link)
+
+    (setq org-capture-templates
+          '(("n" "Note" entry (file org-default-notes-file)
+             "* %?\n  %i")
+            ("l" "Linked note" entry (file org-default-notes-file)
+             "* %?\n  %i\n  %a")
+            ("t" "Todo" entry (file org-default-notes-file)
+             "* TODO %?\n  %i\n  %a")
+            )))
 #+END_SRC
 
 ** auto-complete
