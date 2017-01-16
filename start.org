@@ -29,15 +29,6 @@
 #+END_SRC
 
 * Basic Configuration
-** Setup use-package
-
-#+BEGIN_SRC emacs-lisp
-  (eval-when-compile
-    (require 'use-package))
-  (require 'diminish)                ;; if you use :diminish
-  (require 'bind-key)    
-#+END_SRC
-
 ** Must-Haves
   There are a few settings that any user of Emacs should have. You do
   want the power of =cl=, which brings in a lot of Common Lisp's
@@ -319,7 +310,10 @@
     (package-refresh-contents)
     (package-install 'use-package))
 
-  (require 'use-package)
+  (eval-when-compile
+    (require 'use-package))
+  (require 'diminish)                ;; if you use :diminish
+  (require 'bind-key)
 #+END_SRC
 
 * Package Configuration
@@ -388,21 +382,24 @@
 
 ** org-mode
 #+BEGIN_SRC emacs-lisp
-  (use-package org :ensure t
-    :config
-    (setq org-directory "~/org")
-    (setq org-default-notes-file (concat org-directory "/notes.org"))
-    (define-key global-map (kbd "C-c c") 'org-capture)
-    (define-key global-map (kbd "C-c l") 'org-store-link)
-
-    (setq org-capture-templates
-          '(("n" "Note" entry (file org-default-notes-file)
-             "* %?\n  %i")
-            ("l" "Linked note" entry (file org-default-notes-file)
-             "* %?\n  %i\n  %a")
-            ("t" "Todo" entry (file org-default-notes-file)
-             "* TODO %?\n  %i\n  %a")
-            )))
+    (use-package org :ensure t
+      :config
+      (setq org-directory "~/org"
+            org-default-notes-file (concat org-directory "/notes.org")
+            org-capture-templates
+            '(("n" "Note" entry (file org-default-notes-file)
+               "* %?\n  %i")
+              ("l" "Linked note" entry (file org-default-notes-file)
+               "* %?\n  %i\n  %a")
+              ("t" "Todo" entry (file org-default-notes-file)
+               "* TODO %?\n  %i\n  %a")
+              )
+            org-refile-targets
+            '((nil :level . 1)
+              ("brain.org" :level . 1)
+              ))
+      (define-key global-map (kbd "C-c c") 'org-capture)
+      (define-key global-map (kbd "C-c l") 'org-store-link))
 #+END_SRC
 
 ** auto-complete
