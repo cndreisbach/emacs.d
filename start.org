@@ -313,7 +313,7 @@
   (eval-when-compile
     (require 'use-package))
   (require 'diminish)                ;; if you use :diminish
-  (require 'bind-key)
+  (require 'bind-key)    
 #+END_SRC
 
 * Package Configuration
@@ -382,24 +382,30 @@
 
 ** org-mode
 #+BEGIN_SRC emacs-lisp
-    (use-package org :ensure t
-      :config
-      (setq org-directory "~/org"
-            org-default-notes-file (concat org-directory "/notes.org")
-            org-capture-templates
-            '(("n" "Note" entry (file org-default-notes-file)
-               "* %?\n  %i")
-              ("l" "Linked note" entry (file org-default-notes-file)
-               "* %?\n  %i\n  %a")
-              ("t" "Todo" entry (file org-default-notes-file)
-               "* TODO %?\n  %i\n  %a")
-              )
-            org-refile-targets
-            '((nil :level . 1)
-              ("brain.org" :level . 1)
-              ))
-      (define-key global-map (kbd "C-c c") 'org-capture)
-      (define-key global-map (kbd "C-c l") 'org-store-link))
+  (use-package org
+    :ensure org-plus-contrib
+    :pin org
+    :bind (("C-c c" . org-capture)
+           ("C-c l" . org-store-link)
+           :map org-mode-map
+           ("C-c v" . org-velocity-read))
+    :config
+    (setq org-directory "~/org"
+          org-default-notes-file (concat org-directory "/notes.org")
+          org-capture-templates
+          '(("n" "Note" entry (file org-default-notes-file)
+             "* %?\n  %i")
+            ("l" "Linked note" entry (file org-default-notes-file)
+             "* %?\n  %i\n  %a")
+            ("t" "Todo" entry (file org-default-notes-file)
+             "* TODO %?\n  %i\n  %a")
+            )
+          org-refile-targets
+          '((nil :level . 1)
+            ("brain.org" :level . 1)
+            )))
+
+  (use-package org-velocity :ensure nil)
 #+END_SRC
 
 ** auto-complete
@@ -511,6 +517,29 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
     (add-hook 'go-mode-hook 'my-go-mode-hook))
 #+END_SRC
 
+*** Lisp
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lispy :ensure t)
+
+  (use-package parinfer
+    :ensure t
+    :bind (("C-," . parinfer-toggle-mode))
+    :init
+    (progn
+      (setq parinfer-extensions 
+            '(defaults
+              pretty-parens         ; different paren styles for different modes.
+              lispy ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+              smart-tab ; C-b & C-f jump positions and smart shift with tab & S-tab.
+              smart-yank))               ; Yank behavior depend on mode.
+      (add-hook 'clojure-mode-hook #'parinfer-mode)
+      (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+      (add-hook 'common-lisp-mode-hook #'parinfer-mode)
+      (add-hook 'scheme-mode-hook #'parinfer-mode)
+      (add-hook 'lisp-mode-hook #'parinfer-mode)))
+#+END_SRC
+    
 * Keybindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-c") 'compile)
