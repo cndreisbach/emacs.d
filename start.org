@@ -386,12 +386,20 @@
     :init (yas-global-mode 1))
 #+END_SRC
 
+** Real Auto Save
+
+#+BEGIN_SRC emacs-lisp
+(use-package real-auto-save :ensure t)
+#+END_SRC
+
 ** org-mode
 #+BEGIN_SRC emacs-lisp
   (use-package org :ensure t
     :config
     (setq org-directory "~/org")
     (setq org-default-notes-file (concat org-directory "/notes.org"))
+    (add-hook 'org-mode-hook 'visual-line-mode)
+    (add-hook 'org-mode-hook 'real-auto-save-mode)
     (define-key global-map (kbd "C-c c") 'org-capture)
     (define-key global-map (kbd "C-c l") 'org-store-link))
 #+END_SRC
@@ -559,3 +567,4 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
       (load local-config)))
 #+END_SRC
   
+
