@@ -380,6 +380,12 @@
     :init (yas-global-mode 1))
 #+END_SRC
 
+** Real Auto Save
+
+#+BEGIN_SRC emacs-lisp
+(use-package real-auto-save :ensure t)
+#+END_SRC
+
 ** org-mode
 #+BEGIN_SRC emacs-lisp
   (use-package org
