@@ -409,7 +409,9 @@
           org-refile-targets
           '((nil :level . 1)
             ("brain.org" :level . 1)
-            )))
+            ))
+    (add-hook 'org-mode-hook 'real-auto-save-mode)
+    (add-hook 'org-mode-hook 'visual-line-mode))
 
   (use-package org-velocity :ensure nil)
 #+END_SRC
