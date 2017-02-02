@@ -289,33 +289,6 @@
     (indent-for-tab-command))
 #+END_SRC
 
-* Package Management
-** use-package
-   =use-package= helps us organize the packages we want and configure them.
-
-#+BEGIN_SRC emacs-lisp
-  ;; tells emacs not to load any packages before starting up
-  (setq package-enable-at-startup nil)
-
-  ;; the following lines tell emacs where on the internet to look up
-  ;; for new packages.
-  (setq package-archives '(("org"       . "http://orgmode.org/elpa/")
-                           ("gnu"       . "http://elpa.gnu.org/packages/")
-                           ("melpa"     . "https://melpa.org/packages/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/")))
-  (package-initialize)
-
-  ;; Bootstrap =use-package=
-  (unless (package-installed-p 'use-package) ; unless it is already installed
-    (package-refresh-contents)
-    (package-install 'use-package))
-
-  (eval-when-compile
-    (require 'use-package))
-  (require 'diminish)                ;; if you use :diminish
-  (require 'bind-key)    
-#+END_SRC
-
 * Package Configuration
 ** general
    Better key bindings.
@@ -390,7 +363,6 @@
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure t
-    :pin org
     :bind (("C-c c" . org-capture)
            ("C-c l" . org-store-link))
     :config
