@@ -290,6 +290,22 @@
 #+END_SRC
 
 * Package Configuration
+** eval-in-repl
+
+Start shells and send commands to them easily.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package eval-in-repl
+    :ensure t
+    :bind (:map sh-mode-map
+                ("C-<return>" . eir-eval-in-shell))
+    :config
+    (require 'eval-in-repl-shell)
+    (add-hook 'sh-mode-hook
+              '(lambda ()
+                 (local-set-key (kbd "C-<return>") 'eir-eval-in-shell))))
+#+END_SRC
+
 ** general
    Better key bindings.
 #+BEGIN_SRC emacs-lisp
@@ -516,6 +532,12 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
       (add-hook 'lisp-mode-hook #'parinfer-mode)))
 #+END_SRC
     
+*** YAML
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode :ensure t)
+#+END_SRC
+
 * Keybindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-c") 'compile)

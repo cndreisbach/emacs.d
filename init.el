@@ -34,7 +34,7 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package org :ensure t :pin org)
+(use-package org :ensure org-plus-contrib :pin org)
 (require 'diminish)
 (require 'bind-key)
 (require 'ob-tangle)
