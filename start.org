@@ -289,6 +289,51 @@
     (indent-for-tab-command))
 #+END_SRC
 
+** Theming
+
+   [[http://www.greghendershott.com/2017/02/emacs-themes.html][This article on Emacs themes]] explains so many issues I have had with themes.
+   All code below is adapted from this article.
+
+#+BEGIN_SRC emacs-lisp
+  (defun cnd/disable-all-themes ()
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes))
+
+  ;;; Theme hooks
+
+  (defvar cnd/theme-hooks nil
+    "((theme-id . function) ...)")
+
+  (defun cnd/add-theme-hook (theme-id hook-func)
+    (add-to-list 'cnd/theme-hooks (cons theme-id hook-func)))
+
+  (defun cnd/load-theme-advice (f theme-id &optional no-confirm no-enable &rest args)
+    "Enhances `load-theme' in two ways:
+  1. Disables enabled themes for a clean slate.
+  2. Calls functions registered using `cnd/add-theme-hook'."
+    (unless no-enable
+      (cnd/disable-all-themes))
+    (prog1
+        (apply f theme-id no-confirm no-enable args)
+      (unless no-enable
+        (pcase (assq theme-id cnd/theme-hooks)
+          (`(,_ . ,f) (funcall f))))))
+
+  (advice-add 'load-theme
+              :around
+              #'cnd/load-theme-advice)
+
+  (use-package apropospriate-light :ensure apropospriate-theme :defer t)
+  (use-package apropospriate-dark :ensure apropospriate-theme :defer t)
+  (use-package majapahit-light :ensure majapahit-theme :defer t)
+  (use-package majapahit-dark :ensure majapahit-theme :defer t)
+  (use-package spacemacs-light :ensure spacemacs-theme :defer t)
+  (use-package spacemacs-dark :ensure spacemacs-theme :defer t)
+  (use-package phoenix-dark-mono :ensure phoenix-dark-mono-theme :defer t)
+  (use-package phoenix-dark-pink :ensure phoenix-dark-pink-theme :defer t)
+  (use-package eink :ensure eink-theme :defer t)
+#+END_SRC
+
 * Package Configuration
 ** eval-in-repl
 
