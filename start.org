@@ -520,6 +520,10 @@ Source: http://whattheemacsd.com/setup-magit.el-01.html
 
   (use-package anaconda-mode :ensure t
     :commands (anaconda-mode))
+
+  (use-package py-yapf :ensure t
+    :bind (:map python-mode-map
+                ("C-c C-f" . py-yapf-buffer)))
 #+END_SRC
 
 *** Django
@@ -597,6 +601,7 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
 * Keybindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-c") 'compile)
+  (global-set-key (kbd "C-c a") 'mark-whole-buffer)
 #+END_SRC
 * OS-Specific Settings
 ** OS X
