@@ -511,8 +511,9 @@ Source: http://whattheemacsd.com/setup-magit.el-01.html
   (use-package python :ensure t
     :mode ("\\.py\\'" . python-mode)
 
-    :bind* (("C-c !" . python-shell-switch-to-shell)
-            ("C-c |" . python-shell-send-region))
+    :bind (:map python-mode-map
+                ("C-c !" . python-shell-switch-to-shell)
+                ("C-c |" . (point)ython-shell-send-region))
     :config
     (setq python-indent-offset 4)
     (add-hook 'python-mode-hook 'anaconda-mode)
