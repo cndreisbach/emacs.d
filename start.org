@@ -513,7 +513,7 @@ Source: http://whattheemacsd.com/setup-magit.el-01.html
 
     :bind (:map python-mode-map
                 ("C-c !" . python-shell-switch-to-shell)
-                ("C-c |" . (point)ython-shell-send-region))
+                ("C-c |" . python-shell-send-region))
     :config
     (setq python-indent-offset 4)
     (add-hook 'python-mode-hook 'anaconda-mode)
