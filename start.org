@@ -538,13 +538,14 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
 *** web-mode
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode :ensure t
-    :mode ("\\.html?\\'" "\\.mustache\\'" "\\.jsx?\\'" "\\.css\\'")
+    :mode ("\\.html?\\'" "\\.mustache\\'" "\\.jsx?\\'" "\\.css\\'" "\\.djhtml\\'")
     :config
     (setq web-mode-content-types-alist
           '(("jsx" . "\\.js[x]?\\'")))
     (setq web-mode-markup-indent-offset 4)
     (setq web-mode-css-indent-offset 4)
-    (setq web-mode-code-indent-offset 4))
+    (setq web-mode-code-indent-offset 4)
+    (setq web-mode-enable-engine-detection t))
 #+END_SRC
 *** golang
 
