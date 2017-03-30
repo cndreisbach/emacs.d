@@ -604,6 +604,8 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-c") 'compile)
   (global-set-key (kbd "C-c a") 'mark-whole-buffer)
+  (global-set-key (kbd "C-c n") (lambda () (interactive) (find-file "~/org/notes.org")))
+  (global-set-key (kbd "C-c o") (lambda () (interactive) (find-file "~/org/")))
 #+END_SRC
 * OS-Specific Settings
 ** OS X
