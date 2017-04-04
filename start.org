@@ -376,7 +376,7 @@ Start shells and send commands to them easily.
     :init (which-key-mode)
     :diminish which-key-mode
     :config
-    (which-key-setup-side-window-right-bottom)
+    (which-key-setup-side-window-bottom)
     (setq which-key-sort-order 'which-key-key-order-alpha
           which-key-side-window-max-width 0.33
           which-key-idle-delay 0.05))
@@ -405,7 +405,7 @@ Start shells and send commands to them easily.
      ))
 #+END_SRC
 
-** Projectile
+** Projectile and project-explorer
    [[https://github.com/bbatsov/projectile][Projectile]] is a package to allow you to search over projects.
 
 #+BEGIN_SRC emacs-lisp
@@ -414,6 +414,9 @@ Start shells and send commands to them easily.
 
   (use-package counsel-projectile :ensure t
     :init (counsel-projectile-on))
+
+  (use-package project-explorer :ensure t
+    :bind ("C-c p n" . project-explorer-open))
 #+END_SRC
 
 ** Snippets
@@ -604,6 +607,7 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-c") 'compile)
   (global-set-key (kbd "C-c a") 'mark-whole-buffer)
+  (global-set-key (kbd "C-c e") 'cnd/edit-config)
   (global-set-key (kbd "C-c n") (lambda () (interactive) (find-file "~/org/notes.org")))
   (global-set-key (kbd "C-c o") (lambda () (interactive) (find-file "~/org/")))
 #+END_SRC
