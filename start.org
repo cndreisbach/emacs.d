@@ -494,6 +494,16 @@ Source: http://whattheemacsd.com/setup-magit.el-01.html
 #+BEGIN_SRC emacs-lisp
   (use-package ag :ensure t)
 #+END_SRC
+
+** helm-dash
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-dash :ensure t
+:config
+    :bind (("C-h x" . helm-dash-at-point)
+           ("C-h C-x" . helm-dash)))
+
+         
+#+END_SRC
 ** Programming
 *** autopair-mode
    =autopair-mode= automatically adds closing parentheses, brackets,
