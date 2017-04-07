@@ -497,12 +497,11 @@ Source: http://whattheemacsd.com/setup-magit.el-01.html
 
 ** helm-dash
 #+BEGIN_SRC emacs-lisp
+  (use-package helm :ensure t)
+
   (use-package helm-dash :ensure t
-:config
     :bind (("C-h x" . helm-dash-at-point)
            ("C-h C-x" . helm-dash)))
-
-         
 #+END_SRC
 ** Programming
 *** autopair-mode
