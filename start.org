@@ -462,7 +462,8 @@ Start shells and send commands to them easily.
 ** Markdown
 
 #+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode :ensure t)
+  (use-package markdown-mode :ensure t
+    :config (add-hook 'markdown-mode-hook 'visual-line-mode))
 #+END_SRC
 
 
