@@ -621,6 +621,14 @@ I use =[[https://github.com/davidmiller/pony-mode][pony-mode]]= to enhance Emacs
   (use-package yaml-mode :ensure t)
 #+END_SRC
 
+*** Javascript
+
+#+BEGIN_SRC emacs-lisp
+  (use-package javascript-mode :ensure t
+    :config
+    (setq js-indent-level 2))
+#+END_SRC
+
 * Keybindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c C-c") 'compile)
